@@ -11,8 +11,8 @@ import {
   type OverlayPresentation,
   type OverlayRole,
   type Traits
-} from './index.js'
-import { env } from './traits.test.js'
+} from './index'
+import { env } from './traits.test'
 
 function traitsOf(width: number, input: 'touch' | 'pointer'): Traits {
   return resolveTraits(

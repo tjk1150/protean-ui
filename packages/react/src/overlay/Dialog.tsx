@@ -9,7 +9,7 @@ import {
   type OverlayRole
 } from '@protean-ui/core'
 import * as React from 'react'
-import { useProteanContext, useReadTraits } from '../provider.js'
+import { useProteanContext, useReadTraits } from '../provider'
 
 interface DialogLocalContextValue {
   readonly open: boolean

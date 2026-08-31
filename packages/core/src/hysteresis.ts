@@ -1,4 +1,4 @@
-import { defaultThresholds, type SizeClass, type TraitThresholds } from './traits.js'
+import { defaultThresholds, type SizeClass, type TraitThresholds } from './traits'
 
 export const defaultDeadband = 16
 

@@ -1,4 +1,4 @@
-import type { SizeClass, Traits } from './traits.js'
+import type { SizeClass, Traits } from './traits'
 
 export type OverlayRole = 'confirmation' | 'form' | 'contextual'
 export type OverlayPresentation = 'popover' | 'sheet' | 'modal' | 'fullscreen'

@@ -1,19 +1,19 @@
 export * from '@protean-ui/core'
 
-export { createEnvironmentStore, type EnvironmentStore } from './environment.js'
+export { createEnvironmentStore, type EnvironmentStore } from './environment'
 export {
   ProteanProvider,
   defaultSsrTraits,
   useReadTraits,
   useTraits,
   type ProteanProviderProps
-} from './provider.js'
+} from './provider'
 export {
   Dialog,
   type DialogCloseProps,
   type DialogContentProps,
   type DialogProps,
   type DialogTriggerProps
-} from './overlay/Dialog.js'
-export { defaultOverlayComponents, type OverlayComponents } from './overlay/defaults.js'
-export type { OverlayPresentationProps } from './overlay/types.js'
+} from './overlay/Dialog'
+export { defaultOverlayComponents, type OverlayComponents } from './overlay/defaults'
+export type { OverlayPresentationProps } from './overlay/types'

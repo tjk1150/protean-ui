@@ -5,7 +5,7 @@ import { Drawer as BaseDrawer } from '@base-ui/react/drawer'
 import { Popover as BasePopover } from '@base-ui/react/popover'
 import type { OverlayPresentation } from '@protean-ui/core'
 import type * as React from 'react'
-import type { OverlayPresentationProps } from './types.js'
+import type { OverlayPresentationProps } from './types'
 
 function dataAttributes(presentation: OverlayPresentation, part: string) {
   return {

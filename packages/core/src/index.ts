@@ -6,9 +6,9 @@ export {
   type SizeClass,
   type TraitThresholds,
   type Traits
-} from './traits.js'
+} from './traits'
 
-export { defaultDeadband, resolveSizeWithHysteresis } from './hysteresis.js'
+export { defaultDeadband, resolveSizeWithHysteresis } from './hysteresis'
 
 export {
   asPolicy,
@@ -31,6 +31,6 @@ export {
   type Policy,
   type PolicyDefinition,
   type PolicyPack
-} from './policy.js'
+} from './policy'
 
-export { appFirst } from './packs.js'
+export { appFirst } from './packs'

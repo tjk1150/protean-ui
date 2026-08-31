@@ -1,0 +1,256 @@
+* {
+  box-sizing: border-box;
+}
+
+:root {
+  --ink: #171a20;
+  --muted: #5c6572;
+  --line: #e2e5eb;
+  --bg: #f6f7f9;
+  --surface: #ffffff;
+  --accent: #2b5ce6;
+}
+
+body {
+  margin: 0;
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  background: var(--bg);
+  color: var(--ink);
+  line-height: 1.6;
+}
+
+.page {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 48px 20px 80px;
+}
+
+h1 {
+  margin: 0 0 8px;
+  letter-spacing: -0.01em;
+}
+
+.lede {
+  color: var(--muted);
+  font-size: 1.05rem;
+}
+
+.hint {
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+a {
+  color: var(--accent);
+}
+
+.traits-chip {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 4px 12px;
+  font-size: 0.85rem;
+}
+
+.cards {
+  display: grid;
+  gap: 16px;
+  margin-top: 24px;
+}
+
+@media (min-width: 600px) {
+  .cards {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.card {
+  display: block;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 18px 20px;
+  text-decoration: none;
+  color: inherit;
+}
+
+.card h2 {
+  margin: 0 0 6px;
+  font-size: 1.05rem;
+}
+
+.card p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+.compare {
+  display: grid;
+  gap: 16px;
+  margin: 24px 0;
+}
+
+@media (min-width: 720px) {
+  .compare {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.pane {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 20px;
+}
+
+.pane h2 {
+  margin: 0 0 4px;
+  font-size: 1rem;
+}
+
+.loc {
+  color: var(--muted);
+  font-size: 0.85rem;
+  margin: 0 0 16px;
+}
+
+.flaws {
+  margin: 16px 0 0;
+  padding-left: 1.2em;
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+
+.button,
+[data-scope="overlay"][data-part="trigger"] {
+  appearance: none;
+  border: 1px solid var(--line);
+  background: var(--surface);
+  color: var(--ink);
+  border-radius: 8px;
+  padding: 10px 16px;
+  font-size: 0.95rem;
+  cursor: pointer;
+}
+
+.button.primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #ffffff;
+}
+
+.address-form {
+  display: grid;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+.address-form label {
+  display: grid;
+  gap: 4px;
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+
+.address-form input {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 10px 12px;
+  font-size: 1rem;
+  min-height: 44px;
+}
+
+/* Overlay styling through the Protean data-attribute contract */
+
+[data-scope="overlay"][data-part="backdrop"],
+.manual-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgb(0 0 0 / 0.4);
+}
+
+[data-scope="overlay"][data-part="title"],
+.manual-title {
+  margin: 0 0 12px;
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+[data-scope="overlay"][data-part="popup"] {
+  background: var(--surface);
+  color: var(--ink);
+}
+
+[data-scope="overlay"][data-part="popup"][data-presentation="modal"],
+.manual-modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: min(92vw, 420px);
+  border-radius: 14px;
+  padding: 24px;
+  background: var(--surface);
+  box-shadow: 0 20px 60px -20px rgb(0 0 0 / 0.4);
+}
+
+[data-scope="overlay"][data-part="popup"][data-presentation="sheet"],
+.manual-sheet {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border-radius: 16px 16px 0 0;
+  padding: 20px 20px calc(20px + env(safe-area-inset-bottom));
+  background: var(--surface);
+  box-shadow: 0 -12px 40px -12px rgb(0 0 0 / 0.35);
+}
+
+[data-scope="overlay"][data-part="popup"][data-presentation="fullscreen"] {
+  position: fixed;
+  inset: 0;
+  padding: 24px 20px calc(24px + env(safe-area-inset-bottom));
+  overflow-y: auto;
+}
+
+[data-scope="overlay"][data-part="popup"][data-presentation="popover"] {
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 16px;
+  width: 320px;
+  box-shadow: 0 12px 32px -12px rgb(0 0 0 / 0.3);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  [data-scope="overlay"][data-part="popup"][data-presentation="sheet"],
+  .manual-sheet {
+    animation: protean-slide-up 220ms ease-out;
+  }
+
+  [data-scope="overlay"][data-part="popup"][data-presentation="modal"],
+  [data-scope="overlay"][data-part="popup"][data-presentation="popover"],
+  .manual-modal {
+    animation: protean-fade-in 150ms ease-out;
+  }
+}
+
+@keyframes protean-slide-up {
+  from {
+    transform: translateY(24px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes protean-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}

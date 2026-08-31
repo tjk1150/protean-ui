@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { defaultThresholds, resolveTraits, type EnvironmentSnapshot } from './index.js'
+import { defaultThresholds, resolveTraits, type EnvironmentSnapshot } from './index'
 
 export function env(overrides: Partial<EnvironmentSnapshot>): EnvironmentSnapshot {
   return {

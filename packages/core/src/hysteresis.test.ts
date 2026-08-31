@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { resolveSizeWithHysteresis } from './index.js'
+import { resolveSizeWithHysteresis } from './index'
 
 describe('resolveSizeWithHysteresis', () => {
   it('uses plain classification when there is no previous size', () => {

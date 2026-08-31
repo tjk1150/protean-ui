@@ -10,8 +10,8 @@ import {
   type Traits
 } from '@protean-ui/core'
 import * as React from 'react'
-import { createEnvironmentStore, type EnvironmentStore } from './environment.js'
-import { defaultOverlayComponents, type OverlayComponents } from './overlay/defaults.js'
+import { createEnvironmentStore, type EnvironmentStore } from './environment'
+import { defaultOverlayComponents, type OverlayComponents } from './overlay/defaults'
 
 export const defaultSsrTraits: Traits = {
   size: 'compact',

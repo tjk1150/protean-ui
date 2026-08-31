@@ -1,5 +1,5 @@
-import type { PolicyPack } from './policy.js'
-import type { Traits } from './traits.js'
+import type { PolicyPack } from './policy'
+import type { Traits } from './traits'
 
 function isTouchFirst(traits: Traits): boolean {
   return traits.input === 'touch'
