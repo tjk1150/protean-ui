@@ -2,7 +2,7 @@
 
 > Headless adaptive UI runtime for React. Declare what your UI means; the runtime decides how it presents in the current environment.
 
-**Status: pre-alpha.** Phase 0 spike in progress. Nothing here is published or stable yet.
+**Status: pre-alpha.** Phase 0 passed its kill criteria ([verdict](docs/phase-0-verdict.md)); Phase 1 (Screen, PrimaryAction, app-first showcase) is in progress. Nothing here is published or stable yet.
 
 ## The idea
 
