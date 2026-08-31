@@ -130,6 +130,12 @@ export function DialogContent({
   const { components } = useProteanContext()
   const { open, decision, triggerRef, setOpen } = useDialogLocalContext('Content')
 
+  // The backend resolves an initialFocus ref asynchronously; apply it
+  // synchronously after commit so focus is deterministic for consumers.
+  React.useLayoutEffect(() => {
+    if (open && initialFocus?.current) initialFocus.current.focus()
+  }, [open, initialFocus])
+
   if (!decision) return null
 
   const Presentation = components[decision.presentation]

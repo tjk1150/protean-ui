@@ -36,7 +36,6 @@ function ModalPresentation({
           className={className}
           {...(alert ? { role: 'alertdialog' as const } : {})}
           {...(describedBy ? { 'aria-describedby': describedBy } : {})}
-          {...(initialFocus ? { initialFocus } : {})}
         >
           {title ? (
             <BaseDialog.Title {...dataAttributes(decision.presentation, 'title')}>
@@ -72,7 +71,6 @@ function SheetPresentation({
             className={className}
             {...(alert ? { role: 'alertdialog' as const } : {})}
             {...(describedBy ? { 'aria-describedby': describedBy } : {})}
-            {...(initialFocus ? { initialFocus } : {})}
           >
             {title ? (
               <BaseDrawer.Title {...dataAttributes(decision.presentation, 'title')}>
@@ -108,7 +106,6 @@ function PopoverPresentation({
             className={className}
             {...(alert ? { role: 'alertdialog' as const } : {})}
             {...(describedBy ? { 'aria-describedby': describedBy } : {})}
-            {...(initialFocus ? { initialFocus } : {})}
           >
             {title ? (
               <BasePopover.Title {...dataAttributes(decision.presentation, 'title')}>
