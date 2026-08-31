@@ -1,0 +1,91 @@
+'use client'
+
+import {
+  appFirst,
+  asPolicy,
+  defaultThresholds,
+  type Policy,
+  type PolicyPack,
+  type TraitThresholds,
+  type Traits
+} from '@protean-ui/core'
+import * as React from 'react'
+import { createEnvironmentStore, type EnvironmentStore } from './environment.js'
+import { defaultOverlayComponents, type OverlayComponents } from './overlay/defaults.js'
+
+export const defaultSsrTraits: Traits = {
+  size: 'compact',
+  input: 'touch',
+  hover: false,
+  reducedMotion: false,
+  virtualKeyboard: false
+}
+
+export interface ProteanContextValue {
+  readonly policy: Policy
+  readonly components: OverlayComponents
+  readonly store: EnvironmentStore | null
+  readonly ssrTraits: Traits
+}
+
+const ProteanContext = React.createContext<ProteanContextValue | null>(null)
+
+export interface ProteanProviderProps {
+  readonly policy?: Policy | PolicyPack
+  readonly ssrTraits?: Traits
+  readonly thresholds?: TraitThresholds
+  readonly components?: Partial<OverlayComponents>
+  readonly children: React.ReactNode
+}
+
+function normalizePolicy(policy: Policy | PolicyPack): Policy {
+  return 'resolveOverlay' in policy ? policy : asPolicy(policy)
+}
+
+export function ProteanProvider({
+  policy = appFirst,
+  ssrTraits = defaultSsrTraits,
+  thresholds = defaultThresholds,
+  components,
+  children
+}: ProteanProviderProps): React.JSX.Element {
+  const [store] = React.useState<EnvironmentStore | null>(() =>
+    typeof window === 'undefined' ? null : createEnvironmentStore(thresholds)
+  )
+
+  const value = React.useMemo<ProteanContextValue>(
+    () => ({
+      policy: normalizePolicy(policy),
+      components: { ...defaultOverlayComponents, ...components },
+      store,
+      ssrTraits
+    }),
+    [policy, components, store, ssrTraits]
+  )
+
+  return <ProteanContext.Provider value={value}>{children}</ProteanContext.Provider>
+}
+
+export function useProteanContext(): ProteanContextValue {
+  const context = React.useContext(ProteanContext)
+  if (!context) {
+    throw new Error('Protean components must be rendered inside <ProteanProvider>.')
+  }
+  return context
+}
+
+const noopSubscribe = (): (() => void) => () => {}
+
+export function useTraits(): Traits {
+  const { store, ssrTraits } = useProteanContext()
+  return React.useSyncExternalStore(
+    store ? store.subscribe : noopSubscribe,
+    store ? store.getTraits : () => ssrTraits,
+    () => ssrTraits
+  )
+}
+
+export function useReadTraits(): () => Traits {
+  const { store, ssrTraits } = useProteanContext()
+  return React.useCallback(() => (store ? store.getTraits() : ssrTraits), [store, ssrTraits])
+}

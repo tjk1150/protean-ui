@@ -12,6 +12,7 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
+    "@base-ui/react": "^1.7.0",
     "@protean-ui/core": "workspace:*"
   },
   "peerDependencies": {
@@ -19,6 +20,11 @@
     "react-dom": ">=18"
   },
   "devDependencies": {
+    "@types/node": "^26.4.0",
+    "@types/react": "^19.2.18",
+    "@types/react-dom": "^19.2.5",
+    "react": "^19",
+    "react-dom": "^19",
     "typescript": "^5.9.0"
   }
 }
