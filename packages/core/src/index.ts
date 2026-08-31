@@ -1,61 +1,36 @@
-export type SizeClass = 'compact' | 'medium' | 'expanded'
+export {
+  defaultThresholds,
+  resolveTraits,
+  type EnvironmentSnapshot,
+  type InputProfile,
+  type SizeClass,
+  type TraitThresholds,
+  type Traits
+} from './traits.js'
 
-export type InputProfile = 'touch' | 'pointer' | 'hybrid'
+export { defaultDeadband, resolveSizeWithHysteresis } from './hysteresis.js'
 
-export interface Traits {
-  readonly size: SizeClass
-  readonly input: InputProfile
-  readonly hover: boolean
-  readonly reducedMotion: boolean
-  readonly virtualKeyboard: boolean
-}
+export {
+  asPolicy,
+  decideNavigation,
+  decideOverlay,
+  decidePrimaryAction,
+  definePolicy,
+  explain,
+  type ActionPresentation,
+  type ActionQuery,
+  type Decision,
+  type DecisionDomain,
+  type DecisionSource,
+  type InstanceOverride,
+  type NavigationPresentation,
+  type NavigationQuery,
+  type OverlayPresentation,
+  type OverlayQuery,
+  type OverlayRole,
+  type Policy,
+  type PolicyDefinition,
+  type PolicyPack
+} from './policy.js'
 
-export type OverlayRole = 'confirmation' | 'form' | 'contextual'
-export type OverlayPresentation = 'popover' | 'sheet' | 'modal' | 'fullscreen'
-export type NavigationPresentation = 'bar' | 'rail' | 'sidebar' | 'drawer'
-export type ActionPresentation = 'action-bar' | 'sticky-footer' | 'inline'
-
-export interface EnvironmentSnapshot {
-  readonly width: number
-  readonly height: number
-  readonly coarsePointer: boolean
-  readonly canHover: boolean
-  readonly reducedMotion: boolean
-  readonly virtualKeyboardVisible: boolean
-}
-
-export interface TraitThresholds {
-  readonly medium: number
-  readonly expanded: number
-}
-
-export const defaultThresholds: TraitThresholds = {
-  medium: 600,
-  expanded: 840
-}
-
-export function resolveTraits(
-  env: EnvironmentSnapshot,
-  thresholds: TraitThresholds = defaultThresholds
-): Traits {
-  const size: SizeClass =
-    env.width < thresholds.medium
-      ? 'compact'
-      : env.width < thresholds.expanded
-        ? 'medium'
-        : 'expanded'
-
-  const input: InputProfile = env.coarsePointer
-    ? env.canHover
-      ? 'hybrid'
-      : 'touch'
-    : 'pointer'
-
-  return {
-    size,
-    input,
-    hover: env.canHover,
-    reducedMotion: env.reducedMotion,
-    virtualKeyboard: env.virtualKeyboardVisible
-  }
-}
+export { appFirst } from './packs.js'
