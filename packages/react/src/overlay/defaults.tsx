@@ -57,17 +57,19 @@ function SheetPresentation({
     <BaseDrawer.Root open={open} onOpenChange={(next) => onOpenChange(next)} swipeDirection="down">
       <BaseDrawer.Portal>
         <BaseDrawer.Backdrop {...dataAttributes(decision.presentation, 'backdrop')} />
-        <BaseDrawer.Popup
-          {...dataAttributes(decision.presentation, 'popup')}
-          className={className}
-        >
-          {title ? (
-            <BaseDrawer.Title {...dataAttributes(decision.presentation, 'title')}>
-              {title}
-            </BaseDrawer.Title>
-          ) : null}
-          {children}
-        </BaseDrawer.Popup>
+        <BaseDrawer.Viewport {...dataAttributes(decision.presentation, 'viewport')}>
+          <BaseDrawer.Popup
+            {...dataAttributes(decision.presentation, 'popup')}
+            className={className}
+          >
+            {title ? (
+              <BaseDrawer.Title {...dataAttributes(decision.presentation, 'title')}>
+                {title}
+              </BaseDrawer.Title>
+            ) : null}
+            {children}
+          </BaseDrawer.Popup>
+        </BaseDrawer.Viewport>
       </BaseDrawer.Portal>
     </BaseDrawer.Root>
   )
