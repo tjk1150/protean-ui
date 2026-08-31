@@ -21,6 +21,7 @@ function ModalPresentation({
   decision,
   triggerRef,
   title,
+  className,
   children
 }: OverlayPresentationProps): React.JSX.Element {
   return (
@@ -29,6 +30,7 @@ function ModalPresentation({
         <BaseDialog.Backdrop {...dataAttributes(decision.presentation, 'backdrop')} />
         <BaseDialog.Popup
           {...dataAttributes(decision.presentation, 'popup')}
+          className={className}
           finalFocus={triggerRef}
         >
           {title ? (
@@ -49,13 +51,18 @@ function SheetPresentation({
   decision,
   triggerRef,
   title,
+  className,
   children
 }: OverlayPresentationProps): React.JSX.Element {
   return (
     <BaseDrawer.Root open={open} onOpenChange={(next) => onOpenChange(next)} swipeDirection="down">
       <BaseDrawer.Portal>
         <BaseDrawer.Backdrop {...dataAttributes(decision.presentation, 'backdrop')} />
-        <BaseDrawer.Popup {...dataAttributes(decision.presentation, 'popup')} finalFocus={triggerRef}>
+        <BaseDrawer.Popup
+          {...dataAttributes(decision.presentation, 'popup')}
+          className={className}
+          finalFocus={triggerRef}
+        >
           {title ? (
             <BaseDrawer.Title {...dataAttributes(decision.presentation, 'title')}>
               {title}
@@ -74,13 +81,18 @@ function PopoverPresentation({
   decision,
   triggerRef,
   title,
+  className,
   children
 }: OverlayPresentationProps): React.JSX.Element {
   return (
     <BasePopover.Root open={open} onOpenChange={(next) => onOpenChange(next)}>
       <BasePopover.Portal>
         <BasePopover.Positioner anchor={triggerRef} side="bottom" align="start" sideOffset={8}>
-          <BasePopover.Popup {...dataAttributes(decision.presentation, 'popup')} finalFocus={triggerRef}>
+          <BasePopover.Popup
+            {...dataAttributes(decision.presentation, 'popup')}
+            className={className}
+            finalFocus={triggerRef}
+          >
             {title ? (
               <BasePopover.Title {...dataAttributes(decision.presentation, 'title')}>
                 {title}

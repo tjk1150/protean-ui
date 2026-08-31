@@ -112,10 +112,15 @@ export function DialogTrigger({ children, onClick, ...rest }: DialogTriggerProps
 
 export interface DialogContentProps {
   readonly title?: string
+  readonly className?: string
   readonly children: React.ReactNode
 }
 
-export function DialogContent({ title, children }: DialogContentProps): React.JSX.Element | null {
+export function DialogContent({
+  title,
+  className,
+  children
+}: DialogContentProps): React.JSX.Element | null {
   const { components } = useProteanContext()
   const { open, decision, triggerRef, setOpen } = useDialogLocalContext('Content')
 
@@ -129,6 +134,7 @@ export function DialogContent({ title, children }: DialogContentProps): React.JS
       decision={decision}
       triggerRef={triggerRef}
       title={title}
+      className={className}
     >
       {children}
     </Presentation>

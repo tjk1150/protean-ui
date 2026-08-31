@@ -7,5 +7,6 @@ export interface OverlayPresentationProps {
   readonly decision: Decision<OverlayPresentation>
   readonly triggerRef: React.RefObject<HTMLButtonElement | null>
   readonly title?: string
+  readonly className?: string
   readonly children: React.ReactNode
 }
