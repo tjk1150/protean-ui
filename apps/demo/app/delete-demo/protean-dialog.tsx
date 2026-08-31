@@ -5,11 +5,11 @@ import { AddressForm } from './address-form'
 
 export function ProteanCheckoutDialog() {
   return (
-    <Dialog role="form">
+    <Dialog.Root role="form">
       <Dialog.Trigger className="button">Edit shipping address</Dialog.Trigger>
       <Dialog.Content title="Edit shipping address">
         <AddressForm />
       </Dialog.Content>
-    </Dialog>
+    </Dialog.Root>
   )
 }

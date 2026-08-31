@@ -5,7 +5,7 @@ import { NavReadout } from './readout'
 
 function Glyph({ path }: { path: string }) {
   return (
-    <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.6">
+    <svg viewBox="0 0 20 20" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="1.6">
       <path d={path} strokeLinecap="round" strokeLinejoin="round" />
     </svg>
   )
@@ -14,7 +14,7 @@ function Glyph({ path }: { path: string }) {
 export default function NavigationSpikePage() {
   return (
     <div className="nav-shell">
-      <Navigation aria-label="Primary">
+      <Navigation.Root aria-label="Primary">
         <Navigation.Item href="/navigation-spike" current icon={<Glyph path="M3 9.5 10 3l7 6.5V17h-5v-4H8v4H3z" />}>
           Home
         </Navigation.Item>
@@ -30,7 +30,7 @@ export default function NavigationSpikePage() {
         <Navigation.Item href="#settings" icon={<Glyph path="M10 12.5a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5zM10 2v2m0 12v2M2 10h2m12 0h2M4.3 4.3l1.4 1.4m8.6 8.6 1.4 1.4m0-11.4-1.4 1.4M5.7 14.3l-1.4 1.4" />}>
           Settings
         </Navigation.Item>
-      </Navigation>
+      </Navigation.Root>
       <main>
         <p>
           <Link href="/">Back</Link>

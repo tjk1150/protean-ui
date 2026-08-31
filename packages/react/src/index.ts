@@ -9,13 +9,14 @@ export {
   useTraits,
   type ProteanProviderProps
 } from './provider'
-export {
-  Dialog,
-  type DialogCloseProps,
-  type DialogContentProps,
-  type DialogProps,
-  type DialogTriggerProps
+export * as Dialog from './overlay/index.parts'
+export type {
+  DialogCloseProps,
+  DialogContentProps,
+  DialogProps,
+  DialogTriggerProps
 } from './overlay/Dialog'
 export { defaultOverlayComponents, type OverlayComponents } from './overlay/defaults'
 export type { OverlayPresentationProps } from './overlay/types'
-export { Navigation, type NavigationItemProps, type NavigationProps } from './navigation/Navigation'
+export * as Navigation from './navigation/index.parts'
+export type { NavigationItemProps, NavigationProps } from './navigation/Navigation'

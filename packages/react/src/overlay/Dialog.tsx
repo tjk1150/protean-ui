@@ -23,7 +23,7 @@ const DialogLocalContext = React.createContext<DialogLocalContextValue | null>(n
 function useDialogLocalContext(part: string): DialogLocalContextValue {
   const context = React.useContext(DialogLocalContext)
   if (!context) {
-    throw new Error(`<Dialog.${part}> must be rendered inside <Dialog>.`)
+    throw new Error(`<Dialog.${part}> must be rendered inside <Dialog.Root>.`)
   }
   return context
 }
@@ -37,7 +37,7 @@ export interface DialogProps {
   readonly children: React.ReactNode
 }
 
-function DialogRoot({
+export function DialogRoot({
   role = 'confirmation',
   presentation,
   defaultOpen = false,
@@ -80,7 +80,7 @@ export interface DialogTriggerProps extends React.ButtonHTMLAttributes<HTMLButto
   readonly children: React.ReactNode
 }
 
-function DialogTrigger({ children, onClick, ...rest }: DialogTriggerProps): React.JSX.Element {
+export function DialogTrigger({ children, onClick, ...rest }: DialogTriggerProps): React.JSX.Element {
   const { open, setOpen, triggerRef, decision } = useDialogLocalContext('Trigger')
   return (
     <button
@@ -107,7 +107,7 @@ export interface DialogContentProps {
   readonly children: React.ReactNode
 }
 
-function DialogContent({ title, children }: DialogContentProps): React.JSX.Element | null {
+export function DialogContent({ title, children }: DialogContentProps): React.JSX.Element | null {
   const { components } = useProteanContext()
   const { open, decision, triggerRef, setOpen } = useDialogLocalContext('Content')
 
@@ -131,7 +131,7 @@ export interface DialogCloseProps extends React.ButtonHTMLAttributes<HTMLButtonE
   readonly children: React.ReactNode
 }
 
-function DialogClose({ children, onClick, ...rest }: DialogCloseProps): React.JSX.Element {
+export function DialogClose({ children, onClick, ...rest }: DialogCloseProps): React.JSX.Element {
   const { setOpen, decision } = useDialogLocalContext('Close')
   return (
     <button
@@ -149,9 +149,3 @@ function DialogClose({ children, onClick, ...rest }: DialogCloseProps): React.JS
     </button>
   )
 }
-
-export const Dialog = Object.assign(DialogRoot, {
-  Trigger: DialogTrigger,
-  Content: DialogContent,
-  Close: DialogClose
-})

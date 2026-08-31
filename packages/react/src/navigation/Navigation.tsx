@@ -15,7 +15,7 @@ export interface NavigationProps extends React.HTMLAttributes<HTMLElement> {
   readonly children: React.ReactNode
 }
 
-function NavigationRoot({
+export function NavigationRoot({
   presentation,
   toggleLabel = 'Menu',
   children,
@@ -44,7 +44,6 @@ function NavigationRoot({
     >
       <button
         type="button"
-        data-scope="navigation"
         data-part="drawer-toggle"
         aria-expanded={drawerOpen}
         aria-controls={listId}
@@ -52,7 +51,7 @@ function NavigationRoot({
       >
         {toggleLabel}
       </button>
-      <ul id={listId} data-scope="navigation" data-part="list">
+      <ul id={listId} data-part="list">
         {children}
       </ul>
     </nav>
@@ -67,7 +66,7 @@ export interface NavigationItemProps
   readonly children: React.ReactNode
 }
 
-function NavigationItem({
+export function NavigationItem({
   href,
   icon,
   current = false,
@@ -75,27 +74,22 @@ function NavigationItem({
   ...rest
 }: NavigationItemProps): React.JSX.Element {
   return (
-    <li data-scope="navigation" data-part="item">
+    <li data-part="item">
       <a
         {...rest}
         href={href}
-        data-scope="navigation"
         data-part="link"
         aria-current={current ? 'page' : undefined}
       >
         {icon ? (
-          <span data-scope="navigation" data-part="icon" aria-hidden="true">
+          <span data-part="icon" aria-hidden="true">
             {icon}
           </span>
         ) : null}
-        <span data-scope="navigation" data-part="label">
+        <span data-part="label">
           {children}
         </span>
       </a>
     </li>
   )
 }
-
-export const Navigation = Object.assign(NavigationRoot, {
-  Item: NavigationItem
-})

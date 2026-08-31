@@ -2,17 +2,17 @@ import { act, render } from '@testing-library/react'
 import { describe, expect, it } from 'vitest'
 import { ProteanProvider } from '../provider'
 import { installEnvironment } from '../test/environment-mock'
-import { Navigation } from './Navigation'
+import * as Navigation from './index.parts'
 
 function renderNavigation() {
   return render(
     <ProteanProvider>
-      <Navigation aria-label="Primary">
+      <Navigation.Root aria-label="Primary">
         <Navigation.Item href="/" current>
           Home
         </Navigation.Item>
         <Navigation.Item href="/orders">Orders</Navigation.Item>
-      </Navigation>
+      </Navigation.Root>
     </ProteanProvider>
   )
 }

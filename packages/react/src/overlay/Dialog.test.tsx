@@ -2,17 +2,17 @@ import { act, fireEvent, render, screen } from '@testing-library/react'
 import { describe, expect, it } from 'vitest'
 import { ProteanProvider } from '../provider'
 import { installEnvironment } from '../test/environment-mock'
-import { Dialog } from './Dialog'
+import * as Dialog from './index.parts'
 
-function renderDialog(props: Partial<React.ComponentProps<typeof Dialog>> = {}) {
+function renderDialog(props: Partial<React.ComponentProps<typeof Dialog.Root>> = {}) {
   return render(
     <ProteanProvider>
-      <Dialog role="form" {...props}>
+      <Dialog.Root role="form" {...props}>
         <Dialog.Trigger>Open</Dialog.Trigger>
         <Dialog.Content title="Shipping">
           <p>content</p>
         </Dialog.Content>
-      </Dialog>
+      </Dialog.Root>
     </ProteanProvider>
   )
 }
