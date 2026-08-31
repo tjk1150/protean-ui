@@ -121,6 +121,18 @@ describe('Dialog', () => {
     )
   })
 
+  it('works without a provider via the app-first defaults', () => {
+    installEnvironment({ width: 375, coarse: true, hover: false })
+    render(
+      <Dialog.Root role="form" defaultOpen>
+        <Dialog.Content title="Standalone">
+          <p>content</p>
+        </Dialog.Content>
+      </Dialog.Root>
+    )
+    expect(openedPopup().getAttribute('data-presentation')).toBe('fullscreen')
+  })
+
   it('honors an instance override over the policy', () => {
     installEnvironment({ width: 1280, coarse: false, hover: true })
     renderDialog({ presentation: 'fullscreen' })

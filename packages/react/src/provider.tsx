@@ -66,12 +66,23 @@ export function ProteanProvider({
   return <ProteanContext.Provider value={value}>{children}</ProteanContext.Provider>
 }
 
-export function useProteanContext(): ProteanContextValue {
-  const context = React.useContext(ProteanContext)
-  if (!context) {
-    throw new Error('Protean components must be rendered inside <ProteanProvider>.')
+const defaultPolicy = asPolicy(appFirst)
+let defaultStore: EnvironmentStore | null = null
+
+function defaultContextValue(): ProteanContextValue {
+  if (typeof window !== 'undefined' && !defaultStore) {
+    defaultStore = createEnvironmentStore()
   }
-  return context
+  return {
+    policy: defaultPolicy,
+    components: defaultOverlayComponents,
+    store: defaultStore,
+    ssrTraits: defaultSsrTraits
+  }
+}
+
+export function useProteanContext(): ProteanContextValue {
+  return React.useContext(ProteanContext) ?? defaultContextValue()
 }
 
 export function usePolicy(): Policy {
