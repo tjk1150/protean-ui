@@ -60,7 +60,7 @@ export function NavigationRoot({
 
 export interface NavigationItemProps
   extends Omit<React.AnchorHTMLAttributes<HTMLAnchorElement>, 'href'> {
-  readonly href: string
+  readonly href?: string
   readonly icon?: React.ReactNode
   readonly current?: boolean
   readonly children: React.ReactNode
@@ -73,23 +73,33 @@ export function NavigationItem({
   children,
   ...rest
 }: NavigationItemProps): React.JSX.Element {
+  const inner = (
+    <>
+      {icon ? (
+        <span data-part="icon" aria-hidden="true">
+          {icon}
+        </span>
+      ) : null}
+      <span data-part="label">{children}</span>
+    </>
+  )
+
   return (
     <li data-part="item">
-      <a
-        {...rest}
-        href={href}
-        data-part="link"
-        aria-current={current ? 'page' : undefined}
-      >
-        {icon ? (
-          <span data-part="icon" aria-hidden="true">
-            {icon}
-          </span>
-        ) : null}
-        <span data-part="label">
-          {children}
-        </span>
-      </a>
+      {href === undefined ? (
+        <button
+          {...(rest as React.ButtonHTMLAttributes<HTMLButtonElement>)}
+          type="button"
+          data-part="link"
+          aria-current={current ? 'page' : undefined}
+        >
+          {inner}
+        </button>
+      ) : (
+        <a {...rest} href={href} data-part="link" aria-current={current ? 'page' : undefined}>
+          {inner}
+        </a>
+      )}
     </li>
   )
 }

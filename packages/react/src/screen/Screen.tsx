@@ -20,11 +20,16 @@ export function ScreenNavigation({ children, ...rest }: ScreenSlotProps): React.
   )
 }
 
-export function ScreenContent({ children, ...rest }: ScreenSlotProps): React.JSX.Element {
+export interface ScreenContentProps extends ScreenSlotProps {
+  readonly as?: 'main' | 'div'
+}
+
+export function ScreenContent({ as = 'main', children, ...rest }: ScreenContentProps): React.JSX.Element {
+  const Element = as
   return (
-    <main {...rest} data-part="content">
+    <Element {...rest} data-part="content">
       {children}
-    </main>
+    </Element>
   )
 }
 
