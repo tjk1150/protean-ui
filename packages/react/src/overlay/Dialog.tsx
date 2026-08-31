@@ -113,12 +113,18 @@ export function DialogTrigger({ children, onClick, ...rest }: DialogTriggerProps
 export interface DialogContentProps {
   readonly title?: string
   readonly className?: string
+  readonly alert?: boolean
+  readonly describedBy?: string
+  readonly initialFocus?: React.RefObject<HTMLElement | null>
   readonly children: React.ReactNode
 }
 
 export function DialogContent({
   title,
   className,
+  alert,
+  describedBy,
+  initialFocus,
   children
 }: DialogContentProps): React.JSX.Element | null {
   const { components } = useProteanContext()
@@ -135,6 +141,9 @@ export function DialogContent({
       triggerRef={triggerRef}
       title={title}
       className={className}
+      alert={alert}
+      describedBy={describedBy}
+      initialFocus={initialFocus}
     >
       {children}
     </Presentation>

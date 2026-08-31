@@ -22,6 +22,9 @@ function ModalPresentation({
   triggerRef,
   title,
   className,
+  alert,
+  describedBy,
+  initialFocus,
   children
 }: OverlayPresentationProps): React.JSX.Element {
   return (
@@ -31,6 +34,9 @@ function ModalPresentation({
         <BaseDialog.Popup
           {...dataAttributes(decision.presentation, 'popup')}
           className={className}
+          {...(alert ? { role: 'alertdialog' as const } : {})}
+          {...(describedBy ? { 'aria-describedby': describedBy } : {})}
+          {...(initialFocus ? { initialFocus } : {})}
         >
           {title ? (
             <BaseDialog.Title {...dataAttributes(decision.presentation, 'title')}>
@@ -51,6 +57,9 @@ function SheetPresentation({
   triggerRef,
   title,
   className,
+  alert,
+  describedBy,
+  initialFocus,
   children
 }: OverlayPresentationProps): React.JSX.Element {
   return (
@@ -61,6 +70,9 @@ function SheetPresentation({
           <BaseDrawer.Popup
             {...dataAttributes(decision.presentation, 'popup')}
             className={className}
+            {...(alert ? { role: 'alertdialog' as const } : {})}
+            {...(describedBy ? { 'aria-describedby': describedBy } : {})}
+            {...(initialFocus ? { initialFocus } : {})}
           >
             {title ? (
               <BaseDrawer.Title {...dataAttributes(decision.presentation, 'title')}>
@@ -82,6 +94,9 @@ function PopoverPresentation({
   triggerRef,
   title,
   className,
+  alert,
+  describedBy,
+  initialFocus,
   children
 }: OverlayPresentationProps): React.JSX.Element {
   return (
@@ -91,6 +106,9 @@ function PopoverPresentation({
           <BasePopover.Popup
             {...dataAttributes(decision.presentation, 'popup')}
             className={className}
+            {...(alert ? { role: 'alertdialog' as const } : {})}
+            {...(describedBy ? { 'aria-describedby': describedBy } : {})}
+            {...(initialFocus ? { initialFocus } : {})}
           >
             {title ? (
               <BasePopover.Title {...dataAttributes(decision.presentation, 'title')}>

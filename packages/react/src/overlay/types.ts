@@ -8,5 +8,8 @@ export interface OverlayPresentationProps {
   readonly triggerRef: React.RefObject<HTMLButtonElement | null>
   readonly title?: string
   readonly className?: string
+  readonly alert?: boolean
+  readonly describedBy?: string
+  readonly initialFocus?: React.RefObject<HTMLElement | null>
   readonly children: React.ReactNode
 }

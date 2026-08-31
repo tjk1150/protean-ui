@@ -1,4 +1,5 @@
-import { act, fireEvent, render, screen } from '@testing-library/react'
+import { act, fireEvent, render, screen, waitFor } from '@testing-library/react'
+import * as React from 'react'
 import { describe, expect, it } from 'vitest'
 import { ProteanProvider } from '../provider'
 import { installEnvironment } from '../test/environment-mock'
@@ -86,6 +87,38 @@ describe('Dialog', () => {
     expect(
       (await screen.findByRole('dialog')).getAttribute('data-presentation')
     ).toBe('modal')
+  })
+
+  it('supports alertdialog semantics, description wiring, and initial focus', async () => {
+    installEnvironment({ width: 1280, coarse: false, hover: true })
+    function Harness() {
+      const cancelRef = React.useRef<HTMLButtonElement | null>(null)
+      return (
+        <ProteanProvider>
+          <Dialog.Root role="confirmation" defaultOpen>
+            <Dialog.Content
+              title="Reset"
+              alert
+              describedBy="reset-description"
+              initialFocus={cancelRef}
+            >
+              <p id="reset-description">This cannot be undone.</p>
+              <button type="button">Confirm</button>
+              <button type="button" ref={cancelRef}>
+                Cancel
+              </button>
+            </Dialog.Content>
+          </Dialog.Root>
+        </ProteanProvider>
+      )
+    }
+    render(<Harness />)
+
+    const popup = screen.getByRole('alertdialog', { name: 'Reset' })
+    expect(popup.getAttribute('aria-describedby')).toBe('reset-description')
+    await waitFor(() =>
+      expect(document.activeElement).toBe(screen.getByRole('button', { name: 'Cancel' }))
+    )
   })
 
   it('honors an instance override over the policy', () => {
