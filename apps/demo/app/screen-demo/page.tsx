@@ -2,6 +2,7 @@ import { Navigation, PrimaryAction, Screen } from '@protean-ui/react'
 import Link from 'next/link'
 import { Glyph } from '../glyphs'
 import '../navigation-spike/navigation.css'
+import { BillingSelect } from './billing-select'
 import './screen.css'
 
 export default function ScreenDemoPage() {
@@ -41,6 +42,10 @@ export default function ScreenDemoPage() {
             <li>Four semantic components, one decision layer</li>
             <li>Your components, your styles, our decisions</li>
           </ul>
+          <div className="plan-note">
+            Billing cycle
+            <BillingSelect />
+          </div>
           <label className="plan-note">
             Promo code
             <input name="promo" placeholder="Try focusing me on a phone" />
