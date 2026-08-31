@@ -74,6 +74,10 @@ export function useProteanContext(): ProteanContextValue {
   return context
 }
 
+export function usePolicy(): Policy {
+  return useProteanContext().policy
+}
+
 const noopSubscribe = (): (() => void) => () => {}
 
 export function useTraits(): Traits {

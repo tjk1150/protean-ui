@@ -1,0 +1,183 @@
+/* Reference stylesheet for the app-first navigation policy.
+   One nav > ul DOM; presentation is decided entirely by media queries,
+   so the first paint is always correct with or without JavaScript. */
+
+.nav-shell {
+  display: grid;
+  min-height: 100dvh;
+  grid-template: 'content' 1fr 'nav' auto / 1fr;
+
+  & > main {
+    grid-area: content;
+    padding: 32px 20px 48px;
+    min-width: 0;
+  }
+}
+
+[data-scope='navigation'] {
+  grid-area: nav;
+  background: var(--surface);
+
+  & [data-part='drawer-toggle'] {
+    display: none;
+    appearance: none;
+    border: 1px solid var(--line);
+    background: var(--surface);
+    color: var(--ink);
+    border-radius: 8px;
+    padding: 8px 14px;
+    font-size: 0.9rem;
+    cursor: pointer;
+  }
+
+  & [data-part='list'] {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: flex;
+  }
+
+  & [data-part='link'] {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 14px;
+    border-radius: 10px;
+    text-decoration: none;
+    color: var(--muted);
+    font-size: 0.9rem;
+
+    &[aria-current='page'] {
+      color: var(--accent);
+      font-weight: 600;
+    }
+  }
+
+  & [data-part='icon'] {
+    display: inline-flex;
+
+    & svg {
+      width: 20px;
+      height: 20px;
+    }
+  }
+}
+
+@media (hover: hover) {
+  [data-scope='navigation'] [data-part='link']:hover {
+    background: color-mix(in srgb, var(--accent) 8%, transparent);
+  }
+}
+
+/* compact x touch: bottom tab bar */
+@media (width < 600px) and (pointer: coarse) {
+  [data-scope='navigation'] {
+    position: sticky;
+    bottom: 0;
+    border-top: 1px solid var(--line);
+    padding-bottom: env(safe-area-inset-bottom);
+
+    & [data-part='list'] {
+      justify-content: space-around;
+    }
+
+    & [data-part='link'] {
+      flex-direction: column;
+      gap: 4px;
+      padding: 8px 12px;
+      min-width: 56px;
+      font-size: 11px;
+    }
+  }
+}
+
+/* compact x fine pointer: header strip + drawer panel */
+@media (width < 600px) and (pointer: fine) {
+  .nav-shell {
+    grid-template: 'nav' auto 'content' 1fr / 1fr;
+  }
+
+  [data-scope='navigation'] {
+    border-bottom: 1px solid var(--line);
+    padding: 10px 14px;
+
+    & [data-part='drawer-toggle'] {
+      display: inline-flex;
+    }
+
+    & [data-part='list'] {
+      display: none;
+    }
+
+    &[data-drawer-open] [data-part='list'] {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      position: fixed;
+      top: 53px;
+      bottom: 0;
+      left: 0;
+      width: min(280px, 80vw);
+      background: var(--surface);
+      border-right: 1px solid var(--line);
+      padding: 12px;
+      box-shadow: 24px 0 48px -32px rgb(0 0 0 / 0.3);
+    }
+  }
+}
+
+/* medium: navigation rail */
+@media (600px <= width < 840px) {
+  .nav-shell {
+    grid-template: 'nav content' 1fr / auto 1fr;
+  }
+
+  [data-scope='navigation'] {
+    position: sticky;
+    top: 0;
+    align-self: start;
+    height: 100dvh;
+    width: 80px;
+    border-right: 1px solid var(--line);
+    padding: 16px 8px;
+
+    & [data-part='list'] {
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    & [data-part='link'] {
+      flex-direction: column;
+      gap: 4px;
+      padding: 10px 6px;
+      font-size: 11px;
+      text-align: center;
+    }
+  }
+}
+
+/* expanded: sidebar */
+@media (width >= 840px) {
+  .nav-shell {
+    grid-template: 'nav content' 1fr / auto 1fr;
+  }
+
+  [data-scope='navigation'] {
+    position: sticky;
+    top: 0;
+    align-self: start;
+    height: 100dvh;
+    width: 232px;
+    border-right: 1px solid var(--line);
+    padding: 20px 12px;
+
+    & [data-part='list'] {
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    & [data-part='link'][aria-current='page'] {
+      background: color-mix(in srgb, var(--accent) 10%, transparent);
+    }
+  }
+}

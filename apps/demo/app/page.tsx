@@ -31,6 +31,13 @@ export default function HomePage() {
             layout during hydration.
           </p>
         </Link>
+        <Link className="card" href="/navigation-spike">
+          <h2>Navigation spike</h2>
+          <p>
+            Bottom bar, drawer, rail, and sidebar as four CSS states of one DOM tree - the
+            same-DOM morphing contract in action.
+          </p>
+        </Link>
       </nav>
     </main>
   )

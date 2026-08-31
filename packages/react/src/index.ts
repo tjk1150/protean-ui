@@ -4,6 +4,7 @@ export { createEnvironmentStore, type EnvironmentStore } from './environment'
 export {
   ProteanProvider,
   defaultSsrTraits,
+  usePolicy,
   useReadTraits,
   useTraits,
   type ProteanProviderProps
@@ -17,3 +18,4 @@ export {
 } from './overlay/Dialog'
 export { defaultOverlayComponents, type OverlayComponents } from './overlay/defaults'
 export type { OverlayPresentationProps } from './overlay/types'
+export { Navigation, type NavigationItemProps, type NavigationProps } from './navigation/Navigation'
