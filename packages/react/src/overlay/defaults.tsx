@@ -31,7 +31,6 @@ function ModalPresentation({
         <BaseDialog.Popup
           {...dataAttributes(decision.presentation, 'popup')}
           className={className}
-          finalFocus={triggerRef}
         >
           {title ? (
             <BaseDialog.Title {...dataAttributes(decision.presentation, 'title')}>
@@ -61,7 +60,6 @@ function SheetPresentation({
         <BaseDrawer.Popup
           {...dataAttributes(decision.presentation, 'popup')}
           className={className}
-          finalFocus={triggerRef}
         >
           {title ? (
             <BaseDrawer.Title {...dataAttributes(decision.presentation, 'title')}>
@@ -91,7 +89,6 @@ function PopoverPresentation({
           <BasePopover.Popup
             {...dataAttributes(decision.presentation, 'popup')}
             className={className}
-            finalFocus={triggerRef}
           >
             {title ? (
               <BasePopover.Title {...dataAttributes(decision.presentation, 'title')}>
