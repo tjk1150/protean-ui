@@ -50,8 +50,16 @@ export function DialogRoot({
   const triggerRef = React.useRef<HTMLButtonElement | null>(null)
 
   const [internalOpen, setInternalOpen] = React.useState(defaultOpen)
-  const [decision, setDecision] = React.useState<Decision<OverlayPresentation> | null>(null)
+  const [decision, setDecision] = React.useState<Decision<OverlayPresentation> | null>(() =>
+    (open ?? defaultOpen) ? decideOverlay(policy, readTraits(), role, presentation) : null
+  )
   const isOpen = open ?? internalOpen
+
+  React.useEffect(() => {
+    if (isOpen && !decision) {
+      setDecision(decideOverlay(policy, readTraits(), role, presentation))
+    }
+  }, [isOpen, decision, policy, readTraits, role, presentation])
 
   const setOpen = React.useCallback(
     (next: boolean) => {

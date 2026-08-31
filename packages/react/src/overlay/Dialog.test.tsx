@@ -62,6 +62,32 @@ describe('Dialog', () => {
     expect(openedPopup().getAttribute('data-presentation')).toBe('fullscreen')
   })
 
+  it('decides at mount when defaultOpen is set (no trigger interaction)', () => {
+    installEnvironment({ width: 375, coarse: true, hover: false })
+    renderDialog({ defaultOpen: true })
+    expect(openedPopup().getAttribute('data-presentation')).toBe('fullscreen')
+  })
+
+  it('decides when a controlled open flips to true externally', async () => {
+    installEnvironment({ width: 1280, coarse: false, hover: true })
+    const view = renderDialog({ open: false })
+    expect(document.querySelector('[data-part="popup"]')).toBeNull()
+
+    view.rerender(
+      <ProteanProvider>
+        <Dialog.Root role="form" open>
+          <Dialog.Trigger>Open</Dialog.Trigger>
+          <Dialog.Content title="Shipping">
+            <p>content</p>
+          </Dialog.Content>
+        </Dialog.Root>
+      </ProteanProvider>
+    )
+    expect(
+      (await screen.findByRole('dialog')).getAttribute('data-presentation')
+    ).toBe('modal')
+  })
+
   it('honors an instance override over the policy', () => {
     installEnvironment({ width: 1280, coarse: false, hover: true })
     renderDialog({ presentation: 'fullscreen' })
