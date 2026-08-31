@@ -1,0 +1,105 @@
+/* Reference stylesheet for the app-first Screen and PrimaryAction policies.
+   The screen is an app shell on compact viewports (content scrolls, chrome stays)
+   and a normal document on medium and expanded viewports. */
+
+[data-scope='screen'] {
+  display: grid;
+  height: 100dvh;
+  grid-template: 'content' 1fr 'actions' auto 'nav' auto / 1fr;
+
+  & > [data-part='navigation'] {
+    display: contents;
+  }
+
+  & > [data-part='content'] {
+    grid-area: content;
+    overflow-y: auto;
+    min-width: 0;
+    padding: 32px 20px;
+  }
+
+  & > [data-part='actions'] {
+    grid-area: actions;
+  }
+}
+
+/* compact x fine pointer: header nav on top, sticky footer actions */
+@media (width < 600px) and (pointer: fine) {
+  [data-scope='screen'] {
+    grid-template: 'nav' auto 'content' 1fr 'actions' auto / 1fr;
+  }
+}
+
+/* medium and expanded: side navigation, actions inline at the end of content */
+@media (width >= 600px) {
+  [data-scope='screen'] {
+    height: auto;
+    min-height: 100dvh;
+    grid-template: 'nav content' 1fr 'nav actions' auto / auto 1fr;
+
+    & > [data-part='content'] {
+      overflow-y: visible;
+    }
+
+    & > [data-part='actions'] {
+      padding: 0 20px;
+    }
+  }
+}
+
+[data-scope='primary-action'] {
+  & [data-part='button'] {
+    appearance: none;
+    border: none;
+    background: var(--accent);
+    color: #ffffff;
+    border-radius: 10px;
+    padding: 12px 20px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
+  }
+
+  & [data-part='button']:disabled {
+    opacity: 0.5;
+    cursor: default;
+  }
+}
+
+/* action bar: compact x touch, dodges the virtual keyboard */
+@media (width < 600px) and (pointer: coarse) {
+  [data-scope='primary-action'] {
+    padding: 12px 16px;
+    background: var(--surface);
+    border-top: 1px solid var(--line);
+    transform: translateY(calc(-1 * var(--protean-vk-offset, 0px)));
+
+    & [data-part='button'] {
+      width: 100%;
+      min-height: 48px;
+      font-size: 1rem;
+    }
+  }
+
+  [data-scope='screen']:not(:has([data-scope='navigation'])) [data-scope='primary-action'] {
+    padding-bottom: calc(12px + env(safe-area-inset-bottom));
+  }
+}
+
+/* sticky footer: compact x fine pointer */
+@media (width < 600px) and (pointer: fine) {
+  [data-scope='primary-action'] {
+    padding: 10px 16px;
+    background: var(--surface);
+    border-top: 1px solid var(--line);
+    display: flex;
+    justify-content: flex-end;
+  }
+}
+
+/* inline: medium and expanded */
+@media (width >= 600px) {
+  [data-scope='primary-action'] {
+    padding: 8px 0 40px;
+  }
+}

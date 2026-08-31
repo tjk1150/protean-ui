@@ -20,3 +20,7 @@ export { defaultOverlayComponents, type OverlayComponents } from './overlay/defa
 export type { OverlayPresentationProps } from './overlay/types'
 export * as Navigation from './navigation/index.parts'
 export type { NavigationItemProps, NavigationProps } from './navigation/Navigation'
+export * as Screen from './screen/index.parts'
+export type { ScreenSlotProps } from './screen/Screen'
+export * as PrimaryAction from './primary-action/index.parts'
+export type { PrimaryActionProps } from './primary-action/PrimaryAction'

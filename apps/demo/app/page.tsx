@@ -38,6 +38,13 @@ export default function HomePage() {
             same-DOM morphing contract in action.
           </p>
         </Link>
+        <Link className="card" href="/screen-demo">
+          <h2>Screen demo</h2>
+          <p>
+            The full report API: Screen, Navigation, and PrimaryAction composed - action bar,
+            sticky footer, or inline placement decided by the environment.
+          </p>
+        </Link>
       </nav>
     </main>
   )

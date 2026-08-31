@@ -161,6 +161,48 @@ a {
   min-height: 44px;
 }
 
+.plan-card {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 20px;
+  margin: 20px 0;
+  max-width: 480px;
+}
+
+.plan-card h2 {
+  margin: 0 0 4px;
+  font-size: 1.05rem;
+}
+
+.plan-price {
+  margin: 0 0 12px;
+  color: var(--accent);
+  font-weight: 600;
+}
+
+.plan-card ul {
+  margin: 0 0 16px;
+  padding-left: 1.2em;
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+.plan-note {
+  display: grid;
+  gap: 4px;
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+
+.plan-note input {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 10px 12px;
+  font-size: 1rem;
+  min-height: 44px;
+}
+
 /* Overlay styling through the Protean data-attribute contract */
 
 [data-scope="overlay"][data-part="backdrop"],
