@@ -53,10 +53,15 @@ export function createEnvironmentStore(
   let traits = read()
   const listeners = new Set<() => void>()
 
-  function update(): void {
+  function currentTraits(): Traits {
     const next = read(traits)
-    if (traitsEqual(next, traits)) return
-    traits = next
+    if (!traitsEqual(next, traits)) traits = next
+    return traits
+  }
+
+  function update(): void {
+    const previous = traits
+    if (currentTraits() === previous) return
     for (const listener of listeners) listener()
   }
 
@@ -84,6 +89,6 @@ export function createEnvironmentStore(
         }
       }
     },
-    getTraits: () => traits
+    getTraits: currentTraits
   }
 }
