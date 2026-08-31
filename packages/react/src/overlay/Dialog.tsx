@@ -116,6 +116,10 @@ export interface DialogContentProps {
   readonly alert?: boolean
   readonly describedBy?: string
   readonly initialFocus?: React.RefObject<HTMLElement | null>
+  readonly finalFocus?:
+    | boolean
+    | React.RefObject<HTMLElement | null>
+    | ((closeType: unknown) => boolean | HTMLElement | null | void)
   readonly children: React.ReactNode
 }
 
@@ -125,6 +129,7 @@ export function DialogContent({
   alert,
   describedBy,
   initialFocus,
+  finalFocus,
   children
 }: DialogContentProps): React.JSX.Element | null {
   const { components } = useProteanContext()
@@ -150,6 +155,7 @@ export function DialogContent({
       alert={alert}
       describedBy={describedBy}
       initialFocus={initialFocus}
+      finalFocus={finalFocus}
     >
       {children}
     </Presentation>

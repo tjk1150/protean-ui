@@ -25,6 +25,7 @@ function ModalPresentation({
   alert,
   describedBy,
   initialFocus,
+  finalFocus,
   children
 }: OverlayPresentationProps): React.JSX.Element {
   return (
@@ -37,6 +38,7 @@ function ModalPresentation({
           {...(alert ? { role: 'alertdialog' as const } : {})}
           {...(describedBy ? { 'aria-describedby': describedBy } : {})}
           {...(initialFocus ? { initialFocus } : {})}
+          {...(finalFocus === undefined ? {} : { finalFocus })}
         >
           {title ? (
             <BaseDialog.Title {...dataAttributes(decision.presentation, 'title')}>
@@ -60,6 +62,7 @@ function SheetPresentation({
   alert,
   describedBy,
   initialFocus,
+  finalFocus,
   children
 }: OverlayPresentationProps): React.JSX.Element {
   return (
@@ -73,6 +76,7 @@ function SheetPresentation({
             {...(alert ? { role: 'alertdialog' as const } : {})}
             {...(describedBy ? { 'aria-describedby': describedBy } : {})}
             {...(initialFocus ? { initialFocus } : {})}
+            {...(finalFocus === undefined ? {} : { finalFocus })}
           >
             {title ? (
               <BaseDrawer.Title {...dataAttributes(decision.presentation, 'title')}>
@@ -97,6 +101,7 @@ function PopoverPresentation({
   alert,
   describedBy,
   initialFocus,
+  finalFocus,
   children
 }: OverlayPresentationProps): React.JSX.Element {
   return (
@@ -109,6 +114,7 @@ function PopoverPresentation({
             {...(alert ? { role: 'alertdialog' as const } : {})}
             {...(describedBy ? { 'aria-describedby': describedBy } : {})}
             {...(initialFocus ? { initialFocus } : {})}
+            {...(finalFocus === undefined ? {} : { finalFocus })}
           >
             {title ? (
               <BasePopover.Title {...dataAttributes(decision.presentation, 'title')}>
