@@ -1,0 +1,24 @@
+{
+  "name": "@protean-ui/react",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Semantic adaptive components for React, driven by the Protean policy engine",
+  "type": "module",
+  "license": "MIT",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@protean-ui/core": "workspace:*"
+  },
+  "peerDependencies": {
+    "react": ">=18",
+    "react-dom": ">=18"
+  },
+  "devDependencies": {
+    "typescript": "^5.9.0"
+  }
+}
