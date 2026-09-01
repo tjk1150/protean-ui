@@ -5,32 +5,21 @@ export default function GettingStartedKo() {
     <div className="doc" lang="ko">
       <h1>시작하기</h1>
       <p className="lede">
-        10분이면 첫 다이얼로그를 띄울 수 있어요. Protean은 아직 pre-alpha라서 npm에
-        올라가 있지 않고, 저장소에서 직접 받아서 써요.
+        10분이면 첫 다이얼로그를 띄울 수 있어요. pre-alpha지만 npm에 올라가 있어서
+        설치는 한 줄이에요.
       </p>
 
       <h2>1. 설치하기</h2>
-      <pre><code>{`git clone https://github.com/tjk1150/protean-ui
-
-# 내 앱에서:
-npm install ../protean-ui/packages/core ../protean-ui/packages/react @base-ui/react`}</code></pre>
-      <p>Next.js를 쓴다면 설정 두 가지를 추가해 주세요.</p>
-      <pre><code>{`// next.config.ts
-const nextConfig = {
-  // Protean은 지금 TypeScript 소스 그대로 배포돼요. 번들러가 컴파일하도록 알려줘요.
-  transpilePackages: ["@protean-ui/react", "@protean-ui/core"],
-  turbopack: {
-    // Base UI가 내 앱의 React를 쓰도록 경로를 고정해요.
-    resolveAlias: {
-      "@base-ui/react": "./node_modules/@base-ui/react",
-      "@base-ui/react/*": "./node_modules/@base-ui/react/*",
-    },
-  },
-};`}</code></pre>
+      <pre><code>{`npm install protean-ui`}</code></pre>
+      <p>
+        행동을 맡는 Base UI와 정책 엔진(core)은 의존성으로 함께 설치돼요. 컴파일된
+        ESM과 타입이 배포되기 때문에 번들러 설정이나 Next.js 설정은 아무것도 필요
+        없어요. 스코프 패키지를 직접 쓰고 싶으면{' '}
+        <code>npm install @protean-ui/react</code>도 같아요.
+      </p>
       <div className="callout">
-        <strong>왜 이 설정이 필요한가요?</strong> 저장소를 직접 링크해서 쓰는 동안에만
-        필요한 임시 설정이에요. React가 두 벌 로드되는 문제를 막아 줘요. npm에 정식
-        배포되면 이 설정 없이 <code>npm install protean-ui</code> 한 줄로 끝나요.
+        <strong>버전에 대해:</strong> 지금은 <code>0.1.0-alpha</code>예요. API가 예고
+        없이 바뀔 수 있는 단계라, 제품에 쓰기 전에는 버전을 고정해 두세요.
       </div>
 
       <h2>2. 첫 다이얼로그 띄우기</h2>

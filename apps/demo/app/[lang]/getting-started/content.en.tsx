@@ -5,32 +5,21 @@ export default function GettingStartedPage() {
     <div className="doc">
       <h1>Getting started</h1>
       <p className="lede">
-        Protean is pre-alpha and not yet published to npm. Today it is consumed from the
-        repository; the packages are plain TypeScript sources compiled by your bundler.
+        Protean is pre-alpha, published to npm. Install is one line; compiled ESM and
+        types ship in the package, so no bundler configuration is needed.
       </p>
 
       <h2>Install</h2>
-      <pre><code>{`git clone https://github.com/tjk1150/protean-ui
-# in your app:
-npm install ../protean-ui/packages/core ../protean-ui/packages/react @base-ui/react`}</code></pre>
+      <pre><code>{`npm install protean-ui`}</code></pre>
       <p>
-        Next.js needs to transpile the linked sources, and - while the packages are
-        file-linked rather than published - <code>@base-ui/react</code> should resolve to
-        your app&apos;s copy so only one React instance exists:
+        Base UI (the behavior backend) and the policy engine (core) come along as
+        dependencies. No <code>transpilePackages</code>, no aliases. Installing the
+        scoped package directly - <code>npm install @protean-ui/react</code> - is
+        equivalent.
       </p>
-      <pre><code>{`// next.config.ts
-const nextConfig = {
-  transpilePackages: ["@protean-ui/react", "@protean-ui/core"],
-  turbopack: {
-    resolveAlias: {
-      "@base-ui/react": "./node_modules/@base-ui/react",
-      "@base-ui/react/*": "./node_modules/@base-ui/react/*",
-    },
-  },
-};`}</code></pre>
       <div className="callout">
-        Both workarounds disappear once the packages are published: a normal npm install
-        resolves a single React and ships compiled output.
+        On versions: this is <code>0.1.0-alpha</code>. APIs move without notice - pin
+        your version before relying on it.
       </div>
 
       <h2>First component</h2>
