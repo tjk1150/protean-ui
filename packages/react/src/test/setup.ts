@@ -16,3 +16,13 @@ if (typeof globalThis.ResizeObserver === 'undefined') {
 if (typeof Element !== 'undefined' && !Element.prototype.scrollIntoView) {
   Element.prototype.scrollIntoView = () => {}
 }
+
+/* Base UI sequences mount and focus work through requestAnimationFrame.
+   Running callbacks synchronously keeps that work inside the same act()
+   pass, so assertions are deterministic and never leak across tests
+   (the same shim the real-app scenario suite uses). */
+globalThis.requestAnimationFrame = ((callback: FrameRequestCallback): number => {
+  callback(performance.now())
+  return 0
+}) as typeof requestAnimationFrame
+globalThis.cancelAnimationFrame = () => {}

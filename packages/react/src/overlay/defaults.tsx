@@ -5,7 +5,34 @@ import { Drawer as BaseDrawer } from '@base-ui/react/drawer'
 import { Popover as BasePopover } from '@base-ui/react/popover'
 import type { OverlayPresentation } from '@protean-ui/core'
 import type * as React from 'react'
+import { restoreFocus } from './continuity'
 import type { OverlayPresentationProps } from './types'
+
+/* In live-continuity mode the content lives in a persistent host element;
+   the presentation renders a slot and adopts that element, so swapping
+   presentations moves the DOM instead of recreating it. */
+function ContentSlot({
+  host,
+  children
+}: {
+  readonly host?: HTMLElement
+  readonly children: React.ReactNode
+}): React.JSX.Element {
+  if (!host) return <>{children}</>
+  return (
+    <div
+      data-scope="overlay"
+      data-part="content-slot"
+      ref={(node) => {
+        if (!node) return
+        if (host.parentElement !== node) node.appendChild(host)
+        // This ref fires inside the incoming backend's attaching commit -
+        // the one moment the moved content is back in the document.
+        if (node.isConnected) restoreFocus(host)
+      }}
+    />
+  )
+}
 
 function dataAttributes(presentation: OverlayPresentation, part: string, contained = false) {
   return {
@@ -28,6 +55,7 @@ function ModalPresentation({
   initialFocus,
   finalFocus,
   portalContainer,
+  contentHost,
   children
 }: OverlayPresentationProps): React.JSX.Element {
   const contained = portalContainer !== undefined
@@ -48,7 +76,7 @@ function ModalPresentation({
               {title}
             </BaseDialog.Title>
           ) : null}
-          {children}
+          <ContentSlot host={contentHost}>{children}</ContentSlot>
         </BaseDialog.Popup>
       </BaseDialog.Portal>
     </BaseDialog.Root>
@@ -67,6 +95,7 @@ function SheetPresentation({
   initialFocus,
   finalFocus,
   portalContainer,
+  contentHost,
   children
 }: OverlayPresentationProps): React.JSX.Element {
   const contained = portalContainer !== undefined
@@ -88,7 +117,7 @@ function SheetPresentation({
                 {title}
               </BaseDrawer.Title>
             ) : null}
-            {children}
+            <ContentSlot host={contentHost}>{children}</ContentSlot>
           </BaseDrawer.Popup>
         </BaseDrawer.Viewport>
       </BaseDrawer.Portal>
@@ -109,6 +138,7 @@ function PopoverPresentation({
   describedBy,
   initialFocus,
   finalFocus,
+  contentHost,
   children
 }: OverlayPresentationProps): React.JSX.Element {
   return (
@@ -128,7 +158,7 @@ function PopoverPresentation({
                 {title}
               </BasePopover.Title>
             ) : null}
-            {children}
+            <ContentSlot host={contentHost}>{children}</ContentSlot>
           </BasePopover.Popup>
         </BasePopover.Positioner>
       </BasePopover.Portal>

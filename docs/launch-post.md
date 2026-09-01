@@ -86,7 +86,7 @@ decides which pattern, when.
 One architecture rule governs everything: a decision the server could get wrong must be
 expressible in CSS, or deferred to interaction time.
 
-- Overlays decide when they open. The served HTML contains the trigger and zero overlay
+- Overlays decide when they open (opt into `continuity="live"` to re-decide mid-open - the presentation swaps in place with content DOM, typed state, and focus preserved). The served HTML contains the trigger and zero overlay
   markup. There is nothing to flash, mismatch, or shift.
 - Navigation chrome is one `nav > ul` tree whose bottom-bar, drawer, rail, and sidebar
   states are media-query CSS. The same DOM is served to everyone; measured cumulative

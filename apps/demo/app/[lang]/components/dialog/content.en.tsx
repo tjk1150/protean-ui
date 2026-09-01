@@ -37,7 +37,11 @@ export default function DialogDocPage() {
       </div>
       <p>
         The decision is frozen while open - resizing mid-interaction never swaps the
-        presentation under the user; the next open re-decides.
+        presentation under the user; the next open re-decides. When you want the
+        opposite trade, opt in with <code>continuity=&quot;live&quot;</code>: the
+        overlay re-decides while open and swaps in place, preserving the content DOM,
+        typed state, and focus - see the{' '}
+        <a href="/continuity-demo">transition continuity demo</a>.
       </p>
 
       <h2>Dialog.Root</h2>
@@ -47,6 +51,7 @@ export default function DialogDocPage() {
           <tbody>
             <tr><td>role</td><td>&quot;confirmation&quot; | &quot;form&quot; | &quot;contextual&quot;</td><td>default &quot;confirmation&quot;</td></tr>
             <tr><td>presentation</td><td>presentation | &#123; sizeClass: presentation &#125;</td><td>instance override, trait language only</td></tr>
+            <tr><td>continuity</td><td>&quot;pinned&quot; | &quot;live&quot;</td><td>pinned (default) freezes the decision while open; live re-decides mid-open and swaps in place, preserving state</td></tr>
             <tr><td>open / defaultOpen / onOpenChange</td><td>controlled or uncontrolled</td><td>parent-mounted dialogs use defaultOpen + onOpenChange; a controlled parent can veto a close by ignoring it</td></tr>
           </tbody>
         </table>

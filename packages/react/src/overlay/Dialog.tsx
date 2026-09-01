@@ -9,14 +9,19 @@ import {
   type OverlayRole
 } from '@protean-ui/core'
 import * as React from 'react'
+import { createPortal } from 'react-dom'
 import { BoundaryContext } from '../boundary'
-import { useProteanContext, useReadTraits } from '../provider'
+import { focusableSelector, restoreFocus, trackFocus } from './continuity'
+import { useProteanContext, useReadTraits, useTraits } from '../provider'
 
 interface DialogLocalContextValue {
   readonly open: boolean
   readonly decision: Decision<OverlayPresentation> | null
   readonly triggerRef: React.RefObject<HTMLButtonElement | null>
   readonly setOpen: (open: boolean) => void
+  /* Live-continuity mode only: the persistent element the content lives in,
+     so a presentation swap moves the DOM instead of recreating it. */
+  readonly contentHost: HTMLElement | null
 }
 
 const DialogLocalContext = React.createContext<DialogLocalContextValue | null>(null)
@@ -32,13 +37,21 @@ function useDialogLocalContext(part: string): DialogLocalContextValue {
 export interface DialogProps {
   readonly role?: OverlayRole
   readonly presentation?: InstanceOverride<OverlayPresentation>
+  /* 'pinned' (default) keeps the decision for the whole open lifecycle and
+     re-decides at the next open. 'live' re-decides while open and swaps the
+     presentation in place, preserving the content DOM, state, and focus. */
+  readonly continuity?: 'pinned' | 'live'
   readonly defaultOpen?: boolean
   readonly open?: boolean
   readonly onOpenChange?: (open: boolean) => void
   readonly children: React.ReactNode
 }
 
-export function DialogRoot({
+export function DialogRoot(props: DialogProps): React.JSX.Element {
+  return props.continuity === 'live' ? <LiveDialogRoot {...props} /> : <PinnedDialogRoot {...props} />
+}
+
+function PinnedDialogRoot({
   role = 'confirmation',
   presentation,
   defaultOpen = false,
@@ -78,7 +91,59 @@ export function DialogRoot({
   )
 
   const value = React.useMemo<DialogLocalContextValue>(
-    () => ({ open: isOpen, decision, triggerRef, setOpen }),
+    () => ({ open: isOpen, decision, triggerRef, setOpen, contentHost: null }),
+    [isOpen, decision, setOpen]
+  )
+
+  return <DialogLocalContext.Provider value={value}>{children}</DialogLocalContext.Provider>
+}
+
+function LiveDialogRoot({
+  role = 'confirmation',
+  presentation,
+  defaultOpen = false,
+  open,
+  onOpenChange,
+  children
+}: DialogProps): React.JSX.Element {
+  const { policy } = useProteanContext()
+  useTraits() // subscribe: re-render (and re-decide below) on environment change
+  const readTraits = useReadTraits()
+  const triggerRef = React.useRef<HTMLButtonElement | null>(null)
+
+  const [internalOpen, setInternalOpen] = React.useState(defaultOpen)
+  const isOpen = open ?? internalOpen
+
+  // Derived, not stored: while open, every environment change re-decides.
+  const decision = isOpen ? decideOverlay(policy, readTraits(), role, presentation) : null
+
+  React.useEffect(() => {
+    if (decision && process.env.NODE_ENV !== 'production') {
+      console.debug(`[protean] ${explain(decision)} (continuity: live)`)
+    }
+  }, [decision?.presentation])
+
+  // The content's permanent home; presentations adopt this element into
+  // their popup, so a swap moves the subtree instead of recreating it.
+  const hostRef = React.useRef<HTMLElement | null>(null)
+  if (typeof document !== 'undefined' && hostRef.current === null) {
+    const host = document.createElement('div')
+    host.setAttribute('data-scope', 'overlay')
+    host.setAttribute('data-part', 'content-host')
+    trackFocus(host)
+    hostRef.current = host
+  }
+
+  const setOpen = React.useCallback(
+    (next: boolean) => {
+      setInternalOpen(next)
+      onOpenChange?.(next)
+    },
+    [onOpenChange]
+  )
+
+  const value = React.useMemo<DialogLocalContextValue>(
+    () => ({ open: isOpen, decision, triggerRef, setOpen, contentHost: hostRef.current }),
     [isOpen, decision, setOpen]
   )
 
@@ -134,7 +199,7 @@ export function DialogContent({
   children
 }: DialogContentProps): React.JSX.Element | null {
   const { components } = useProteanContext()
-  const { open, decision, triggerRef, setOpen } = useDialogLocalContext('Content')
+  const { open, decision, triggerRef, setOpen, contentHost } = useDialogLocalContext('Content')
   const boundary = React.useContext(BoundaryContext)
 
   // The backend resolves an initialFocus ref asynchronously; apply it
@@ -143,25 +208,38 @@ export function DialogContent({
     if (open && initialFocus?.current) initialFocus.current.focus()
   }, [open, initialFocus])
 
+  // Live swap backstop: if the moved content is attached but lost focus,
+  // pull it back in. The primary restore happens in the content slot's ref,
+  // inside the incoming backend's own attaching commit (see defaults.tsx).
+  React.useEffect(() => {
+    if (!contentHost || !open) return
+    if (!document.contains(contentHost)) return
+    restoreFocus(contentHost)
+  })
+
   if (!decision) return null
 
   const Presentation = components[decision.presentation]
   return (
-    <Presentation
-      open={open}
-      onOpenChange={setOpen}
-      decision={decision}
-      triggerRef={triggerRef}
-      title={title}
-      className={className}
-      alert={alert}
-      describedBy={describedBy}
-      initialFocus={initialFocus}
-      finalFocus={finalFocus}
-      {...(boundary ? { portalContainer: boundary } : {})}
-    >
-      {children}
-    </Presentation>
+    <>
+      {contentHost ? createPortal(children, contentHost) : null}
+      <Presentation
+        open={open}
+        onOpenChange={setOpen}
+        decision={decision}
+        triggerRef={triggerRef}
+        title={title}
+        className={className}
+        alert={alert}
+        describedBy={describedBy}
+        initialFocus={initialFocus}
+        finalFocus={finalFocus}
+        {...(boundary ? { portalContainer: boundary } : {})}
+        {...(contentHost ? { contentHost } : {})}
+      >
+        {contentHost ? null : children}
+      </Presentation>
+    </>
   )
 }
 

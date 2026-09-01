@@ -41,7 +41,11 @@ export default function DialogKo() {
       </div>
       <div className="callout">
         열려 있는 동안에는 창 크기가 바뀌어도 모습을 유지해요. 쓰던 도중에 UI가 갑자기
-        변신하면 당황스러우니까요. 다음에 열 때 다시 판단해요.
+        변신하면 당황스러우니까요. 다음에 열 때 다시 판단해요. 반대 트레이드가 필요하면{' '}
+        <code>continuity=&quot;live&quot;</code>를 켜 보세요. 열려 있는 동안에도 다시
+        판단해서 모습을 그 자리에서 바꾸는데, 입력하던 내용과 포커스, React 상태까지
+        전부 보존돼요. <a href="/continuity-demo">전환 연속성 데모</a>에서 직접 확인할
+        수 있어요.
       </div>
 
       <h2>Dialog.Root</h2>
@@ -51,6 +55,7 @@ export default function DialogKo() {
           <tbody>
             <tr><td>role</td><td>&quot;confirmation&quot; | &quot;form&quot; | &quot;contextual&quot;</td><td>다이얼로그의 성격. 기본값은 confirmation이에요.</td></tr>
             <tr><td>presentation</td><td>모습 이름 | &#123; 화면등급: 모습 &#125;</td><td>이 다이얼로그만 다르게 열고 싶을 때 지정해요. 픽셀이 아니라 환경 이름으로 써요.</td></tr>
+            <tr><td>continuity</td><td>&quot;pinned&quot; | &quot;live&quot;</td><td>기본은 pinned(열림 동안 고정)이에요. live면 열려 있는 동안에도 다시 판단해서, 상태를 보존한 채 모습을 바꿔요.</td></tr>
             <tr><td>open / defaultOpen / onOpenChange</td><td></td><td>열림 상태를 직접 관리할 수도, 맡길 수도 있어요. 부모가 조건부로 렌더링하는 패턴은 defaultOpen과 onOpenChange를 쓰면 돼요.</td></tr>
           </tbody>
         </table>
