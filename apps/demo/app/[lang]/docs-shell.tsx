@@ -17,7 +17,9 @@ type NavEntry =
 const entries: readonly NavEntry[] = [
   { path: '', label: { ko: '개요', en: 'Overview' } },
   { path: '/getting-started', label: { ko: '시작하기', en: 'Getting started' } },
+  { path: '/why', label: { ko: '왜 만들었나요', en: 'Why this exists' } },
   { group: { ko: '개념', en: 'Concepts' } },
+  { path: '/concepts/design-principles', label: { ko: '설계 원리', en: 'Design principles' } },
   { path: '/concepts/traits-and-policy', label: { ko: '판단 기준과 규칙', en: 'Traits and policy' } },
   { path: '/concepts/ssr', label: { ko: '서버 렌더링', en: 'Server rendering' } },
   { path: '/concepts/accessibility', label: { ko: '접근성', en: 'Accessibility' } },
