@@ -1,5 +1,7 @@
 # Protean UI
 
+[![ci](https://github.com/tjk1150/protean-ui/actions/workflows/ci.yml/badge.svg)](https://github.com/tjk1150/protean-ui/actions/workflows/ci.yml)
+
 > Headless adaptive UI runtime for React. Declare what your UI means; the runtime decides how it presents in the current environment.
 
 **Status: pre-alpha.** Phase 0 passed its kill criteria ([verdict](docs/phase-0-verdict.md)). Five roles are implemented (Dialog, Select, Navigation, Screen, PrimaryAction), proven against a 699-test production-grade app migration. APIs move without notice.

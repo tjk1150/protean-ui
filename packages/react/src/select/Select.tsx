@@ -266,6 +266,7 @@ export function SelectContent({ children }: SelectContentProps): React.JSX.Eleme
             data-scope="select"
             data-part="popup"
             data-presentation={presentation}
+            {...(ariaLabel ? { 'aria-label': ariaLabel } : {})}
             {...containedAttr}
           >
             <BaseCombobox.Input
