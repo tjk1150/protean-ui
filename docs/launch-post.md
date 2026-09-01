@@ -107,7 +107,7 @@ Numbers from the repository, not projections:
 - Bundle: 5.7KB gzip for react with all seven roles, 1.1KB for core (excluding Base
   UI). One role via its public subpath (`@protean-ui/react/dialog`) is 2.8KB, and that
   tree-shakeability is enforced by the release gate as a contract.
-- 157 library tests. The default policy is verified as an exhaustive 45-cell decision
+- 186 library tests. The default policy is verified as an exhaustive 54-cell decision
   table, alongside boundary-value, state-transition, and negative suites; a release gate
   (`pnpm gate`) blocks every publish - a wrong decision cell is a blocked release, not a
   statistic.

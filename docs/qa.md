@@ -9,7 +9,7 @@ design techniques; the gate is checked before every npm publish.
 
 | Characteristic | What it means here | Where it is verified |
 |---|---|---|
-| Functional suitability | Decisions match the documented policy, exactly | `packs.decision-table.test.ts` - the full 45-cell cartesian table |
+| Functional suitability | Decisions match the documented policy, exactly | `packs.decision-table.test.ts` - the full 54-cell cartesian table |
 | Interaction capability | The accessible tree stays isomorphic across presentations; focus/ARIA props pass through | Dialog/Select/Navigation suites; axe runs on demo states |
 | Compatibility | Presentations render correctly across engines and devices | Compatibility matrix below |
 | Reliability | SSR invariant (no hydration-mismatch class), decisions pinned while open, graceful fallbacks | ssr-proof curl checks; `qa.transitions.test.tsx`; no-visualViewport and zero-width-boundary tests |
@@ -23,7 +23,7 @@ design techniques; the gate is checked before every npm publish.
 
 | Technique | Applied to | Suite |
 |---|---|---|
-| Decision table | The app-first pack, exhaustively: 3 overlay roles x 3 sizes x 3 inputs, plus navigation and primary action (45 cells) | `core/src/packs.decision-table.test.ts` |
+| Decision table | The app-first pack, exhaustively: 3 overlay roles x 3 sizes x 3 inputs, plus navigation, primary action, and hint (54 cells) | `core/src/packs.decision-table.test.ts` |
 | Boundary value analysis | Size thresholds (599/600, 839/840); hysteresis transitions in both directions (583/584, 615/616, 823/824, 855/856); virtual-keyboard threshold (649/650 at 800px); bar capacity (5 vs 6 items, degenerate capacity 1) | `traits.test.ts`, `hysteresis.test.ts`, `environment.test.ts`, `Navigation.test.tsx`, `qa.transitions.test.tsx` |
 | Equivalence partitioning | Input profiles (touch / pointer / hybrid), size classes, overlay roles | throughout; partitions enumerated in the decision table |
 | State transition | Overlay lifecycle (closed -> open pins the decision -> close -> reopen re-decides); drawer and overflow panels reset when their presentation leaves | `qa.transitions.test.tsx`, `Navigation.test.tsx`, `Dialog.test.tsx` |
