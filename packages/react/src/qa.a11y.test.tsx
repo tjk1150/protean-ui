@@ -3,6 +3,7 @@ import { fireEvent, render, screen } from '@testing-library/react'
 import * as React from 'react'
 import { describe, expect, it } from 'vitest'
 import * as Dialog from './overlay/index.parts'
+import * as Menu from './menu/index.parts'
 import * as Navigation from './navigation/index.parts'
 import * as Select from './select/index.parts'
 import { ProteanProvider } from './provider'
@@ -88,6 +89,41 @@ describe('axe on key open states', () => {
     )
     fireEvent.click(screen.getByRole('button', { name: 'More' }))
     await expectClean('bar-overflow')
+  })
+
+  it('menu popover open', async () => {
+    installEnvironment({ width: 1280, coarse: false, hover: true })
+    render(
+      <ProteanProvider>
+        <Menu.Root>
+          <Menu.Trigger>More actions</Menu.Trigger>
+          <Menu.Content>
+            <Menu.Item>Share</Menu.Item>
+            <Menu.Separator />
+            <Menu.Item destructive>Delete</Menu.Item>
+          </Menu.Content>
+        </Menu.Root>
+      </ProteanProvider>
+    )
+    fireEvent.click(screen.getByRole('button', { name: 'More actions' }))
+    await expectClean('menu-popover')
+  })
+
+  it('menu action sheet open', async () => {
+    installEnvironment({ width: 375, coarse: true, hover: false })
+    render(
+      <ProteanProvider>
+        <Menu.Root>
+          <Menu.Trigger>More actions</Menu.Trigger>
+          <Menu.Content>
+            <Menu.Item>Share</Menu.Item>
+            <Menu.Item destructive>Delete</Menu.Item>
+          </Menu.Content>
+        </Menu.Root>
+      </ProteanProvider>
+    )
+    fireEvent.click(screen.getByRole('button', { name: 'More actions' }))
+    await expectClean('menu-sheet')
   })
 
   it('searchable select open', async () => {

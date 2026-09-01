@@ -27,6 +27,7 @@ const entries: readonly NavEntry[] = [
   { group: { ko: '컴포넌트', en: 'Components' } },
   { path: '/components/dialog', label: { ko: 'Dialog', en: 'Dialog' } },
   { path: '/components/select', label: { ko: 'Select', en: 'Select' } },
+  { path: '/components/menu', label: { ko: 'Menu', en: 'Menu' } },
   { path: '/components/navigation', label: { ko: 'Navigation', en: 'Navigation' } },
   { path: '/components/screen', label: { ko: 'Screen', en: 'Screen' } },
   { path: '/components/primary-action', label: { ko: 'PrimaryAction', en: 'PrimaryAction' } },
