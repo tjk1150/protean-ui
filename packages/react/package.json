@@ -34,7 +34,8 @@
     "./screen": "./src/screen/index.parts.ts",
     "./primary-action": "./src/primary-action/index.parts.ts",
     "./boundary": "./src/boundary.tsx",
-    "./provider": "./src/provider.tsx"
+    "./provider": "./src/provider.tsx",
+    "./list-detail": "./src/list-detail/index.parts.ts"
   },
   "files": [
     "dist",
@@ -85,6 +86,10 @@
       "./provider": {
         "types": "./dist/provider.d.ts",
         "default": "./dist/provider.js"
+      },
+      "./list-detail": {
+        "types": "./dist/list-detail/index.parts.d.ts",
+        "default": "./dist/list-detail/index.parts.js"
       }
     },
     "main": "./dist/index.js",

@@ -25,6 +25,12 @@ export * as Screen from './screen/index.parts'
 export type { ScreenSlotProps } from './screen/Screen'
 export * as PrimaryAction from './primary-action/index.parts'
 export type { PrimaryActionProps } from './primary-action/PrimaryAction'
+export * as ListDetail from './list-detail/index.parts'
+export type {
+  ListDetailBackProps,
+  ListDetailRootProps,
+  ListDetailSlotProps
+} from './list-detail/ListDetail'
 export * as Menu from './menu/index.parts'
 export type {
   MenuContentProps,

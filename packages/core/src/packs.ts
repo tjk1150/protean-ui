@@ -21,5 +21,6 @@ export const appFirst: PolicyPack = {
     if (traits.size === 'compact') return isTouchFirst(traits) ? 'action-bar' : 'sticky-footer'
     return 'inline'
   },
-  hint: ({ traits }) => (traits.hover ? 'tooltip' : 'popover')
+  hint: ({ traits }) => (traits.hover ? 'tooltip' : 'popover'),
+  listDetail: ({ traits }) => (traits.size === 'compact' ? 'stack' : 'panes')
 }

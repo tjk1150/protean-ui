@@ -30,6 +30,7 @@ const entries: readonly NavEntry[] = [
   { path: '/components/menu', label: { ko: 'Menu', en: 'Menu' } },
   { path: '/components/navigation', label: { ko: 'Navigation', en: 'Navigation' } },
   { path: '/components/screen', label: { ko: 'Screen', en: 'Screen' } },
+  { path: '/components/list-detail', label: { ko: 'ListDetail', en: 'ListDetail' } },
   { path: '/components/primary-action', label: { ko: 'PrimaryAction', en: 'PrimaryAction' } },
   { path: '/components/tooltip', label: { ko: 'Tooltip', en: 'Tooltip' } },
   { path: '/components/boundary', label: { ko: 'Boundary', en: 'Boundary' } },
@@ -38,6 +39,7 @@ const entries: readonly NavEntry[] = [
   { path: '/navigation-spike', label: { ko: '내비게이션 데모', en: 'Navigation spike' }, external: true },
   { path: '/boundary-demo', label: { ko: '컨테이너 경계 데모', en: 'Container boundary' }, external: true },
   { path: '/continuity-demo', label: { ko: '전환 연속성 데모', en: 'Transition continuity' }, external: true },
+  { path: '/list-detail-demo', label: { ko: '리스트-디테일 데모', en: 'List-detail' }, external: true },
   { path: '/screen-demo', label: { ko: '화면 데모', en: 'Screen demo' }, external: true },
   { path: '/ssr-proof', label: { ko: 'SSR 증명', en: 'SSR proof' }, external: true },
 ]

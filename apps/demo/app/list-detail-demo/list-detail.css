@@ -1,0 +1,52 @@
+.listDetailDemoPage .inboxDemo [data-scope='list-detail'] {
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--surface);
+  min-height: 320px;
+  margin: 24px 0;
+  overflow: hidden;
+}
+
+/* A consumer rule that sets display on a part must respect the stack's
+   visibility - scope it to the states where the list actually shows. */
+.listDetailDemoPage [data-scope='list-detail'][data-presentation='panes'] [data-part='list'],
+.listDetailDemoPage [data-scope='list-detail']:not([data-detail-active]) [data-part='list'] {
+  display: flex;
+  flex-direction: column;
+  padding: 8px;
+  gap: 2px;
+}
+
+.listDetailDemoPage .inboxItem {
+  appearance: none;
+  border: 0;
+  background: transparent;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+  padding: 10px 12px;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  color: var(--ink);
+  cursor: pointer;
+  text-align: left;
+  min-height: 44px;
+}
+
+.listDetailDemoPage .inboxItem span {
+  color: var(--muted);
+}
+
+.listDetailDemoPage .inboxItem[aria-current] {
+  background: color-mix(in srgb, var(--accent) 10%, transparent);
+}
+
+.listDetailDemoPage [data-part='detail'] {
+  padding: 20px;
+}
+
+.listDetailDemoPage [data-part='detail'] h2 {
+  margin: 0 0 4px;
+  font-size: 1.05rem;
+}

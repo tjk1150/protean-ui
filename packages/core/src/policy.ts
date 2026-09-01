@@ -5,6 +5,7 @@ export type OverlayPresentation = 'popover' | 'sheet' | 'modal' | 'fullscreen'
 export type NavigationPresentation = 'bar' | 'rail' | 'sidebar' | 'drawer'
 export type ActionPresentation = 'action-bar' | 'sticky-footer' | 'inline'
 export type HintPresentation = 'tooltip' | 'popover'
+export type ListDetailPresentation = 'stack' | 'panes'
 
 export interface OverlayQuery {
   readonly traits: Traits
@@ -23,6 +24,10 @@ export interface HintQuery {
   readonly traits: Traits
 }
 
+export interface ListDetailQuery {
+  readonly traits: Traits
+}
+
 export interface PolicyPack {
   readonly name: string
   readonly overlay: (query: OverlayQuery) => OverlayPresentation
@@ -31,10 +36,14 @@ export interface PolicyPack {
   /* Optional so older packs stay valid; the built-in default keys off hover
      capability - touch has no hover, so the tooltip pattern cannot fire. */
   readonly hint?: (query: HintQuery) => HintPresentation
+  readonly listDetail?: (query: ListDetailQuery) => ListDetailPresentation
 }
 
 const defaultHint = ({ traits }: HintQuery): HintPresentation =>
   traits.hover ? 'tooltip' : 'popover'
+
+const defaultListDetail = ({ traits }: ListDetailQuery): ListDetailPresentation =>
+  traits.size === 'compact' ? 'stack' : 'panes'
 
 type WithDefaults<Q, P> = Q & { readonly defaults: () => P }
 
@@ -49,11 +58,14 @@ export interface PolicyDefinition {
     query: WithDefaults<ActionQuery, ActionPresentation>
   ) => ActionPresentation
   readonly hint?: (query: WithDefaults<HintQuery, HintPresentation>) => HintPresentation
+  readonly listDetail?: (
+    query: WithDefaults<ListDetailQuery, ListDetailPresentation>
+  ) => ListDetailPresentation
 }
 
 export type DecisionSource = 'instance' | 'policy' | 'pack'
 
-export type DecisionDomain = 'overlay' | 'navigation' | 'primaryAction' | 'hint'
+export type DecisionDomain = 'overlay' | 'navigation' | 'primaryAction' | 'hint' | 'listDetail'
 
 export interface Decision<P extends string> {
   readonly presentation: P
@@ -77,6 +89,7 @@ export interface Policy {
   readonly resolveNavigation: (query: NavigationQuery) => Resolved<NavigationPresentation>
   readonly resolvePrimaryAction: (query: ActionQuery) => Resolved<ActionPresentation>
   readonly resolveHint: (query: HintQuery) => Resolved<HintPresentation>
+  readonly resolveListDetail: (query: ListDetailQuery) => Resolved<ListDetailPresentation>
 }
 
 function makeResolver<Q, P extends string>(
@@ -106,7 +119,8 @@ export function asPolicy(pack: PolicyPack): Policy {
     resolveOverlay: makeResolver(pack.overlay, undefined),
     resolveNavigation: makeResolver(pack.navigation, undefined),
     resolvePrimaryAction: makeResolver(pack.primaryAction, undefined),
-    resolveHint: makeResolver(pack.hint ?? defaultHint, undefined)
+    resolveHint: makeResolver(pack.hint ?? defaultHint, undefined),
+    resolveListDetail: makeResolver(pack.listDetail ?? defaultListDetail, undefined)
   }
 }
 
@@ -117,7 +131,8 @@ export function definePolicy(definition: PolicyDefinition): Policy {
     resolveOverlay: makeResolver(pack.overlay, definition.overlay),
     resolveNavigation: makeResolver(pack.navigation, definition.navigation),
     resolvePrimaryAction: makeResolver(pack.primaryAction, definition.primaryAction),
-    resolveHint: makeResolver(pack.hint ?? defaultHint, definition.hint)
+    resolveHint: makeResolver(pack.hint ?? defaultHint, definition.hint),
+    resolveListDetail: makeResolver(pack.listDetail ?? defaultListDetail, definition.listDetail)
   }
 }
 
@@ -181,6 +196,19 @@ export function decideHint(
   }
   const { presentation, source } = policy.resolveHint({ traits })
   return { presentation, source, policyName: policy.name, traits, domain: 'hint' }
+}
+
+export function decideListDetail(
+  policy: Policy,
+  traits: Traits,
+  instance?: InstanceOverride<ListDetailPresentation>
+): Decision<ListDetailPresentation> {
+  const forced = resolveInstance(instance, traits.size)
+  if (forced !== undefined) {
+    return { presentation: forced, source: 'instance', policyName: policy.name, traits, domain: 'listDetail' }
+  }
+  const { presentation, source } = policy.resolveListDetail({ traits })
+  return { presentation, source, policyName: policy.name, traits, domain: 'listDetail' }
 }
 
 export function explain(decision: Decision<string>): string {

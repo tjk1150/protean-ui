@@ -3,11 +3,13 @@ import {
   appFirst,
   asPolicy,
   decideHint,
+  decideListDetail,
   decideNavigation,
   decideOverlay,
   decidePrimaryAction,
   type ActionPresentation,
   type HintPresentation,
+  type ListDetailPresentation,
   type InputProfile,
   type NavigationPresentation,
   type OverlayPresentation,
@@ -67,6 +69,13 @@ const HINT_TABLE: Record<SizeClass, Record<InputProfile, HintPresentation>> = {
   expanded: { touch: 'popover', pointer: 'tooltip', hybrid: 'tooltip' }
 }
 
+/* Master-detail: one screen at a time on compact, two panes elsewhere. */
+const LIST_DETAIL_TABLE: Record<SizeClass, Record<InputProfile, ListDetailPresentation>> = {
+  compact: { touch: 'stack', pointer: 'stack', hybrid: 'stack' },
+  medium: { touch: 'panes', pointer: 'panes', hybrid: 'panes' },
+  expanded: { touch: 'panes', pointer: 'panes', hybrid: 'panes' }
+}
+
 const ACTION_TABLE: Record<SizeClass, Record<InputProfile, ActionPresentation>> = {
   compact: { touch: 'action-bar', pointer: 'sticky-footer', hybrid: 'sticky-footer' },
   medium: { touch: 'inline', pointer: 'inline', hybrid: 'inline' },
@@ -102,6 +111,11 @@ describe('app-first pack decision table', () => {
           HINT_TABLE[size][input]
         )
       })
+      it(`listDetail ${size} x ${input} -> ${LIST_DETAIL_TABLE[size][input]}`, () => {
+        expect(decideListDetail(policy, traits(size, input)).presentation).toBe(
+          LIST_DETAIL_TABLE[size][input]
+        )
+      })
     }
   }
 
@@ -109,7 +123,8 @@ describe('app-first pack decision table', () => {
     const overlayCells = 3 * SIZES.length * INPUTS.length
     const chromeCells = 2 * SIZES.length * INPUTS.length
     const hintCells = SIZES.length * INPUTS.length
-    expect(overlayCells + chromeCells + hintCells).toBe(54)
+    const listDetailCells = SIZES.length * INPUTS.length
+    expect(overlayCells + chromeCells + hintCells + listDetailCells).toBe(63)
   })
 
   it('hint honors an instance override', () => {

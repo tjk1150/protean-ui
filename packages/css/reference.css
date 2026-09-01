@@ -685,6 +685,69 @@
   }
 
   /* ------------------------------------------------------------------ */
+  /* ListDetail: two panes on medium and expanded, one screen on compact */
+  /* ------------------------------------------------------------------ */
+
+  .protean-defaults [data-scope='list-detail'] {
+    display: grid;
+    min-height: 0;
+
+    & > [data-part='list'] {
+      min-width: 0;
+    }
+
+    & > [data-part='detail'] {
+      min-width: 0;
+      outline: none;
+    }
+
+    & [data-part='back'] {
+      display: none;
+      appearance: none;
+      align-items: center;
+      gap: 6px;
+      border: 1px solid var(--protean-hairline);
+      background: var(--protean-surface);
+      color: var(--protean-ink);
+      border-radius: 8px;
+      padding: 8px 14px;
+      font-size: 0.9rem;
+      cursor: pointer;
+    }
+  }
+
+  @media (width >= 600px) {
+    .protean-defaults [data-scope='list-detail'] {
+      grid-template-columns: minmax(240px, 320px) 1fr;
+
+      & > [data-part='list'] {
+        border-right: 1px solid var(--protean-hairline);
+      }
+    }
+  }
+
+  /* compact: the two panes become two screens of a stack */
+  @media (width < 600px) {
+    .protean-defaults [data-scope='list-detail'] {
+      grid-template-columns: 1fr;
+
+      &:not([data-detail-active]) > [data-part='detail'] {
+        display: none;
+      }
+
+      &[data-detail-active] > [data-part='list'] {
+        display: none;
+      }
+
+      & [data-part='back'] {
+        display: inline-flex;
+        align-self: start;
+        margin-bottom: 12px;
+      }
+    }
+  }
+
+  /* ------------------------------------------------------------------ */
   /* PrimaryAction: action-bar / sticky-footer / inline                  */
   /* ------------------------------------------------------------------ */
 
