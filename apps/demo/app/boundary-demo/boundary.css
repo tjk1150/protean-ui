@@ -26,4 +26,5 @@
 .boundaryDemoPage .boundaryPanel {
   border: 2px dashed var(--accent);
   max-width: 420px;
+  min-height: 360px;
 }

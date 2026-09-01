@@ -10,6 +10,7 @@ import {
   type OverlayPresentation
 } from '@protean-ui/core'
 import * as React from 'react'
+import { BoundaryContext } from '../boundary'
 import { useProteanContext, useReadTraits } from '../provider'
 
 export interface SelectOption {
@@ -229,31 +230,44 @@ export interface SelectContentProps {
 export function SelectContent({ children }: SelectContentProps): React.JSX.Element | null {
   const { decision, ariaLabel, searchable, searchPlaceholder, emptyLabel } =
     useSelectLocalContext('Content')
+  const boundary = React.useContext(BoundaryContext)
 
   if (!decision) return null
 
   const presentation = decision.presentation
   const sheet = presentation === 'sheet'
+  // Sheets portal into the nearest boundary so the panel acts as the viewport;
+  // anchored popovers stay at the document level.
+  const contained = sheet && boundary !== null
+  const containedAttr = contained ? { 'data-contained': '' } : {}
+  const portalProps = contained && boundary ? { container: boundary } : {}
 
   if (searchable) {
     return (
-      <BaseCombobox.Portal>
+      <BaseCombobox.Portal {...portalProps}>
         {sheet ? (
           <BaseCombobox.Backdrop
             data-scope="select"
             data-part="backdrop"
             data-presentation={presentation}
+            {...containedAttr}
           />
         ) : null}
         <BaseCombobox.Positioner
           data-scope="select"
           data-part="positioner"
           data-presentation={presentation}
+          {...containedAttr}
           side="bottom"
           align="start"
           sideOffset={sheet ? 0 : 6}
         >
-          <BaseCombobox.Popup data-scope="select" data-part="popup" data-presentation={presentation}>
+          <BaseCombobox.Popup
+            data-scope="select"
+            data-part="popup"
+            data-presentation={presentation}
+            {...containedAttr}
+          >
             <BaseCombobox.Input
               data-scope="select"
               data-part="search"
@@ -285,20 +299,31 @@ export function SelectContent({ children }: SelectContentProps): React.JSX.Eleme
   }
 
   return (
-    <BaseSelect.Portal>
+    <BaseSelect.Portal {...portalProps}>
       {sheet ? (
-        <BaseSelect.Backdrop data-scope="select" data-part="backdrop" data-presentation={presentation} />
+        <BaseSelect.Backdrop
+          data-scope="select"
+          data-part="backdrop"
+          data-presentation={presentation}
+          {...containedAttr}
+        />
       ) : null}
       <BaseSelect.Positioner
         data-scope="select"
         data-part="positioner"
         data-presentation={presentation}
+        {...containedAttr}
         side="bottom"
         align="start"
         sideOffset={sheet ? 0 : 6}
         alignItemWithTrigger={false}
       >
-        <BaseSelect.Popup data-scope="select" data-part="popup" data-presentation={presentation}>
+        <BaseSelect.Popup
+          data-scope="select"
+          data-part="popup"
+          data-presentation={presentation}
+          {...containedAttr}
+        >
           <BaseSelect.List data-scope="select" data-part="list">
             {children}
           </BaseSelect.List>

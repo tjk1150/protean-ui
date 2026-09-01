@@ -19,11 +19,11 @@ export default function BoundaryDemoPage() {
       <p className="hint">
         How it stays SSR-safe: overlays decide at the moment they open, so the boundary
         is measured synchronously at interaction time - the server never needs to know
-        the container&apos;s size, and there is nothing to hydrate wrong. The sheet
-        itself still slides from the viewport edge (the reference stylesheet is
-        viewport-anchored; portal-to-boundary geometry is on the roadmap). Chrome
-        components stay viewport-driven - style container-scoped chrome with CSS
-        container queries.
+        the container&apos;s size, and there is nothing to hydrate wrong. Geometry
+        follows too: the sheet portals into the boundary and rises from the
+        panel&apos;s own bottom edge, with the scrim covering the panel only. Anchored
+        popovers stay at the document level, and chrome components stay
+        viewport-driven - style container-scoped chrome with CSS container queries.
       </p>
     </div>
   )

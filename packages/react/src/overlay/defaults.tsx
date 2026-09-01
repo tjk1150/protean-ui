@@ -7,12 +7,13 @@ import type { OverlayPresentation } from '@protean-ui/core'
 import type * as React from 'react'
 import type { OverlayPresentationProps } from './types'
 
-function dataAttributes(presentation: OverlayPresentation, part: string) {
+function dataAttributes(presentation: OverlayPresentation, part: string, contained = false) {
   return {
     'data-scope': 'overlay',
     'data-part': part,
-    'data-presentation': presentation
-  } as const
+    'data-presentation': presentation,
+    ...(contained ? { 'data-contained': '' } : {})
+  }
 }
 
 function ModalPresentation({
@@ -26,14 +27,16 @@ function ModalPresentation({
   describedBy,
   initialFocus,
   finalFocus,
+  portalContainer,
   children
 }: OverlayPresentationProps): React.JSX.Element {
+  const contained = portalContainer !== undefined
   return (
     <BaseDialog.Root open={open} onOpenChange={(next) => onOpenChange(next)}>
-      <BaseDialog.Portal>
-        <BaseDialog.Backdrop {...dataAttributes(decision.presentation, 'backdrop')} />
+      <BaseDialog.Portal {...(contained ? { container: portalContainer } : {})}>
+        <BaseDialog.Backdrop {...dataAttributes(decision.presentation, 'backdrop', contained)} />
         <BaseDialog.Popup
-          {...dataAttributes(decision.presentation, 'popup')}
+          {...dataAttributes(decision.presentation, 'popup', contained)}
           className={className}
           {...(alert ? { role: 'alertdialog' as const } : {})}
           {...(describedBy ? { 'aria-describedby': describedBy } : {})}
@@ -63,15 +66,17 @@ function SheetPresentation({
   describedBy,
   initialFocus,
   finalFocus,
+  portalContainer,
   children
 }: OverlayPresentationProps): React.JSX.Element {
+  const contained = portalContainer !== undefined
   return (
     <BaseDrawer.Root open={open} onOpenChange={(next) => onOpenChange(next)} swipeDirection="down">
-      <BaseDrawer.Portal>
-        <BaseDrawer.Backdrop {...dataAttributes(decision.presentation, 'backdrop')} />
-        <BaseDrawer.Viewport {...dataAttributes(decision.presentation, 'viewport')}>
+      <BaseDrawer.Portal {...(contained ? { container: portalContainer } : {})}>
+        <BaseDrawer.Backdrop {...dataAttributes(decision.presentation, 'backdrop', contained)} />
+        <BaseDrawer.Viewport {...dataAttributes(decision.presentation, 'viewport', contained)}>
           <BaseDrawer.Popup
-            {...dataAttributes(decision.presentation, 'popup')}
+            {...dataAttributes(decision.presentation, 'popup', contained)}
             className={className}
             {...(alert ? { role: 'alertdialog' as const } : {})}
             {...(describedBy ? { 'aria-describedby': describedBy } : {})}
@@ -91,6 +96,8 @@ function SheetPresentation({
   )
 }
 
+/* Anchored popovers deliberately ignore portalContainer: they position
+   against the trigger, and portaling into a panel risks clipping. */
 function PopoverPresentation({
   open,
   onOpenChange,

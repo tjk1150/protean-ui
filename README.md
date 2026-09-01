@@ -51,7 +51,7 @@ Goal: **no breakpoints in application code** - precisely, no pattern-choosing br
 Stated plainly, in the order we intend to close them:
 
 - **Tablet-touch differentiation.** The default policy branches on input only at compact size today - we refuse to ship speculative rules unvalidated on real devices, so medium and expanded treat touch and mouse alike until we have data.
-- **Container-boundary geometry.** Overlay decisions are container-scoped today (`ProteanBoundary` - a dialog in a 420px panel presents the compact way on any monitor), but the sheet still slides from the viewport edge; portal-to-boundary geometry and container-scoped chrome (via CSS container queries) remain.
+- **Container-scoped chrome.** Overlay decisions and geometry are container-scoped today (`ProteanBoundary` - a dialog in a 420px panel presents the compact way on any monitor, its sheet rising from the panel's own bottom edge); navigation and screen chrome inside containers stays a CSS-container-query concern.
 - **An unanchored sheet option upstream** (the current sheet pins the floating-ui positioner with CSS).
 - **Device and end-to-end testing.** The bar-overflow and tablet-rail cells are verified in jsdom and in the iOS Simulator (real WebKit, iPhone 16 Pro and iPad Pro); physical hardware and automated e2e remain.
 

@@ -9,6 +9,7 @@ import {
   type OverlayRole
 } from '@protean-ui/core'
 import * as React from 'react'
+import { BoundaryContext } from '../boundary'
 import { useProteanContext, useReadTraits } from '../provider'
 
 interface DialogLocalContextValue {
@@ -134,6 +135,7 @@ export function DialogContent({
 }: DialogContentProps): React.JSX.Element | null {
   const { components } = useProteanContext()
   const { open, decision, triggerRef, setOpen } = useDialogLocalContext('Content')
+  const boundary = React.useContext(BoundaryContext)
 
   // The backend resolves an initialFocus ref asynchronously; apply it
   // synchronously after commit so focus is deterministic for consumers.
@@ -156,6 +158,7 @@ export function DialogContent({
       describedBy={describedBy}
       initialFocus={initialFocus}
       finalFocus={finalFocus}
+      {...(boundary ? { portalContainer: boundary } : {})}
     >
       {children}
     </Presentation>

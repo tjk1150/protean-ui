@@ -243,6 +243,38 @@
     }
   }
 
+  /* ------------------------------------------------------------------ */
+  /* Container boundary: contained overlays treat the panel as the       */
+  /* viewport. The library stamps data-contained when an overlay portals */
+  /* into its nearest ProteanBoundary.                                   */
+  /* ------------------------------------------------------------------ */
+
+  [data-scope='boundary'] {
+    position: relative;
+  }
+
+  [data-scope='overlay'][data-part='backdrop'][data-contained],
+  [data-scope='select'][data-part='backdrop'][data-contained] {
+    position: absolute;
+  }
+
+  [data-scope='overlay'][data-part='popup'][data-contained] {
+    position: absolute;
+  }
+
+  /* A contained modal sizes against the panel, not the window. */
+  [data-scope='overlay'][data-part='popup'][data-presentation='modal'][data-contained] {
+    width: min(92%, 420px);
+  }
+
+  [data-scope='select'][data-part='positioner'][data-presentation='sheet'][data-contained] {
+    position: absolute !important;
+  }
+
+  [data-scope='select'][data-part='popup'][data-presentation='sheet'][data-contained] {
+    max-height: 80%;
+  }
+
   /* ================================================================== */
   /* Chrome below: opt in with a `.protean-defaults` ancestor.           */
   /* ================================================================== */

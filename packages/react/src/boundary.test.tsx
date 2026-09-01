@@ -82,3 +82,75 @@ describe('ProteanBoundary', () => {
     expect(popup().getAttribute('data-presentation')).toBe('modal')
   })
 })
+
+describe('portal to boundary', () => {
+  it('renders a contained sheet inside the boundary element', () => {
+    installEnvironment({ width: 1280, coarse: false, hover: true })
+    renderInBoundary()
+    mockWidth(screen.getByTestId('panel'), 480)
+
+    fireEvent.click(screen.getByRole('button', { name: 'Open' }))
+    const sheet = popup()
+    expect(sheet.getAttribute('data-presentation')).toBe('sheet')
+    expect(sheet.closest('[data-scope="boundary"]')).not.toBeNull()
+    expect(sheet.hasAttribute('data-contained')).toBe(true)
+    expect(
+      document
+        .querySelector('[data-scope="overlay"][data-part="backdrop"]')
+        ?.hasAttribute('data-contained')
+    ).toBe(true)
+  })
+
+  it('renders a contained modal inside the boundary element', () => {
+    installEnvironment({ width: 1280, coarse: false, hover: true })
+    renderInBoundary()
+    mockWidth(screen.getByTestId('panel'), 1000)
+
+    fireEvent.click(screen.getByRole('button', { name: 'Open' }))
+    const modal = popup()
+    expect(modal.getAttribute('data-presentation')).toBe('modal')
+    expect(modal.closest('[data-scope="boundary"]')).not.toBeNull()
+    expect(modal.hasAttribute('data-contained')).toBe(true)
+  })
+
+  it('leaves anchored popovers at the document level', () => {
+    installEnvironment({ width: 1280, coarse: false, hover: true })
+    render(
+      <ProteanProvider>
+        <ProteanBoundary data-testid="panel">
+          <Dialog.Root role="contextual">
+            <Dialog.Trigger>Open</Dialog.Trigger>
+            <Dialog.Content title="Menu">
+              <p>content</p>
+            </Dialog.Content>
+          </Dialog.Root>
+        </ProteanBoundary>
+      </ProteanProvider>
+    )
+    mockWidth(screen.getByTestId('panel'), 480)
+
+    fireEvent.click(screen.getByRole('button', { name: 'Open' }))
+    const popover = popup()
+    expect(popover.getAttribute('data-presentation')).toBe('popover')
+    expect(popover.closest('[data-scope="boundary"]')).toBeNull()
+    expect(popover.hasAttribute('data-contained')).toBe(false)
+  })
+
+  it('stamps nothing outside a boundary', () => {
+    installEnvironment({ width: 375, coarse: true, hover: false })
+    render(
+      <ProteanProvider>
+        <Dialog.Root role="confirmation">
+          <Dialog.Trigger>Open</Dialog.Trigger>
+          <Dialog.Content title="Confirm">
+            <p>content</p>
+          </Dialog.Content>
+        </Dialog.Root>
+      </ProteanProvider>
+    )
+    fireEvent.click(screen.getByRole('button', { name: 'Open' }))
+    expect(popup().getAttribute('data-presentation')).toBe('sheet')
+    expect(popup().hasAttribute('data-contained')).toBe(false)
+    expect(popup().closest('[data-scope="boundary"]')).toBeNull()
+  })
+})

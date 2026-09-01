@@ -15,5 +15,9 @@ export interface OverlayPresentationProps {
     | boolean
     | React.RefObject<HTMLElement | null>
     | ((closeType: unknown) => boolean | HTMLElement | null | void)
+  /* The nearest ProteanBoundary, when there is one. Modal, fullscreen, and
+     sheet presentations portal into it so the panel acts as the viewport;
+     anchored popovers stay at the document level to avoid clipping. */
+  readonly portalContainer?: React.RefObject<HTMLElement | null>
   readonly children: React.ReactNode
 }
