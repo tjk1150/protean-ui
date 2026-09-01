@@ -85,4 +85,10 @@
     --protean-shape: 16px 16px 0 0;
     --protean-pad: 12px;
   }
+
+  /* The supporting pane's compact sheet shares the sheet vocabulary. */
+  [data-scope='supporting'] > [data-part='pane'] {
+    --protean-shape: 16px 16px 0 0;
+    --protean-pad: 20px;
+  }
 }

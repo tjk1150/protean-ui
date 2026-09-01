@@ -2,6 +2,12 @@ export * from '@protean-ui/core'
 
 export * as Actions from './actions/index.parts'
 export type { ActionsItemProps, ActionsRootProps } from './actions/Actions'
+export * as SupportingPane from './supporting-pane/index.parts'
+export type {
+  SupportingPaneMainProps,
+  SupportingPanePaneProps,
+  SupportingPaneRootProps
+} from './supporting-pane/SupportingPane'
 export { ProteanBoundary, type ProteanBoundaryProps } from './boundary'
 export { createEnvironmentStore, type EnvironmentStore } from './environment'
 export {

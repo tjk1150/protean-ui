@@ -3,6 +3,7 @@ import { fireEvent, render, screen } from '@testing-library/react'
 import * as React from 'react'
 import { describe, expect, it } from 'vitest'
 import * as ActionsBar from './actions/index.parts'
+import * as SupportingPane from './supporting-pane/index.parts'
 import * as Dialog from './overlay/index.parts'
 import * as Menu from './menu/index.parts'
 import * as Navigation from './navigation/index.parts'
@@ -106,6 +107,24 @@ describe('axe on key open states', () => {
     )
     fireEvent.click(screen.getByRole('button', { name: 'More' }))
     await expectClean('actions-overflow')
+  })
+
+  it('supporting pane raised as the compact sheet', async () => {
+    installEnvironment({ width: 375, coarse: true, hover: false })
+    render(
+      <ProteanProvider>
+        <SupportingPane.Root paneLabel="Metadata">
+          <SupportingPane.Main>
+            <p>The document body.</p>
+          </SupportingPane.Main>
+          <SupportingPane.Pane>
+            <p>Author, dates, size.</p>
+          </SupportingPane.Pane>
+        </SupportingPane.Root>
+      </ProteanProvider>
+    )
+    fireEvent.click(screen.getByRole('button', { name: 'Metadata' }))
+    await expectClean('supporting-sheet')
   })
 
   it('menu popover open', async () => {

@@ -4,7 +4,7 @@
 
 > Headless adaptive UI runtime for React. Declare what your UI means; the runtime decides how it presents in the current environment.
 
-**Status: pre-alpha.** Phase 0 passed its kill criteria ([verdict](docs/phase-0-verdict.md)). Nine roles are implemented (Dialog, Select, Menu, Navigation, Screen, PrimaryAction, Tooltip, ListDetail, Actions), proven against a 699-test production-grade app migration. APIs move without notice.
+**Status: pre-alpha.** Phase 0 passed its kill criteria ([verdict](docs/phase-0-verdict.md)). Ten roles are implemented (Dialog, Select, Menu, Navigation, Screen, PrimaryAction, Tooltip, ListDetail, Actions, SupportingPane), proven against a 699-test production-grade app migration. APIs move without notice.
 
 ```
 npm install protean-ui
@@ -39,12 +39,16 @@ Goal: **no breakpoints in application code** - precisely, no pattern-choosing br
 - Accessibility is a contract: the accessible tree stays isomorphic across presentations.
 - Decisions are values: traced to their source (instance, policy, or pack), explainable (`explain()` prints `overlay(form) -> fullscreen [pack:app-first] size=compact input=touch`), unit-testable without rendering, stamped on the DOM.
 
+## One install, a whole app
+
+`npm install protean-ui` brings the adaptation layer and the entire behavior layer: Base UI installs alongside as a peer, so every non-adaptive component an app needs - form controls, tabs, accordion, toast, and the rest - is already there to `import` directly. No second UI library required, and no new ecosystem coupling: Protean is one layer on top of the substrate you would use anyway, and removing it leaves a plain Base UI app. The full map lives in the docs ("Is it enough?").
+
 ## Packages
 
 | Package | What it is |
 |---|---|
 | `protean-ui` | umbrella, re-exports `@protean-ui/react` |
-| `@protean-ui/react` | the five semantic components plus the environment store and provider; ships `reference.css` |
+| `@protean-ui/react` | the semantic role components plus the environment store and provider; ships `reference.css` |
 | `@protean-ui/core` | framework-agnostic traits and policy engine (no React, no DOM) |
 | `@protean-ui/css` | the presentation-scoped token contract (`tokens.css`) and the reference stylesheet (`reference.css`) |
 
@@ -62,7 +66,7 @@ Stated plainly, in the order we intend to close them:
 Testing follows ISO/IEC 25010 (what quality means) and ISO/IEC/IEEE 29119-4-derived
 test design: the default policy is verified as an exhaustive 63-cell decision table,
 thresholds and hysteresis by boundary value analysis, lifecycles by state-transition
-tests, and odd user behavior by negative tests - 218 library tests plus a 699-test
+tests, and odd user behavior by negative tests - 225 library tests plus a 699-test
 real-app scenario suite. The release gate is documented in [docs/qa.md](docs/qa.md).
 
 ## Why "protean"
