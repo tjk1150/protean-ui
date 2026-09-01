@@ -9,12 +9,12 @@ design techniques; the gate is checked before every npm publish.
 
 | Characteristic | What it means here | Where it is verified |
 |---|---|---|
-| Functional suitability | Decisions match the documented policy, exactly | `packs.decision-table.test.ts` - the full 54-cell cartesian table |
+| Functional suitability | Decisions match the documented policy, exactly | `packs.decision-table.test.ts` - the full 63-cell cartesian table |
 | Interaction capability | The accessible tree stays isomorphic across presentations; focus/ARIA props pass through | Dialog/Select/Navigation suites; axe runs on demo states |
 | Compatibility | Presentations render correctly across engines and devices | Compatibility matrix below |
 | Reliability | SSR invariant (no hydration-mismatch class), decisions pinned while open, graceful fallbacks | ssr-proof curl checks; `qa.transitions.test.tsx`; no-visualViewport and zero-width-boundary tests |
 | Performance efficiency | The decision layer stays feather-weight; no redundant renders | Bundle budget in the gate; referential-stability store tests |
-| Maintainability | The decision layer is pure and testable without a DOM | `@protean-ui/core` has no React/DOM dependency; 92 node tests |
+| Maintainability | The decision layer is pure and testable without a DOM | `@protean-ui/core` has no React/DOM dependency; 111 node tests |
 | Flexibility | Every default has a three-level escape hatch | Instance/policy/pack override tests, `defaults()` delegation tests |
 | Security | No network, no secrets, no dangerous HTML injection surface | Code review; the library renders only consumer-provided content |
 | Safety | Not applicable to a UI presentation library | - |
@@ -23,7 +23,7 @@ design techniques; the gate is checked before every npm publish.
 
 | Technique | Applied to | Suite |
 |---|---|---|
-| Decision table | The app-first pack, exhaustively: 3 overlay roles x 3 sizes x 3 inputs, plus navigation, primary action, and hint (54 cells) | `core/src/packs.decision-table.test.ts` |
+| Decision table | The app-first pack, exhaustively: 3 overlay roles x 3 sizes x 3 inputs, plus navigation, primary action, hint, and list-detail (63 cells) | `core/src/packs.decision-table.test.ts` |
 | Boundary value analysis | Size thresholds (599/600, 839/840); hysteresis transitions in both directions (583/584, 615/616, 823/824, 855/856); virtual-keyboard threshold (649/650 at 800px); bar capacity (5 vs 6 items, degenerate capacity 1) | `traits.test.ts`, `hysteresis.test.ts`, `environment.test.ts`, `Navigation.test.tsx`, `qa.transitions.test.tsx` |
 | Equivalence partitioning | Input profiles (touch / pointer / hybrid), size classes, overlay roles | throughout; partitions enumerated in the decision table |
 | State transition | Overlay lifecycle (closed -> open pins the decision -> close -> reopen re-decides); drawer and overflow panels reset when their presentation leaves | `qa.transitions.test.tsx`, `Navigation.test.tsx`, `Dialog.test.tsx` |

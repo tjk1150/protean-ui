@@ -31,8 +31,8 @@ sites just as short. The difference is the quality and scope of the decision, no
 line count. A wrapper keyed to width 768 cannot tell a narrow mouse-driven window from a
 phone, leaves the SSR first-paint problem where it was, and covers one dialog. Protean
 decides on two axes (size x input), makes SSR structurally unable to be wrong, and drives
-five roles - overlay, select, navigation, screen skeleton, primary action - through one
-policy. (Credenza, for the record, has been dormant since November 2025 and was never
+nine roles - overlay, select, menu, navigation, screen skeleton, primary action, tooltip,
+list-detail, action row - through one policy. (Credenza, for the record, has been dormant since November 2025 and was never
 published to npm.)
 
 ## The gap
@@ -104,10 +104,10 @@ Numbers from the repository, not projections:
 
 - 73% less application code at the overlay call site (55 lines to 15 - measured against
   the hand-written recipe, not against wrapper libraries).
-- Bundle: 5.7KB gzip for react with all seven roles, 1.1KB for core (excluding Base
+- Bundle: 6.3KB gzip for react with all nine roles, 1.2KB for core (excluding Base
   UI). One role via its public subpath (`@protean-ui/react/dialog`) is 2.8KB, and that
   tree-shakeability is enforced by the release gate as a contract.
-- 186 library tests. The default policy is verified as an exhaustive 54-cell decision
+- 209 library tests. The default policy is verified as an exhaustive 63-cell decision
   table, alongside boundary-value, state-transition, and negative suites; a release gate
   (`pnpm gate`) blocks every publish - a wrong decision cell is a blocked release, not a
   statistic.
@@ -124,8 +124,9 @@ Numbers from the repository, not projections:
 
 ## Honest edges
 
-- Pre-alpha. Five roles exist today: Dialog, Select, Navigation, Screen, PrimaryAction.
-  React 18+; Next.js App Router and Vite are both first-class targets.
+- Pre-alpha. Nine roles exist today: Dialog, Select, Menu, Navigation, Screen,
+  PrimaryAction, Tooltip, ListDetail, Actions. React 18+; Next.js App Router and Vite are
+  both first-class targets.
 - Behavior is delegated to Base UI - focus traps, listbox semantics, drawer gestures.
   Protean refuses to reimplement solved problems; it owns only the decision, the wiring,
   and continuity across presentation switches.

@@ -17,7 +17,7 @@ export default function QualityPage() {
         <table>
           <thead><tr><th>Technique</th><th>In Protean</th></tr></thead>
           <tbody>
-            <tr><td>Decision table</td><td>the app-first pack verified as an exhaustive 54-cell table - 3 overlay roles x 3 sizes x 3 inputs, plus navigation, primary action, and hint. Editing the policy means consciously editing the table; the table is the documentation.</td></tr>
+            <tr><td>Decision table</td><td>the app-first pack verified as an exhaustive 63-cell table - 3 overlay roles x 3 sizes x 3 inputs, plus navigation, primary action, hint, and list-detail. Editing the policy means consciously editing the table; the table is the documentation.</td></tr>
             <tr><td>Boundary value analysis</td><td>size thresholds (599/600, 839/840), hysteresis in both directions (583/584, 615/616, 823/824, 855/856), the keyboard threshold (649/650), bar capacity (5/6) - one pixel on each side of every boundary.</td></tr>
             <tr><td>State transition</td><td>decision pinned while open, re-decided at the next open; drawers and overflow panels closing when their presentation leaves.</td></tr>
             <tr><td>Negative</td><td>double-clicked triggers, values missing from items, unmeasurable boundaries, browsers without visualViewport - odd usage must not break anything.</td></tr>
@@ -32,10 +32,10 @@ export default function QualityPage() {
         Machine-checkable criteria run automatically; human ones print as a checklist.
       </p>
       <ul>
-        <li>100% of library tests (currently 186) plus a clean workspace typecheck</li>
-        <li>all 54 decision-table cells - one wrong cell is a blocked release, not a statistic</li>
+        <li>100% of library tests (currently 209) plus a clean workspace typecheck</li>
+        <li>all 63 decision-table cells - one wrong cell is a blocked release, not a statistic</li>
         <li>the 699-test real-app scenario suite green</li>
-        <li>bundle budgets: all roles under 8KB gzip (5.7 today); one role via its public subpath under 3.5KB tree-shaken (2.8 today - shakeability is a contract); core under 2KB (1.1)</li>
+        <li>bundle budgets: all roles under 8KB gzip (6.3 today); one role via its public subpath under 3.5KB tree-shaken (2.8 today - shakeability is a contract); core under 2KB (1.2)</li>
         <li>zero overlay markup in the deployed site&apos;s server HTML (measured with curl)</li>
         <li>manual checklist: axe, CLS 0, the browser matrix, docs-match-reality</li>
       </ul>

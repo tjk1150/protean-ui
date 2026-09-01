@@ -4,7 +4,7 @@
 
 > Headless adaptive UI runtime for React. Declare what your UI means; the runtime decides how it presents in the current environment.
 
-**Status: pre-alpha.** Phase 0 passed its kill criteria ([verdict](docs/phase-0-verdict.md)). Five roles are implemented (Dialog, Select, Navigation, Screen, PrimaryAction), proven against a 699-test production-grade app migration. APIs move without notice.
+**Status: pre-alpha.** Phase 0 passed its kill criteria ([verdict](docs/phase-0-verdict.md)). Nine roles are implemented (Dialog, Select, Menu, Navigation, Screen, PrimaryAction, Tooltip, ListDetail, Actions), proven against a 699-test production-grade app migration. APIs move without notice.
 
 ```
 npm install protean-ui
@@ -60,9 +60,9 @@ Stated plainly, in the order we intend to close them:
 ## Quality
 
 Testing follows ISO/IEC 25010 (what quality means) and ISO/IEC/IEEE 29119-4-derived
-test design: the default policy is verified as an exhaustive 45-cell decision table,
+test design: the default policy is verified as an exhaustive 63-cell decision table,
 thresholds and hysteresis by boundary value analysis, lifecycles by state-transition
-tests, and odd user behavior by negative tests - 149 library tests plus a 699-test
+tests, and odd user behavior by negative tests - 209 library tests plus a 699-test
 real-app scenario suite. The release gate is documented in [docs/qa.md](docs/qa.md).
 
 ## Why "protean"
