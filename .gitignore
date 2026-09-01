@@ -6,3 +6,5 @@ coverage/
 .turbo/
 .next/
 *.tsbuildinfo
+.vercel
+.vercel
