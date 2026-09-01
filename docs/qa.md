@@ -45,7 +45,9 @@ searchable select, container boundary.
 
 ## Release exit criteria (quality gate)
 
-A publish to npm requires all of:
+Every machine-checkable criterion below runs as one command - `pnpm gate`
+(`scripts/gate.mjs`) - which exits non-zero on any failure and prints the manual
+criteria as a checklist. A publish to npm requires all of:
 
 - Critical or major defects open: **0**
 - Library suites: **100% pass** (core + react), typecheck clean across the workspace
