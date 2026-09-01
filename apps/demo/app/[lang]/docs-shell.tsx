@@ -22,6 +22,7 @@ const entries: readonly NavEntry[] = [
   { path: '/concepts/design-principles', label: { ko: '설계 원리', en: 'Design principles' } },
   { path: '/concepts/traits-and-policy', label: { ko: '판단 기준과 규칙', en: 'Traits and policy' } },
   { path: '/concepts/ssr', label: { ko: '서버 렌더링', en: 'Server rendering' } },
+  { path: '/concepts/composition', label: { ko: '함께 쓰기', en: 'Using together' } },
   { path: '/concepts/accessibility', label: { ko: '접근성', en: 'Accessibility' } },
   { path: '/concepts/quality', label: { ko: '품질과 테스트', en: 'Quality and testing' } },
   { group: { ko: '컴포넌트', en: 'Components' } },

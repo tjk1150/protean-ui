@@ -81,6 +81,32 @@ describe('ProteanBoundary', () => {
     fireEvent.click(screen.getByRole('button', { name: 'Open' }))
     expect(popup().getAttribute('data-presentation')).toBe('modal')
   })
+
+  // Nesting: the nearest boundary wins, both for the decision and containment.
+  it('measures and contains against the nearest boundary when nested', () => {
+    installEnvironment({ width: 1280, coarse: false, hover: true })
+    render(
+      <ProteanProvider policy={containerAware}>
+        <ProteanBoundary data-testid="outer">
+          <ProteanBoundary data-testid="inner">
+            <Dialog.Root role="form">
+              <Dialog.Trigger>Open</Dialog.Trigger>
+              <Dialog.Content title="Inside">
+                <p>content</p>
+              </Dialog.Content>
+            </Dialog.Root>
+          </ProteanBoundary>
+        </ProteanBoundary>
+      </ProteanProvider>
+    )
+    mockWidth(screen.getByTestId('outer'), 1000)
+    mockWidth(screen.getByTestId('inner'), 480)
+
+    fireEvent.click(screen.getByRole('button', { name: 'Open' }))
+    const sheet = popup()
+    expect(sheet.getAttribute('data-presentation')).toBe('sheet')
+    expect(sheet.closest('[data-scope="boundary"]')).toBe(screen.getByTestId('inner'))
+  })
 })
 
 describe('portal to boundary', () => {

@@ -64,4 +64,60 @@ describe('Tooltip', () => {
     expect(screen.getByRole('button', { name: 'Shipping fee info' })).toBeTruthy()
     expect(popup()).toBeNull()
   })
+
+  // A hinted button is still a button: its own onClick and disabled must pass
+  // through so "tooltip on an action button" composes.
+  it('passes button props through the trigger in tooltip mode', () => {
+    installEnvironment({ width: 1280, coarse: false, hover: true })
+    let clicks = 0
+    render(
+      <ProteanProvider>
+        <Tooltip.Root>
+          <Tooltip.Trigger aria-label="Delete row" onClick={() => (clicks += 1)}>
+            x
+          </Tooltip.Trigger>
+          <Tooltip.Content>Removes this row.</Tooltip.Content>
+        </Tooltip.Root>
+      </ProteanProvider>
+    )
+
+    fireEvent.click(screen.getByRole('button', { name: 'Delete row' }))
+    expect(clicks).toBe(1)
+  })
+
+  it('runs the consumer onClick alongside the toggletip open in popover mode', () => {
+    installEnvironment({ width: 375, coarse: true, hover: false })
+    let clicks = 0
+    render(
+      <ProteanProvider>
+        <Tooltip.Root>
+          <Tooltip.Trigger aria-label="Delete row" onClick={() => (clicks += 1)}>
+            x
+          </Tooltip.Trigger>
+          <Tooltip.Content>Removes this row.</Tooltip.Content>
+        </Tooltip.Root>
+      </ProteanProvider>
+    )
+
+    fireEvent.click(screen.getByRole('button', { name: 'Delete row' }))
+    expect(clicks).toBe(1)
+    expect(popup()?.getAttribute('data-presentation')).toBe('popover')
+  })
+
+  it('passes disabled through to the trigger', () => {
+    installEnvironment({ width: 1280, coarse: false, hover: true })
+    render(
+      <ProteanProvider>
+        <Tooltip.Root>
+          <Tooltip.Trigger aria-label="Save" disabled>
+            save
+          </Tooltip.Trigger>
+          <Tooltip.Content>Saves the draft.</Tooltip.Content>
+        </Tooltip.Root>
+      </ProteanProvider>
+    )
+    expect(
+      screen.getByRole('button', { name: 'Save' }).hasAttribute('disabled')
+    ).toBe(true)
+  })
 })

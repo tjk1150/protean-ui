@@ -62,7 +62,7 @@ Stated plainly, in the order we intend to close them:
 Testing follows ISO/IEC 25010 (what quality means) and ISO/IEC/IEEE 29119-4-derived
 test design: the default policy is verified as an exhaustive 63-cell decision table,
 thresholds and hysteresis by boundary value analysis, lifecycles by state-transition
-tests, and odd user behavior by negative tests - 209 library tests plus a 699-test
+tests, and odd user behavior by negative tests - 213 library tests plus a 699-test
 real-app scenario suite. The release gate is documented in [docs/qa.md](docs/qa.md).
 
 ## Why "protean"

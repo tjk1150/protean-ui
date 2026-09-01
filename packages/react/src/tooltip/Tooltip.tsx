@@ -74,21 +74,17 @@ export function TooltipRoot({ presentation, children }: TooltipRootProps): React
   )
 }
 
-export interface TooltipTriggerProps {
-  readonly className?: string
-  readonly 'aria-label'?: string
+/* A hinted button is still a button: every button prop passes through, so a
+   tooltip composes with an action (onClick), a disabled state, or a form. In
+   popover mode the consumer onClick runs alongside the toggletip open. */
+export interface TooltipTriggerProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   readonly children: React.ReactNode
 }
 
-export function TooltipTrigger({
-  className,
-  'aria-label': ariaLabel,
-  children
-}: TooltipTriggerProps): React.JSX.Element {
+export function TooltipTrigger({ children, disabled, ...rest }: TooltipTriggerProps): React.JSX.Element {
   const { decision } = useTooltipLocalContext('Trigger')
   const shared = {
-    className,
-    'aria-label': ariaLabel,
+    ...rest,
     'data-scope': 'tooltip',
     'data-part': 'trigger',
     'data-presentation': decision?.presentation
@@ -96,15 +92,26 @@ export function TooltipTrigger({
 
   if (!decision) {
     return (
-      <button type="button" {...shared}>
+      <button {...shared} disabled={disabled} type="button">
         {children}
       </button>
     )
   }
+  /* Base UI consumes `disabled` as "do not open the hint" and drops the DOM
+     attribute; rendering our own element keeps the button natively disabled. */
+  const element = <button {...shared} disabled={disabled} type="button" />
   if (decision.presentation === 'tooltip') {
-    return <BaseTooltip.Trigger {...shared}>{children}</BaseTooltip.Trigger>
+    return (
+      <BaseTooltip.Trigger disabled={disabled} render={element}>
+        {children}
+      </BaseTooltip.Trigger>
+    )
   }
-  return <BasePopover.Trigger {...shared}>{children}</BasePopover.Trigger>
+  return (
+    <BasePopover.Trigger disabled={disabled} render={element}>
+      {children}
+    </BasePopover.Trigger>
+  )
 }
 
 export interface TooltipContentProps {
