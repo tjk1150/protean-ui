@@ -46,4 +46,47 @@ describe('createEnvironmentStore', () => {
     env.set({ width: 583 })
     expect(store.getTraits().size).toBe('compact')
   })
+
+  it('reports the virtual keyboard hidden by default', () => {
+    installEnvironment({ width: 375, coarse: true, hover: false })
+    const store = createEnvironmentStore()
+    expect(store.getTraits().virtualKeyboard).toBe(false)
+  })
+
+  it('reports the virtual keyboard when the visual viewport shrinks past the threshold', () => {
+    const env = installEnvironment({ width: 375, height: 800, coarse: true, hover: false })
+    const store = createEnvironmentStore()
+
+    env.set({ vvHeight: 440 })
+    expect(store.getTraits().virtualKeyboard).toBe(true)
+
+    env.set({ vvHeight: null })
+    expect(store.getTraits().virtualKeyboard).toBe(false)
+  })
+
+  it('ignores viewport differences under the threshold', () => {
+    const env = installEnvironment({ width: 375, height: 800, coarse: true, hover: false })
+    const store = createEnvironmentStore()
+
+    env.set({ vvHeight: 700 })
+    expect(store.getTraits().virtualKeyboard).toBe(false)
+  })
+
+  it('does not mistake pinch zoom for the keyboard', () => {
+    const env = installEnvironment({ width: 375, height: 800, coarse: true, hover: false })
+    const store = createEnvironmentStore()
+
+    env.set({ vvHeight: 400, vvScale: 2 })
+    expect(store.getTraits().virtualKeyboard).toBe(false)
+  })
+
+  it('notifies subscribers when the keyboard appears', () => {
+    const env = installEnvironment({ width: 375, height: 800, coarse: true, hover: false })
+    const store = createEnvironmentStore()
+    const listener = vi.fn()
+    store.subscribe(listener)
+
+    env.set({ vvHeight: 440 })
+    expect(listener).toHaveBeenCalledTimes(1)
+  })
 })

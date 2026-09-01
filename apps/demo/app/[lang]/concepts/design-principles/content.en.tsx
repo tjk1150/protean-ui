@@ -112,20 +112,21 @@ the user clicks the trigger
       </p>
 
       <h2>What the default policy sees - and what it does not</h2>
-      <p>In the interest of honesty: decisions currently consult two axes.</p>
+      <p>In the interest of honesty: here is what perception currently collects.</p>
       <ul>
         <li>size class: compact (below 600px), medium, expanded (840px and up)</li>
         <li>input profile: touch, pointer, hybrid</li>
+        <li>virtualKeyboard: whether the on-screen keyboard is up - available to your policies</li>
       </ul>
       <p>
-        And the app-first pack branches on input <strong>only at compact size</strong>.
-        On medium and expanded viewports a touch tablet receives the same patterns as a
-        mouse desktop (parametric differences like touch-target size belong to CSS).
-        That is a decision, not an oversight: we do not ship speculative rules we have
-        not validated on real devices. Tablet-touch differentiation, container-scoped
-        traits, and a virtual-keyboard trait are on the roadmap - and because the policy
-        is a first-class API, adding those axes will not change a single call site of
-        yours.
+        And the app-first pack branches on input <strong>only at compact size</strong>,
+        and does not consult the keyboard yet. On medium and expanded viewports a touch
+        tablet receives the same patterns as a mouse desktop (parametric differences
+        like touch-target size belong to CSS). That is a decision, not an oversight: we
+        do not ship speculative rules we have not validated on real devices.
+        Tablet-touch differentiation and container-scoped traits are on the roadmap -
+        and because the policy is a first-class API, adding those axes will not change
+        a single call site of yours.
       </p>
 
       <p>

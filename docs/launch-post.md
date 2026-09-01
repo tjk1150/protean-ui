@@ -129,7 +129,7 @@ Numbers from the repository, not projections:
 - Known gaps, stated plainly: decisions currently consult two axes (size x input), and
   the default policy branches on input only at compact size - we refuse to ship
   speculative rules unvalidated on real devices, so tablet-touch differentiation waits
-  for data. Container-scoped traits and a virtual-keyboard trait are roadmap. The
+  for data. The virtual keyboard is now collected as a trait (the default pack does not consult it yet); container-scoped traits are roadmap. The
   sheet-mode Select pins its positioner with CSS until an unanchored option exists
   upstream, and has no in-sheet search input yet. The tablet rail cell and the
   bar-with-overflow cell are verified in jsdom and in the iOS Simulator (real WebKit,

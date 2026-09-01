@@ -24,6 +24,16 @@ function traitsEqual(a: Traits, b: Traits): boolean {
   )
 }
 
+/* A visual viewport this much shorter than the window means an on-screen
+   keyboard, not browser chrome. Scale-corrected so pinch zoom never counts. */
+const virtualKeyboardThreshold = 150
+
+function readVirtualKeyboard(): boolean {
+  const viewport = window.visualViewport
+  if (!viewport) return false
+  return window.innerHeight - viewport.height * viewport.scale > virtualKeyboardThreshold
+}
+
 export function createEnvironmentStore(
   thresholds: TraitThresholds = defaultThresholds,
   deadband: number = defaultDeadband
@@ -42,7 +52,7 @@ export function createEnvironmentStore(
         coarsePointer: queries.coarse.matches,
         canHover: queries.hover.matches,
         reducedMotion: queries.reducedMotion.matches,
-        virtualKeyboardVisible: false
+        virtualKeyboardVisible: readVirtualKeyboard()
       },
       thresholds
     )
@@ -67,10 +77,13 @@ export function createEnvironmentStore(
 
   function attach(): () => void {
     const mediaQueries = Object.values(queries)
+    const viewport = window.visualViewport
     window.addEventListener('resize', update)
+    viewport?.addEventListener('resize', update)
     for (const query of mediaQueries) query.addEventListener('change', update)
     return () => {
       window.removeEventListener('resize', update)
+      viewport?.removeEventListener('resize', update)
       for (const query of mediaQueries) query.removeEventListener('change', update)
     }
   }

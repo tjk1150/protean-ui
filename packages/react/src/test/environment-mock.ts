@@ -1,8 +1,12 @@
 interface EnvironmentState {
   width: number
+  height: number
   coarse: boolean
   hover: boolean
   reducedMotion: boolean
+  /** Visual viewport height; null tracks the window height (no keyboard). */
+  vvHeight: number | null
+  vvScale: number
 }
 
 export interface EnvironmentControls {
@@ -16,12 +20,16 @@ export function installEnvironment(
 ): EnvironmentControls {
   const state: EnvironmentState = {
     width: 1280,
+    height: 800,
     coarse: false,
     hover: true,
     reducedMotion: false,
+    vvHeight: null,
+    vvScale: 1,
     ...initial
   }
   const listeners = new Map<string, Set<ChangeListener>>()
+  const viewportListeners = new Set<() => void>()
 
   function matchesFor(query: string): boolean {
     if (query.includes('pointer: coarse')) return state.coarse
@@ -65,7 +73,29 @@ export function installEnvironment(
   })
   Object.defineProperty(window, 'innerHeight', {
     configurable: true,
-    get: () => 800
+    get: () => state.height
+  })
+
+  const visualViewport = {
+    get height() {
+      return state.vvHeight ?? state.height
+    },
+    get offsetTop() {
+      return 0
+    },
+    get scale() {
+      return state.vvScale
+    },
+    addEventListener: (_type: string, callback: () => void) => {
+      viewportListeners.add(callback)
+    },
+    removeEventListener: (_type: string, callback: () => void) => {
+      viewportListeners.delete(callback)
+    }
+  }
+  Object.defineProperty(window, 'visualViewport', {
+    configurable: true,
+    get: () => visualViewport
   })
 
   return {
@@ -74,6 +104,7 @@ export function installEnvironment(
       for (const [query, set] of listeners) {
         for (const callback of set) callback({ matches: matchesFor(query) })
       }
+      for (const callback of viewportListeners) callback()
       window.dispatchEvent(new Event('resize'))
     }
   }
