@@ -7,7 +7,7 @@ import './screen.css'
 
 export default function ScreenDemoPage() {
   return (
-    <Screen.Root>
+    <Screen.Root className="screenDemo">
       <Screen.Navigation>
         <Navigation.Root aria-label="Primary">
           <Navigation.Item href="/screen-demo" current icon={<Glyph path="M3 9.5 10 3l7 6.5V17h-5v-4H8v4H3z" />}>
