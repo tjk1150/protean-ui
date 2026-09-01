@@ -80,14 +80,20 @@ decides which pattern, when.
   never pixels. Every decision is stamped on the DOM as `data-presentation` and is
   explainable: `explain()` prints
   `overlay(form) -> fullscreen [pack:app-first] size=compact input=touch`.
+- The viewport is not the only frame of reference. Inside a `ProteanBoundary` the size
+  class is measured from that panel, and the sheet rises from the panel's own bottom
+  edge - a dialog in a 420px side panel presents the compact way on a 1440px monitor.
+  No other adaptive system on the web has this axis.
 
 ## SSR cannot be wrong, by construction
 
 One architecture rule governs everything: a decision the server could get wrong must be
 expressible in CSS, or deferred to interaction time.
 
-- Overlays decide when they open (opt into `continuity="live"` to re-decide mid-open - the presentation swaps in place with content DOM, typed state, and focus preserved). The served HTML contains the trigger and zero overlay
-  markup. There is nothing to flash, mismatch, or shift.
+- Overlays decide when they open. The served HTML contains the trigger and zero overlay
+  markup - nothing to flash, mismatch, or shift. When you want the opposite trade, opt
+  into `continuity="live"`: the overlay re-decides mid-open and swaps in place, with the
+  content DOM, typed state, and focus preserved.
 - Navigation chrome is one `nav > ul` tree whose bottom-bar, drawer, rail, and sidebar
   states are media-query CSS. The same DOM is served to everyone; measured cumulative
   layout shift is 0, and the navigation lays out correctly with JavaScript disabled.
@@ -98,8 +104,13 @@ Numbers from the repository, not projections:
 
 - 73% less application code at the overlay call site (55 lines to 15 - measured against
   the hand-written recipe, not against wrapper libraries).
-- Bundle: 4.4KB gzip for react, 1.1KB for core (excluding Base UI). That is the entire
-  weight of the decision layer.
+- Bundle: 4.9KB gzip for react, 1.1KB for core (excluding Base UI) - the entire weight
+  of the decision layer, five roles plus search, container boundaries, and transition
+  continuity included.
+- 157 library tests. The default policy is verified as an exhaustive 45-cell decision
+  table, alongside boundary-value, state-transition, and negative suites; a release gate
+  (`pnpm gate`) blocks every publish - a wrong decision cell is a blocked release, not a
+  statistic.
 - axe: zero violations on the navigation and fullscreen states; on the open modal, one
   fewer flagged node than the manual recipe it replaces (the remainder are the focus-guard
   sentinels of the shared backend, present in both implementations).
@@ -121,19 +132,19 @@ Numbers from the repository, not projections:
 - The default policy is not taste. It encodes documented platform convention (Material
   window size classes, HIG overlay patterns), and every default has a three-level escape
   hatch: instance, trait, policy.
-- Style is not imposed, but not abandoned either: a reference stylesheet ships in the
-  package (`@protean-ui/react/reference.css`) in which values hang off the presentation,
-  never the viewport - a sheet rounds only its top corners and a fullscreen surface has
-  none because the role changed, not because a media query fired. Everything sits in
-  `@layer`, so your CSS always wins.
-- Known gaps, stated plainly: decisions currently consult two axes (size x input), and
-  the default policy branches on input only at compact size - we refuse to ship
-  speculative rules unvalidated on real devices, so tablet-touch differentiation waits
-  for data. The virtual keyboard is collected as a trait (the default pack does not consult it yet), and overlay decisions can be container-scoped with ProteanBoundary - a dialog inside a 420px panel presents the compact way on any monitor, its sheet rising from the panel's own bottom edge with the scrim covering the panel only, measured at open time so the SSR invariant is untouched. Container-scoped chrome stays with CSS container queries. The
-  sheet-mode Select pins its positioner with CSS until an unanchored option exists
-  upstream (long lists get a real combobox-pattern search input via searchable). The tablet rail cell and the
-  bar-with-overflow cell are verified in jsdom and in the iOS Simulator (real WebKit,
-  iPhone 16 Pro and iPad Pro); physical hardware is still pending.
+- Style is not imposed, but not abandoned either: a reference stylesheet ships
+  (`@protean-ui/css`), and teams that want only the vocabulary can import `tokens.css`
+  alone. Values hang off the presentation, never the viewport - a sheet rounds only its
+  top corners and a fullscreen surface has none because the role changed, not because a
+  media query fired. Everything sits in `@layer`, so your CSS always wins.
+- Known gaps, stated plainly: the default policy branches on input only at compact
+  size - we refuse to ship speculative rules unvalidated on real devices, so
+  tablet-touch differentiation waits for data (the virtual keyboard is likewise
+  collected as a trait but not consulted yet). Chrome inside containers stays a CSS
+  container-query concern. The sheet-mode Select pins its positioner with CSS until an
+  unanchored option exists upstream. The tablet rail and bar-overflow cells are
+  verified in jsdom and the iOS Simulator (real WebKit - iPhone 16 Pro, iPad Pro);
+  physical hardware is still pending.
 
 The name: protean - readily assuming different forms. The academic lineage is UI
 plasticity (Thevenin and Coutaz, 1999). The kill-criteria verdict that gated this project
