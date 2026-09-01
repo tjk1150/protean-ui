@@ -131,8 +131,9 @@ Numbers from the repository, not projections:
   speculative rules unvalidated on real devices, so tablet-touch differentiation waits
   for data. Container-scoped traits and a virtual-keyboard trait are roadmap. The
   sheet-mode Select pins its positioner with CSS until an unanchored option exists
-  upstream, and has no in-sheet search input yet. The tablet rail cell is exercised in
-  jsdom but not yet on devices.
+  upstream, and has no in-sheet search input yet. The tablet rail cell and the
+  bar-with-overflow cell are verified in jsdom and in the iOS Simulator (real WebKit,
+  iPhone 16 Pro and iPad Pro); physical hardware is still pending.
 
 The name: protean - readily assuming different forms. The academic lineage is UI
 plasticity (Thevenin and Coutaz, 1999). The kill-criteria verdict that gated this project
