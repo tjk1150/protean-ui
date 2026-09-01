@@ -1,6 +1,6 @@
 {
   "name": "@protean-ui/react",
-  "version": "0.1.0-alpha.5",
+  "version": "0.1.0-alpha.6",
   "description": "Semantic adaptive components for React, driven by the Protean policy engine",
   "type": "module",
   "license": "MIT",
@@ -36,7 +36,8 @@
     "./boundary": "./src/boundary.tsx",
     "./provider": "./src/provider.tsx",
     "./list-detail": "./src/list-detail/index.parts.ts",
-    "./actions": "./src/actions/index.parts.ts"
+    "./actions": "./src/actions/index.parts.ts",
+    "./supporting-pane": "./src/supporting-pane/index.parts.ts"
   },
   "files": [
     "dist",
@@ -95,6 +96,10 @@
       "./actions": {
         "types": "./dist/actions/index.parts.d.ts",
         "default": "./dist/actions/index.parts.js"
+      },
+      "./supporting-pane": {
+        "types": "./dist/supporting-pane/index.parts.d.ts",
+        "default": "./dist/supporting-pane/index.parts.js"
       }
     },
     "main": "./dist/index.js",
