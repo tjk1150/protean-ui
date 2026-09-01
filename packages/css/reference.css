@@ -685,6 +685,65 @@
   }
 
   /* ------------------------------------------------------------------ */
+  /* Actions toolbar: inline where there is room; the secondary set      */
+  /* collapses behind More on compact and expands in place when opened.  */
+  /* ------------------------------------------------------------------ */
+
+  .protean-defaults [data-scope='actions'] {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    & [data-part='item'],
+    & [data-part='overflow-toggle'] {
+      appearance: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      border: 1px solid var(--protean-hairline);
+      border-radius: 8px;
+      background: var(--protean-surface);
+      color: var(--protean-ink);
+      padding: 8px 12px;
+      min-height: var(--protean-target);
+      font-size: 0.9rem;
+      cursor: pointer;
+    }
+
+    & [data-part='item'][data-variant='danger'] {
+      color: var(--protean-danger);
+    }
+
+    & [data-part='overflow-toggle'] {
+      display: none;
+    }
+  }
+
+  @media (width < 600px) {
+    .protean-defaults [data-scope='actions'] {
+      & [data-part='item'][data-secondary] {
+        display: none;
+        order: 10;
+      }
+
+      & [data-part='overflow-toggle'] {
+        display: inline-flex;
+      }
+
+      &[data-overflow-open] {
+        flex-wrap: wrap;
+
+        & [data-part='item'][data-secondary] {
+          display: inline-flex;
+          justify-content: flex-start;
+          flex-basis: 100%;
+        }
+      }
+    }
+  }
+
+  /* ------------------------------------------------------------------ */
   /* ListDetail: two panes on medium and expanded, one screen on compact */
   /* ------------------------------------------------------------------ */
 

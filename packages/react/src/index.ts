@@ -1,5 +1,7 @@
 export * from '@protean-ui/core'
 
+export * as Actions from './actions/index.parts'
+export type { ActionsItemProps, ActionsRootProps } from './actions/Actions'
 export { ProteanBoundary, type ProteanBoundaryProps } from './boundary'
 export { createEnvironmentStore, type EnvironmentStore } from './environment'
 export {

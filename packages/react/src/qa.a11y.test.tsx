@@ -2,6 +2,7 @@ import axe from 'axe-core'
 import { fireEvent, render, screen } from '@testing-library/react'
 import * as React from 'react'
 import { describe, expect, it } from 'vitest'
+import * as ActionsBar from './actions/index.parts'
 import * as Dialog from './overlay/index.parts'
 import * as Menu from './menu/index.parts'
 import * as Navigation from './navigation/index.parts'
@@ -90,6 +91,21 @@ describe('axe on key open states', () => {
     )
     fireEvent.click(screen.getByRole('button', { name: 'More' }))
     await expectClean('bar-overflow')
+  })
+
+  it('actions toolbar with the overflow expanded', async () => {
+    installEnvironment({ width: 375, coarse: true, hover: false })
+    render(
+      <ProteanProvider>
+        <ActionsBar.Root aria-label="Document tools" moreLabel="More">
+          <ActionsBar.Item>Save</ActionsBar.Item>
+          <ActionsBar.Item secondary>Rename</ActionsBar.Item>
+          <ActionsBar.Item secondary destructive>Delete</ActionsBar.Item>
+        </ActionsBar.Root>
+      </ProteanProvider>
+    )
+    fireEvent.click(screen.getByRole('button', { name: 'More' }))
+    await expectClean('actions-overflow')
   })
 
   it('menu popover open', async () => {
