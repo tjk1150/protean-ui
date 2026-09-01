@@ -61,6 +61,12 @@
   list-style: none;
 }
 
+/* The docs navigation never uses the bar presentation, so the bar-only
+   overflow toggle stays hidden in every state. */
+.docsShell [data-scope='navigation'] [data-part='overflow-toggle-item'] {
+  display: none;
+}
+
 .docsShell [data-scope='navigation'] [data-part='drawer-toggle'] {
   display: none;
   appearance: none;

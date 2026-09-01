@@ -56,3 +56,116 @@ describe('Navigation', () => {
     expect(nav().hasAttribute('data-drawer-open')).toBe(true)
   })
 })
+
+interface OverflowRenderOptions {
+  readonly count: number
+  readonly maxBarItems?: number
+  readonly overflowLabel?: string
+}
+
+function renderOverflowNavigation({ count, maxBarItems, overflowLabel }: OverflowRenderOptions) {
+  const labels = Array.from({ length: count }, (_, index) => `Item ${index + 1}`)
+  return render(
+    <ProteanProvider>
+      <Navigation.Root
+        aria-label="Primary"
+        {...(maxBarItems !== undefined ? { maxBarItems } : {})}
+        {...(overflowLabel !== undefined ? { overflowLabel } : {})}
+      >
+        {labels.map((label) => (
+          <Navigation.Item key={label} onClick={() => {}}>
+            {label}
+          </Navigation.Item>
+        ))}
+      </Navigation.Root>
+    </ProteanProvider>
+  )
+}
+
+function overflowToggle(): HTMLButtonElement | null {
+  return nav().querySelector('[data-part="overflow-toggle"]')
+}
+
+function overflowItems(): HTMLElement[] {
+  return Array.from(nav().querySelectorAll('li[data-overflow]'))
+}
+
+describe('Navigation overflow', () => {
+  it('renders no overflow affordance at or under the bar capacity', () => {
+    installEnvironment({ width: 375, coarse: true, hover: false })
+    renderOverflowNavigation({ count: 5 })
+
+    expect(overflowToggle()).toBeNull()
+    expect(overflowItems()).toHaveLength(0)
+  })
+
+  it('marks items beyond capacity and exposes an accessible toggle', () => {
+    installEnvironment({ width: 375, coarse: true, hover: false })
+    renderOverflowNavigation({ count: 7 })
+
+    const toggle = overflowToggle() as HTMLButtonElement
+    const list = nav().querySelector('[data-part="list"]') as HTMLElement
+    expect(toggle.textContent).toBe('More')
+    expect(toggle.getAttribute('aria-controls')).toBe(list.id)
+    expect(toggle.getAttribute('aria-expanded')).toBe('false')
+
+    // Capacity 5 keeps four primary slots; the fifth slot is the toggle.
+    expect(overflowItems()).toHaveLength(3)
+    const items = Array.from(nav().querySelectorAll('li[data-part="item"]'))
+    expect(items.slice(0, 4).every((item) => !item.hasAttribute('data-overflow'))).toBe(true)
+  })
+
+  it('opens and closes the overflow panel state on the root', () => {
+    installEnvironment({ width: 375, coarse: true, hover: false })
+    renderOverflowNavigation({ count: 7 })
+
+    const toggle = overflowToggle() as HTMLButtonElement
+    act(() => toggle.click())
+    expect(nav().hasAttribute('data-overflow-open')).toBe(true)
+    expect(toggle.getAttribute('aria-expanded')).toBe('true')
+
+    act(() => toggle.click())
+    expect(nav().hasAttribute('data-overflow-open')).toBe(false)
+  })
+
+  it('closes the overflow panel when a destination is chosen', () => {
+    installEnvironment({ width: 375, coarse: true, hover: false })
+    renderOverflowNavigation({ count: 7 })
+
+    act(() => (overflowToggle() as HTMLButtonElement).click())
+    expect(nav().hasAttribute('data-overflow-open')).toBe(true)
+
+    const lastLink = Array.from(nav().querySelectorAll('[data-part="link"]')).at(-1) as HTMLElement
+    act(() => lastLink.click())
+    expect(nav().hasAttribute('data-overflow-open')).toBe(false)
+  })
+
+  it('respects maxBarItems and a custom overflow label', () => {
+    installEnvironment({ width: 375, coarse: true, hover: false })
+    renderOverflowNavigation({ count: 4, maxBarItems: 3, overflowLabel: '더보기' })
+
+    expect((overflowToggle() as HTMLButtonElement).textContent).toBe('더보기')
+    expect(overflowItems()).toHaveLength(2)
+  })
+
+  it('stamps the overflow structure independent of the presentation', () => {
+    installEnvironment({ width: 1280, coarse: false, hover: true })
+    renderOverflowNavigation({ count: 7 })
+
+    expect(nav().getAttribute('data-presentation')).toBe('sidebar')
+    expect(overflowToggle()).not.toBeNull()
+    expect(overflowItems()).toHaveLength(3)
+  })
+
+  it('resets the overflow state when leaving the bar presentation', () => {
+    const env = installEnvironment({ width: 375, coarse: true, hover: false })
+    renderOverflowNavigation({ count: 7 })
+
+    act(() => (overflowToggle() as HTMLButtonElement).click())
+    expect(nav().hasAttribute('data-overflow-open')).toBe(true)
+
+    act(() => env.set({ width: 1280, coarse: false, hover: true }))
+    expect(nav().getAttribute('data-presentation')).toBe('sidebar')
+    expect(nav().hasAttribute('data-overflow-open')).toBe(false)
+  })
+})

@@ -37,6 +37,12 @@
     display: flex;
   }
 
+  /* The overflow toggle is a bar-only affordance; every other presentation
+     shows the full list, so the slot stays hidden by default. */
+  & [data-part='overflow-toggle-item'] {
+    display: none;
+  }
+
   & [data-part='link'] {
     display: flex;
     align-items: center;
@@ -87,6 +93,69 @@
       padding: 8px 12px;
       min-width: 56px;
       font-size: 11px;
+    }
+
+    /* Items past the bar capacity wait behind the More tab. */
+    & li[data-overflow] {
+      display: none;
+    }
+
+    & [data-part='overflow-toggle-item'] {
+      display: block;
+    }
+
+    & [data-part='overflow-toggle'] {
+      appearance: none;
+      border: 0;
+      background: transparent;
+      color: var(--muted);
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      padding: 8px 12px;
+      min-width: 56px;
+      font-size: 11px;
+
+      &[aria-expanded='true'] {
+        color: var(--accent);
+      }
+    }
+
+    /* Open: the same list morphs into a bottom panel showing every item. */
+    &[data-overflow-open] {
+      & [data-part='list'] {
+        position: fixed;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        z-index: 10;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 2px;
+        max-height: 70dvh;
+        overflow-y: auto;
+        padding: 12px 12px calc(12px + env(safe-area-inset-bottom));
+        background: var(--surface);
+        border-top: 1px solid var(--line);
+        box-shadow: 0 -16px 48px -24px rgb(0 0 0 / 0.45);
+      }
+
+      & li[data-overflow] {
+        display: block;
+      }
+
+      & [data-part='link'],
+      & [data-part='overflow-toggle'] {
+        flex-direction: row;
+        justify-content: flex-start;
+        width: 100%;
+        gap: 10px;
+        min-height: 44px;
+        padding: 10px 14px;
+        font-size: 0.95rem;
+      }
     }
   }
 }

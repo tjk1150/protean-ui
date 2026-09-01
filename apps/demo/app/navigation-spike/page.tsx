@@ -23,6 +23,12 @@ export default function NavigationSpikePage() {
         <Navigation.Item href="#settings" icon={<Glyph path="M10 12.5a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5zM10 2v2m0 12v2M2 10h2m12 0h2M4.3 4.3l1.4 1.4m8.6 8.6 1.4 1.4m0-11.4-1.4 1.4M5.7 14.3l-1.4 1.4" />}>
           Settings
         </Navigation.Item>
+        <Navigation.Item href="#rewards" icon={<Glyph path="M10 3l2 4 4.4.6-3.2 3.1.8 4.3L10 13l-4 2 .8-4.3L3.6 7.6 8 7z" />}>
+          Rewards
+        </Navigation.Item>
+        <Navigation.Item href="#help" icon={<Glyph path="M10 17a7 7 0 1 0 0-14 7 7 0 0 0 0 14zm-2-9a2 2 0 1 1 3.4 1.4c-.6.6-1.4 1-1.4 2m0 2.6h.01" />}>
+          Help
+        </Navigation.Item>
       </Navigation.Root>
       <main>
         <p>
@@ -30,7 +36,7 @@ export default function NavigationSpikePage() {
         </p>
         <h1>Navigation spike</h1>
         <p className="lede">
-          One semantic declaration, one DOM tree: <code>nav &gt; ul</code> with five items. The
+          One semantic declaration, one DOM tree: <code>nav &gt; ul</code> with seven items. The
           bottom tab bar, the drawer, the rail, and the sidebar are four CSS states of that
           same tree.
         </p>
@@ -38,10 +44,14 @@ export default function NavigationSpikePage() {
           Current decision: <NavReadout />
         </p>
         <ul>
-          <li>compact x touch: bottom tab bar with safe-area padding</li>
+          <li>
+            compact x touch: bottom tab bar with safe-area padding - seven items exceed the
+            bar capacity, so the first four stay visible and the rest collapse behind a More
+            tab that opens a bottom panel
+          </li>
           <li>compact x fine pointer: header strip with a drawer toggle - a narrow desktop window is not a phone</li>
-          <li>medium: navigation rail</li>
-          <li>expanded: sidebar</li>
+          <li>medium: navigation rail (all seven items)</li>
+          <li>expanded: sidebar (all seven items)</li>
         </ul>
         <p className="hint">
           Because the default policy is expressed as media queries over the same DOM, the

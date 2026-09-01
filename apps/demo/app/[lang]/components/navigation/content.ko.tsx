@@ -46,10 +46,23 @@ export default function NavigationKo() {
           <tbody>
             <tr><td>presentation</td><td>모습 이름 | &#123; 화면등급: 모습 &#125;</td><td>bar · drawer · rail · sidebar 중에서 직접 지정할 수 있어요. 이 문서 사이트는 compact는 drawer, 그 위는 sidebar로 지정했어요.</td></tr>
             <tr><td>toggleLabel</td><td>string</td><td>서랍을 여는 버튼의 라벨이에요.</td></tr>
+            <tr><td>maxBarItems</td><td>number (기본 5)</td><td>하단 탭 바가 감당할 칸 수예요. 항목이 이보다 많으면 넘치는 항목이 &quot;더보기&quot; 뒤로 접혀요.</td></tr>
+            <tr><td>overflowLabel</td><td>string (기본 &quot;More&quot;)</td><td>더보기 탭의 라벨이에요.</td></tr>
             <tr><td>aria-label</td><td>string</td><td>메뉴 영역의 이름이에요. 화면에 내비게이션이 여러 개면 꼭 붙여 주세요.</td></tr>
           </tbody>
         </table>
       </div>
+
+      <h2>항목이 많을 때</h2>
+      <p>
+        하단 탭 바에 들어가는 항목은 다섯 개 정도가 한계예요. <code>maxBarItems</code>를
+        넘으면 앞의 네 개만 바에 남고, 나머지는 &quot;더보기&quot; 탭 뒤로 접혀요. 더보기를
+        누르면 전체 목록이 아래에서 패널로 올라와요. 어떤 항목이 접힐지는 자식 개수만으로
+        정해지고 환경을 보지 않아서, 서버가 언제나 같은 HTML을 그려요. 탭 바가 아닌
+        모습(서랍 · 레일 · 사이드바)에서는 전체 목록이 그대로 보이고 더보기 탭은 CSS로
+        숨겨져요. <Link href="/navigation-spike">내비게이션 데모</Link>를 폰에서 열면 항목
+        일곱 개로 직접 확인할 수 있어요.
+      </p>
 
       <h2>Navigation.Item</h2>
       <div className="tableWrap">
@@ -66,9 +79,9 @@ export default function NavigationKo() {
       <h2>스타일은 어떻게 입히나요?</h2>
       <p>
         Protean은 모양을 강요하지 않아요. 루트에는 <code>data-scope</code>, 각 조각에는{' '}
-        <code>data-part</code>(list · item · link · icon · label · drawer-toggle)가
-        붙으니, 그 선택자로 원하는 CSS를 쓰면 돼요. 참고용 스타일시트가 데모에 포함돼
-        있어요.
+        <code>data-part</code>(list · item · link · icon · label · drawer-toggle ·
+        overflow-toggle)가 붙으니, 그 선택자로 원하는 CSS를 쓰면 돼요. 참고용
+        스타일시트가 데모에 포함돼 있어요.
       </p>
     </div>
   )
