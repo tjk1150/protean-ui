@@ -129,7 +129,7 @@ Numbers from the repository, not projections:
 - Known gaps, stated plainly: decisions currently consult two axes (size x input), and
   the default policy branches on input only at compact size - we refuse to ship
   speculative rules unvalidated on real devices, so tablet-touch differentiation waits
-  for data. The virtual keyboard is now collected as a trait (the default pack does not consult it yet); container-scoped traits are roadmap. The
+  for data. The virtual keyboard is collected as a trait (the default pack does not consult it yet), and overlay decisions can be container-scoped with ProteanBoundary - a dialog inside a 420px panel presents the compact way on any monitor, measured at open time so the SSR invariant is untouched. Sheet geometry is still viewport-anchored, and container-scoped chrome remains roadmap. The
   sheet-mode Select pins its positioner with CSS until an unanchored option exists
   upstream, and has no in-sheet search input yet. The tablet rail cell and the
   bar-with-overflow cell are verified in jsdom and in the iOS Simulator (real WebKit,

@@ -50,7 +50,7 @@ Goal: **no breakpoints in application code** - precisely, no pattern-choosing br
 Stated plainly, in the order we intend to close them:
 
 - **Tablet-touch differentiation.** The default policy branches on input only at compact size today - we refuse to ship speculative rules unvalidated on real devices, so medium and expanded treat touch and mouse alike until we have data.
-- **Container-scoped traits.** Decisions currently read the viewport; deciding against the nearest container is designed but not built.
+- **Container-boundary geometry.** Overlay decisions are container-scoped today (`ProteanBoundary` - a dialog in a 420px panel presents the compact way on any monitor), but the sheet still slides from the viewport edge; portal-to-boundary geometry and container-scoped chrome (via CSS container queries) remain.
 - **Presentation-scoped token package.** The reference stylesheet demonstrates the token contract (`--protean-shape` set per presentation); a standalone themable package comes after the API settles.
 - **In-sheet search for Select**, and an unanchored sheet option upstream (the current sheet pins the floating-ui positioner with CSS).
 - **Device and end-to-end testing.** The bar-overflow and tablet-rail cells are verified in jsdom and in the iOS Simulator (real WebKit, iPhone 16 Pro and iPad Pro); physical hardware and automated e2e remain.

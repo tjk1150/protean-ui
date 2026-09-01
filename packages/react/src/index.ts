@@ -1,5 +1,6 @@
 export * from '@protean-ui/core'
 
+export { ProteanBoundary, type ProteanBoundaryProps } from './boundary'
 export { createEnvironmentStore, type EnvironmentStore } from './environment'
 export {
   ProteanProvider,

@@ -1,0 +1,29 @@
+.boundaryDemoPage .boundaryCompare {
+  display: grid;
+  gap: 16px;
+  margin: 24px 0;
+}
+
+@media (min-width: 900px) {
+  .boundaryDemoPage .boundaryCompare {
+    grid-template-columns: 1fr 420px;
+    align-items: start;
+  }
+}
+
+.boundaryDemoPage .boundaryCell {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 20px;
+}
+
+.boundaryDemoPage .boundaryCell h2 {
+  margin: 0 0 4px;
+  font-size: 1rem;
+}
+
+.boundaryDemoPage .boundaryPanel {
+  border: 2px dashed var(--accent);
+  max-width: 420px;
+}

@@ -1,5 +1,10 @@
 import { describe, expect, it } from 'vitest'
-import { defaultThresholds, resolveTraits, type EnvironmentSnapshot } from './index'
+import {
+  defaultThresholds,
+  resolveSizeClass,
+  resolveTraits,
+  type EnvironmentSnapshot
+} from './index'
 
 export function env(overrides: Partial<EnvironmentSnapshot>): EnvironmentSnapshot {
   return {
@@ -12,6 +17,19 @@ export function env(overrides: Partial<EnvironmentSnapshot>): EnvironmentSnapsho
     ...overrides
   }
 }
+
+describe('resolveSizeClass', () => {
+  it('classifies a width against the default thresholds', () => {
+    expect(resolveSizeClass(599)).toBe('compact')
+    expect(resolveSizeClass(600)).toBe('medium')
+    expect(resolveSizeClass(839)).toBe('medium')
+    expect(resolveSizeClass(840)).toBe('expanded')
+  })
+
+  it('respects custom thresholds', () => {
+    expect(resolveSizeClass(700, { medium: 800, expanded: 1200 })).toBe('compact')
+  })
+})
 
 describe('resolveTraits', () => {
   it('classifies size below 600 as compact', () => {

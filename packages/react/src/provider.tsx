@@ -4,12 +4,14 @@ import {
   appFirst,
   asPolicy,
   defaultThresholds,
+  resolveSizeClass,
   type Policy,
   type PolicyPack,
   type TraitThresholds,
   type Traits
 } from '@protean-ui/core'
 import * as React from 'react'
+import { BoundaryContext } from './boundary'
 import { createEnvironmentStore, type EnvironmentStore } from './environment'
 import { defaultOverlayComponents, type OverlayComponents } from './overlay/defaults'
 
@@ -26,6 +28,7 @@ export interface ProteanContextValue {
   readonly components: OverlayComponents
   readonly store: EnvironmentStore | null
   readonly ssrTraits: Traits
+  readonly thresholds: TraitThresholds
 }
 
 const ProteanContext = React.createContext<ProteanContextValue | null>(null)
@@ -58,9 +61,10 @@ export function ProteanProvider({
       policy: normalizePolicy(policy),
       components: { ...defaultOverlayComponents, ...components },
       store,
-      ssrTraits
+      ssrTraits,
+      thresholds
     }),
-    [policy, components, store, ssrTraits]
+    [policy, components, store, ssrTraits, thresholds]
   )
 
   return <ProteanContext.Provider value={value}>{children}</ProteanContext.Provider>
@@ -77,7 +81,8 @@ function defaultContextValue(): ProteanContextValue {
     policy: defaultPolicy,
     components: defaultOverlayComponents,
     store: defaultStore,
-    ssrTraits: defaultSsrTraits
+    ssrTraits: defaultSsrTraits,
+    thresholds: defaultThresholds
   }
 }
 
@@ -100,7 +105,19 @@ export function useTraits(): Traits {
   )
 }
 
+/* Reads traits at interaction time. Inside a ProteanBoundary the size class
+   comes from the boundary's measured width; everything else stays viewport-
+   driven. An unmeasurable boundary (zero width) falls back to the viewport. */
 export function useReadTraits(): () => Traits {
-  const { store, ssrTraits } = useProteanContext()
-  return React.useCallback(() => (store ? store.getTraits() : ssrTraits), [store, ssrTraits])
+  const { store, ssrTraits, thresholds } = useProteanContext()
+  const boundary = React.useContext(BoundaryContext)
+  return React.useCallback(() => {
+    const base = store ? store.getTraits() : ssrTraits
+    const element = boundary?.current
+    if (!element) return base
+    const width = element.getBoundingClientRect().width
+    if (width <= 0) return base
+    const size = resolveSizeClass(width, thresholds)
+    return size === base.size ? base : { ...base, size }
+  }, [store, ssrTraits, thresholds, boundary])
 }

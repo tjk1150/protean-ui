@@ -29,16 +29,18 @@ export const defaultThresholds: TraitThresholds = {
   expanded: 840
 }
 
+export function resolveSizeClass(
+  width: number,
+  thresholds: TraitThresholds = defaultThresholds
+): SizeClass {
+  return width < thresholds.medium ? 'compact' : width < thresholds.expanded ? 'medium' : 'expanded'
+}
+
 export function resolveTraits(
   env: EnvironmentSnapshot,
   thresholds: TraitThresholds = defaultThresholds
 ): Traits {
-  const size: SizeClass =
-    env.width < thresholds.medium
-      ? 'compact'
-      : env.width < thresholds.expanded
-        ? 'medium'
-        : 'expanded'
+  const size = resolveSizeClass(env.width, thresholds)
 
   const input: InputProfile = env.coarsePointer
     ? env.canHover

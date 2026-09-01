@@ -1,5 +1,6 @@
 export {
   defaultThresholds,
+  resolveSizeClass,
   resolveTraits,
   type EnvironmentSnapshot,
   type InputProfile,

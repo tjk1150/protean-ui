@@ -124,7 +124,9 @@ the user clicks the trigger
         tablet receives the same patterns as a mouse desktop (parametric differences
         like touch-target size belong to CSS). That is a decision, not an oversight: we
         do not ship speculative rules we have not validated on real devices.
-        Tablet-touch differentiation and container-scoped traits are on the roadmap -
+        Tablet-touch differentiation is on the roadmap; container-scoped decisions
+        shipped for overlays (declare inside a ProteanBoundary and the size class is
+        measured from that panel, not the viewport) -
         and because the policy is a first-class API, adding those axes will not change
         a single call site of yours.
       </p>
