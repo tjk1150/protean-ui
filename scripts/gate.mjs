@@ -16,7 +16,7 @@ import { join } from 'node:path'
 import { gzipSync } from 'node:zlib'
 
 const ROOT = join(import.meta.dirname, '..')
-const BUDGETS = { react: 6 * 1024, core: 2 * 1024 }
+const BUDGETS = { react: 8 * 1024, core: 2 * 1024, role: 3.5 * 1024 }
 const GATE_URL = process.env.PROTEAN_GATE_URL ?? 'https://protean-ui-jintaes-projects.vercel.app'
 
 const results = []
@@ -74,11 +74,40 @@ if (built !== null) {
       '@protean-ui/core'
     ])
     const core = await measure('packages/core/dist/index.js', [])
+    // The public per-role subpath ('@protean-ui/react/dialog') must stay
+    // tree-shaken: a consumer of one role never pays for the others.
+    const dialogSlice = await build({
+      stdin: {
+        contents:
+          "export * from './packages/react/dist/overlay/index.parts.js'; export { ProteanProvider } from './packages/react/dist/provider.js'",
+        resolveDir: ROOT,
+        sourcefile: 'role-entry.js'
+      },
+      bundle: true,
+      minify: true,
+      format: 'esm',
+      write: false,
+      external: [
+        'react',
+        'react-dom',
+        'react/jsx-runtime',
+        '@base-ui/react',
+        '@base-ui/react/*',
+        '@protean-ui/core'
+      ],
+      logLevel: 'silent'
+    })
+    const role = gzipSync(dialogSlice.outputFiles[0].contents).length
     const fmt = (n) => `${(n / 1024).toFixed(1)}KB`
     record(
-      'bundle budget: react <= 6KB gzip',
+      'bundle budget: react (all roles) <= 8KB gzip',
       react <= BUDGETS.react ? 'PASS' : 'FAIL',
       `${fmt(react)} gzip (minified, externals excluded)`
+    )
+    record(
+      'bundle budget: one role via subpath <= 3.5KB gzip',
+      role <= BUDGETS.role ? 'PASS' : 'FAIL',
+      `${fmt(role)} gzip (dialog + provider, tree-shaken)`
     )
     record('bundle budget: core <= 2KB gzip', core <= BUDGETS.core ? 'PASS' : 'FAIL', `${fmt(core)} gzip`)
   } catch (error) {

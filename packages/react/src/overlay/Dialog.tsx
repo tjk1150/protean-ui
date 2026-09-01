@@ -24,7 +24,7 @@ interface DialogLocalContextValue {
   readonly contentHost: HTMLElement | null
 }
 
-const DialogLocalContext = React.createContext<DialogLocalContextValue | null>(null)
+const DialogLocalContext = /*#__PURE__*/ React.createContext<DialogLocalContextValue | null>(null)
 
 function useDialogLocalContext(part: string): DialogLocalContextValue {
   const context = React.useContext(DialogLocalContext)

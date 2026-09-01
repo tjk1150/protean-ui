@@ -31,7 +31,7 @@ export interface ProteanContextValue {
   readonly thresholds: TraitThresholds
 }
 
-const ProteanContext = React.createContext<ProteanContextValue | null>(null)
+const ProteanContext = /*#__PURE__*/ React.createContext<ProteanContextValue | null>(null)
 
 export interface ProteanProviderProps {
   readonly policy?: Policy | PolicyPack
@@ -70,7 +70,7 @@ export function ProteanProvider({
   return <ProteanContext.Provider value={value}>{children}</ProteanContext.Provider>
 }
 
-const defaultPolicy = asPolicy(appFirst)
+const defaultPolicy = /*#__PURE__*/ asPolicy(appFirst)
 let defaultStore: EnvironmentStore | null = null
 
 function defaultContextValue(): ProteanContextValue {

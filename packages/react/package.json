@@ -25,7 +25,16 @@
   ],
   "exports": {
     ".": "./src/index.ts",
-    "./reference.css": "./reference.css"
+    "./reference.css": "./reference.css",
+    "./dialog": "./src/overlay/index.parts.ts",
+    "./select": "./src/select/index.parts.ts",
+    "./menu": "./src/menu/index.parts.ts",
+    "./tooltip": "./src/tooltip/index.parts.ts",
+    "./navigation": "./src/navigation/index.parts.ts",
+    "./screen": "./src/screen/index.parts.ts",
+    "./primary-action": "./src/primary-action/index.parts.ts",
+    "./boundary": "./src/boundary.tsx",
+    "./provider": "./src/provider.tsx"
   },
   "files": [
     "dist",
@@ -40,7 +49,43 @@
         "types": "./dist/index.d.ts",
         "default": "./dist/index.js"
       },
-      "./reference.css": "./reference.css"
+      "./reference.css": "./reference.css",
+      "./dialog": {
+        "types": "./dist/overlay/index.parts.d.ts",
+        "default": "./dist/overlay/index.parts.js"
+      },
+      "./select": {
+        "types": "./dist/select/index.parts.d.ts",
+        "default": "./dist/select/index.parts.js"
+      },
+      "./menu": {
+        "types": "./dist/menu/index.parts.d.ts",
+        "default": "./dist/menu/index.parts.js"
+      },
+      "./tooltip": {
+        "types": "./dist/tooltip/index.parts.d.ts",
+        "default": "./dist/tooltip/index.parts.js"
+      },
+      "./navigation": {
+        "types": "./dist/navigation/index.parts.d.ts",
+        "default": "./dist/navigation/index.parts.js"
+      },
+      "./screen": {
+        "types": "./dist/screen/index.parts.d.ts",
+        "default": "./dist/screen/index.parts.js"
+      },
+      "./primary-action": {
+        "types": "./dist/primary-action/index.parts.d.ts",
+        "default": "./dist/primary-action/index.parts.js"
+      },
+      "./boundary": {
+        "types": "./dist/boundary.d.ts",
+        "default": "./dist/boundary.js"
+      },
+      "./provider": {
+        "types": "./dist/provider.d.ts",
+        "default": "./dist/provider.js"
+      }
     },
     "main": "./dist/index.js",
     "types": "./dist/index.d.ts"

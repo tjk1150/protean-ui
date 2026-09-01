@@ -24,7 +24,7 @@ interface TooltipLocalContextValue {
   readonly decision: Decision<HintPresentation> | null
 }
 
-const TooltipLocalContext = React.createContext<TooltipLocalContextValue | null>(null)
+const TooltipLocalContext = /*#__PURE__*/ React.createContext<TooltipLocalContextValue | null>(null)
 
 function useTooltipLocalContext(part: string): TooltipLocalContextValue {
   const context = React.useContext(TooltipLocalContext)

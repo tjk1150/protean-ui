@@ -21,7 +21,7 @@ interface MenuLocalContextValue {
   readonly decision: Decision<OverlayPresentation> | null
 }
 
-const MenuLocalContext = React.createContext<MenuLocalContextValue | null>(null)
+const MenuLocalContext = /*#__PURE__*/ React.createContext<MenuLocalContextValue | null>(null)
 
 function useMenuLocalContext(part: string): MenuLocalContextValue {
   const context = React.useContext(MenuLocalContext)

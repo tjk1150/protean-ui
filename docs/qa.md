@@ -57,7 +57,7 @@ A publish to npm requires all of:
 - Scenario suite: toss-clone **699/699**
 - axe on demo states: **0 critical or serious** introduced by protean (shared-backend focus-guard sentinels are documented and equal to the manual baseline)
 - SSR: **zero overlay markup** in server HTML (curl), navigation CLS **0**
-- Bundle budget: react **<= 6KB gzip**, core **<= 2KB gzip**
+- Bundle budgets: react all-roles **<= 8KB gzip**; one role via its public subpath (`@protean-ui/react/dialog` style) **<= 3.5KB gzip** tree-shaken - a consumer of one role never pays for the others; core **<= 2KB gzip**
 - Docs: every shipped prop documented in Korean and English; the honesty sections (README roadmap, design-principles, launch post known-gaps) match reality
 - Compatibility: matrix above with **0 critical** on Chrome, iOS Safari, iPadOS
 

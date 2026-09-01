@@ -9,7 +9,7 @@ import {
 import * as React from 'react'
 import { useProteanContext, useTraits } from '../provider'
 
-const NavigationOverflowContext = React.createContext<boolean>(false)
+const NavigationOverflowContext = /*#__PURE__*/ React.createContext<boolean>(false)
 
 export interface NavigationProps extends React.HTMLAttributes<HTMLElement> {
   readonly presentation?: InstanceOverride<NavigationPresentation>

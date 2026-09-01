@@ -4,7 +4,7 @@ import * as React from 'react'
 
 /* Carries the nearest boundary element so open-time decisions can measure
    against the container instead of the viewport. */
-export const BoundaryContext = React.createContext<React.RefObject<HTMLDivElement | null> | null>(
+export const BoundaryContext = /*#__PURE__*/ React.createContext<React.RefObject<HTMLDivElement | null> | null>(
   null
 )
 

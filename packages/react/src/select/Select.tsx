@@ -27,7 +27,7 @@ interface SelectLocalContextValue {
   readonly optionFor: (value: string) => SelectOption | undefined
 }
 
-const SelectLocalContext = React.createContext<SelectLocalContextValue | null>(null)
+const SelectLocalContext = /*#__PURE__*/ React.createContext<SelectLocalContextValue | null>(null)
 
 function useSelectLocalContext(part: string): SelectLocalContextValue {
   const context = React.useContext(SelectLocalContext)
