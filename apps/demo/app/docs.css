@@ -19,6 +19,26 @@
   letter-spacing: -0.01em;
 }
 
+.docsShell [data-part='lang-toggle'] {
+  margin-left: auto;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--muted);
+  text-decoration: none;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 2px 10px;
+}
+
+.docsShell [data-part='lang-toggle']:hover {
+  color: var(--ink);
+  border-color: var(--muted);
+}
+
+.docsShell[lang='ko'] .doc {
+  word-break: keep-all;
+}
+
 .docsShell [data-part='brand-status'] {
   font-size: 0.68rem;
   font-weight: 600;

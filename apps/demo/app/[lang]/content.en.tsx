@@ -55,7 +55,7 @@ return isDesktop ? <Dialog>...</Dialog> : <Drawer>...</Drawer>;`}</code></pre>
         <li>
           Decisions that the server could get wrong are either expressed in CSS or
           deferred to interaction time, so server rendering cannot flash or mismatch.{' '}
-          <Link href="/concepts/ssr">Read the invariant.</Link>
+          <Link href="/en/concepts/ssr">Read the invariant.</Link>
         </li>
       </ul>
 
@@ -71,12 +71,12 @@ return isDesktop ? <Dialog>...</Dialog> : <Drawer>...</Drawer>;`}</code></pre>
       </ul>
 
       <p>
-        Start with <Link href="/getting-started">Getting started</Link>, or jump straight
-        to a component: <Link href="/components/dialog">Dialog</Link>,{' '}
-        <Link href="/components/select">Select</Link>,{' '}
-        <Link href="/components/navigation">Navigation</Link>,{' '}
-        <Link href="/components/screen">Screen</Link>,{' '}
-        <Link href="/components/primary-action">PrimaryAction</Link>.
+        Start with <Link href="/en/getting-started">Getting started</Link>, or jump straight
+        to a component: <Link href="/en/components/dialog">Dialog</Link>,{' '}
+        <Link href="/en/components/select">Select</Link>,{' '}
+        <Link href="/en/components/navigation">Navigation</Link>,{' '}
+        <Link href="/en/components/screen">Screen</Link>,{' '}
+        <Link href="/en/components/primary-action">PrimaryAction</Link>.
       </p>
     </div>
   )

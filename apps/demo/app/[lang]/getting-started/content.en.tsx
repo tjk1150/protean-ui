@@ -83,7 +83,7 @@ import { policy } from "./protean.config";
       </p>
 
       <p>
-        Next: <Link href="/concepts/traits-and-policy">how traits and policies work</Link>.
+        Next: <Link href="/en/concepts/traits-and-policy">how traits and policies work</Link>.
       </p>
     </div>
   )
