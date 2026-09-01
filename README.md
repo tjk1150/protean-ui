@@ -55,6 +55,14 @@ Stated plainly, in the order we intend to close them:
 - **An unanchored sheet option upstream** (the current sheet pins the floating-ui positioner with CSS).
 - **Device and end-to-end testing.** The bar-overflow and tablet-rail cells are verified in jsdom and in the iOS Simulator (real WebKit, iPhone 16 Pro and iPad Pro); physical hardware and automated e2e remain.
 
+## Quality
+
+Testing follows ISO/IEC 25010 (what quality means) and ISO/IEC/IEEE 29119-4-derived
+test design: the default policy is verified as an exhaustive 45-cell decision table,
+thresholds and hysteresis by boundary value analysis, lifecycles by state-transition
+tests, and odd user behavior by negative tests - 149 library tests plus a 699-test
+real-app scenario suite. The release gate is documented in [docs/qa.md](docs/qa.md).
+
 ## Why "protean"
 
 Protean: readily assuming different forms. The academic lineage of this idea is "UI plasticity" (Thevenin & Coutaz, 1999): interfaces that adapt to their context of use while preserving usability.

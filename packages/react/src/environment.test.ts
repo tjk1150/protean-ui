@@ -89,4 +89,28 @@ describe('createEnvironmentStore', () => {
     env.set({ vvHeight: 440 })
     expect(listener).toHaveBeenCalledTimes(1)
   })
+
+  it('applies the keyboard threshold exclusively at the boundary (BVA)', () => {
+    const env = installEnvironment({ width: 375, height: 800, coarse: true, hover: false })
+    const store = createEnvironmentStore()
+
+    env.set({ vvHeight: 650 })
+    expect(store.getTraits().virtualKeyboard).toBe(false)
+
+    env.set({ vvHeight: 649 })
+    expect(store.getTraits().virtualKeyboard).toBe(true)
+  })
+
+  it('degrades gracefully when the platform has no visualViewport', () => {
+    const env = installEnvironment({ width: 1280 })
+    Object.defineProperty(window, 'visualViewport', { configurable: true, get: () => undefined })
+    const store = createEnvironmentStore()
+    const listener = vi.fn()
+    store.subscribe(listener)
+
+    expect(store.getTraits().virtualKeyboard).toBe(false)
+    env.set({ width: 375, coarse: true, hover: false })
+    expect(listener).toHaveBeenCalledTimes(1)
+    expect(store.getTraits().size).toBe('compact')
+  })
 })
