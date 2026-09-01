@@ -45,11 +45,11 @@ searchable select, container boundary.
 
 ## Release exit criteria (quality gate)
 
-Every machine-checkable criterion below runs as one command - `pnpm gate` -
-and in CI on every push and pull request (`.github/workflows/ci.yml`, with the
-external scenario suite skipped there)
+Every machine-checkable criterion below runs as one command - `pnpm gate`
 (`scripts/gate.mjs`) - which exits non-zero on any failure and prints the manual
-criteria as a checklist. A publish to npm requires all of:
+criteria as a checklist. CI runs the same gate on every push and pull request
+(`.github/workflows/ci.yml`; the external scenario suite is skipped there).
+A publish to npm requires all of:
 
 - Critical or major defects open: **0**
 - Library suites: **100% pass** (core + react), typecheck clean across the workspace
