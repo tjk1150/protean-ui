@@ -1,5 +1,6 @@
 'use client'
 
+import { Combobox as BaseCombobox } from '@base-ui/react/combobox'
 import { Select as BaseSelect } from '@base-ui/react/select'
 import {
   decideOverlay,
@@ -19,6 +20,10 @@ export interface SelectOption {
 interface SelectLocalContextValue {
   readonly decision: Decision<OverlayPresentation> | null
   readonly ariaLabel?: string
+  readonly searchable: boolean
+  readonly searchPlaceholder?: string
+  readonly emptyLabel: React.ReactNode
+  readonly optionFor: (value: string) => SelectOption | undefined
 }
 
 const SelectLocalContext = React.createContext<SelectLocalContextValue | null>(null)
@@ -40,6 +45,10 @@ export interface SelectRootProps {
   readonly items?: readonly SelectOption[]
   readonly name?: string
   readonly disabled?: boolean
+  /** Renders a filter input inside the popup, backed by the combobox pattern. Requires items. */
+  readonly searchable?: boolean
+  readonly searchPlaceholder?: string
+  readonly emptyLabel?: React.ReactNode
   readonly 'aria-label'?: string
   readonly children: React.ReactNode
 }
@@ -53,6 +62,9 @@ export function SelectRoot({
   items,
   name,
   disabled,
+  searchable = false,
+  searchPlaceholder,
+  emptyLabel = 'No results',
   'aria-label': ariaLabel,
   children
 }: SelectRootProps): React.JSX.Element {
@@ -89,9 +101,14 @@ export function SelectRoot({
     [decide]
   )
 
+  const optionFor = React.useCallback(
+    (optionValue: string) => items?.find((option) => option.value === optionValue),
+    [items]
+  )
+
   const localValue = React.useMemo<SelectLocalContextValue>(
-    () => ({ decision, ariaLabel }),
-    [decision, ariaLabel]
+    () => ({ decision, ariaLabel, searchable, searchPlaceholder, emptyLabel, optionFor }),
+    [decision, ariaLabel, searchable, searchPlaceholder, emptyLabel, optionFor]
   )
 
   if (presentation === 'native') {
@@ -115,6 +132,31 @@ export function SelectRoot({
           </option>
         ))}
       </select>
+    )
+  }
+
+  if (searchable) {
+    if (!items) {
+      throw new Error('<Select.Root searchable> requires the items prop.')
+    }
+    const selected = value === undefined ? undefined : value === null ? null : optionFor(value)
+    const defaultSelected = defaultValue === undefined ? undefined : (optionFor(defaultValue ?? '') ?? null)
+    return (
+      <SelectLocalContext.Provider value={localValue}>
+        <BaseCombobox.Root
+          items={items as SelectOption[]}
+          {...(selected !== undefined ? { value: selected } : {})}
+          {...(defaultSelected !== undefined ? { defaultValue: defaultSelected } : {})}
+          onValueChange={(next: SelectOption | null) => onValueChange?.(next?.value ?? null)}
+          open={open}
+          onOpenChange={(next) => handleOpenChange(next)}
+          name={name}
+          disabled={disabled}
+          modal={decision?.presentation === 'sheet'}
+        >
+          {children}
+        </BaseCombobox.Root>
+      </SelectLocalContext.Provider>
     )
   }
 
@@ -148,7 +190,24 @@ export function SelectTrigger({
   className,
   'aria-label': ariaLabel
 }: SelectTriggerProps): React.JSX.Element {
-  const { decision, ariaLabel: rootLabel } = useSelectLocalContext('Trigger')
+  const { decision, ariaLabel: rootLabel, searchable } = useSelectLocalContext('Trigger')
+
+  if (searchable) {
+    return (
+      <BaseCombobox.Trigger
+        className={className}
+        aria-label={ariaLabel ?? rootLabel}
+        data-scope="select"
+        data-part="trigger"
+        data-presentation={decision?.presentation}
+      >
+        <span data-scope="select" data-part="value">
+          <BaseCombobox.Value placeholder={placeholder} />
+        </span>
+      </BaseCombobox.Trigger>
+    )
+  }
+
   return (
     <BaseSelect.Trigger
       className={className}
@@ -163,16 +222,67 @@ export function SelectTrigger({
 }
 
 export interface SelectContentProps {
-  readonly children: React.ReactNode
+  /** Ignored in searchable mode, where the list renders from items so Base UI can filter it. */
+  readonly children?: React.ReactNode
 }
 
 export function SelectContent({ children }: SelectContentProps): React.JSX.Element | null {
-  const { decision } = useSelectLocalContext('Content')
+  const { decision, ariaLabel, searchable, searchPlaceholder, emptyLabel } =
+    useSelectLocalContext('Content')
 
   if (!decision) return null
 
   const presentation = decision.presentation
   const sheet = presentation === 'sheet'
+
+  if (searchable) {
+    return (
+      <BaseCombobox.Portal>
+        {sheet ? (
+          <BaseCombobox.Backdrop
+            data-scope="select"
+            data-part="backdrop"
+            data-presentation={presentation}
+          />
+        ) : null}
+        <BaseCombobox.Positioner
+          data-scope="select"
+          data-part="positioner"
+          data-presentation={presentation}
+          side="bottom"
+          align="start"
+          sideOffset={sheet ? 0 : 6}
+        >
+          <BaseCombobox.Popup data-scope="select" data-part="popup" data-presentation={presentation}>
+            <BaseCombobox.Input
+              data-scope="select"
+              data-part="search"
+              data-presentation={presentation}
+              placeholder={searchPlaceholder}
+              aria-label={searchPlaceholder ?? ariaLabel}
+            />
+            <BaseCombobox.Empty data-scope="select" data-part="empty">
+              {emptyLabel}
+            </BaseCombobox.Empty>
+            <BaseCombobox.List data-scope="select" data-part="list">
+              {(option: SelectOption) => (
+                <BaseCombobox.Item
+                  key={option.value}
+                  value={option}
+                  data-scope="select"
+                  data-part="item"
+                >
+                  <span data-scope="select" data-part="item-text">
+                    {option.label}
+                  </span>
+                </BaseCombobox.Item>
+              )}
+            </BaseCombobox.List>
+          </BaseCombobox.Popup>
+        </BaseCombobox.Positioner>
+      </BaseCombobox.Portal>
+    )
+  }
 
   return (
     <BaseSelect.Portal>
@@ -204,6 +314,20 @@ export interface SelectItemProps {
 }
 
 export function SelectItem({ value, children }: SelectItemProps): React.JSX.Element {
+  const { searchable, optionFor } = useSelectLocalContext('Item')
+
+  if (searchable) {
+    // The object value keeps Base UI's default label-based filtering working.
+    const option = optionFor(value) ?? { value, label: children }
+    return (
+      <BaseCombobox.Item value={option} data-scope="select" data-part="item">
+        <span data-scope="select" data-part="item-text">
+          {children}
+        </span>
+      </BaseCombobox.Item>
+    )
+  }
+
   return (
     <BaseSelect.Item value={value} data-scope="select" data-part="item">
       <BaseSelect.ItemText data-scope="select" data-part="item-text">

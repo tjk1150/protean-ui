@@ -134,6 +134,30 @@
     border-radius: var(--protean-shape, 0);
   }
 
+  /* The filter input of a searchable select sits at the top of the popup. */
+  [data-scope='select'][data-part='search'] {
+    box-sizing: border-box;
+    width: 100%;
+    min-height: var(--protean-target);
+    padding: 10px 12px;
+    border: 0;
+    border-bottom: 1px solid var(--protean-hairline);
+    background: transparent;
+    color: var(--protean-ink);
+    font-size: 1rem;
+
+    &:focus-visible {
+      outline: 2px solid var(--protean-accent);
+      outline-offset: -2px;
+    }
+  }
+
+  [data-scope='select'][data-part='empty'] {
+    padding: 12px;
+    color: var(--protean-muted);
+    font-size: 0.95rem;
+  }
+
   [data-scope='select'][data-part='item'] {
     display: flex;
     align-items: center;
