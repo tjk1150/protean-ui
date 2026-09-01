@@ -67,6 +67,11 @@ export default function GettingStartedKo() {
         정책이 함께 바뀌는 거예요. 그리고 모든 스타일이 <code>@layer</code> 안에 있어서,
         여러분이 쓰는 CSS가 언제나 이겨요.
       </p>
+      <p>
+        구조까지 전부 직접 쓰고 싶은 팀은 어휘만 가져갈 수도 있어요.{' '}
+        <code>@protean-ui/css/tokens.css</code>는 모습별 토큰 계약(shape · 밀도 · 모션)만
+        담은 파일이라, 이걸 불러오고 나머지 CSS는 처음부터 쓰면 돼요.
+      </p>
 
       <h2>4. 규칙 바꾸기</h2>
       <p>

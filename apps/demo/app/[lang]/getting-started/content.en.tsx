@@ -61,6 +61,11 @@ export default function GettingStartedPage() {
         changed, not because the window narrowed. Everything sits in{' '}
         <code>@layer protean</code>, so any unlayered rule you write wins automatically.
       </p>
+      <p>
+        Teams that want to own every structural rule can take the vocabulary alone:{' '}
+        <code>@protean-ui/css/tokens.css</code> carries only the per-presentation token
+        contract (shape, density, motion) - import it and write the rest yourself.
+      </p>
 
       <h2>Own the policy</h2>
       <p>

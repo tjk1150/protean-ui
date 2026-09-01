@@ -32,7 +32,7 @@ Goal: **no breakpoints in application code** - precisely, no pattern-choosing br
 ## Principles
 
 - Not a component library. Behavior and a11y are delegated to proven headless primitives (Base UI today); visuals are yours. Protean owns only the decision, the wiring, and continuity across presentation switches.
-- Values follow the presentation, never the viewport. The bundled reference stylesheet (`@protean-ui/react/reference.css`) changes a radius only when the role changes - a sheet rounds its top corners, a fullscreen surface has none - and sits in `@layer` so your CSS always wins.
+- Values follow the presentation, never the viewport. The token contract (`@protean-ui/css/tokens.css`) sets shape, density, and motion per presentation, and the reference stylesheet consumes it - a radius changes only when the role changes - a sheet rounds its top corners, a fullscreen surface has none - and sits in `@layer` so your CSS always wins.
 - SSR invariant: a decision the server can get wrong must be expressible in CSS, or deferred to interaction time. Overlays decide at open (zero SSR markup); chrome is one DOM tree whose presentations are CSS states (CLS 0, works without JavaScript).
 - Accessibility is a contract: the accessible tree stays isomorphic across presentations.
 - Decisions are values: traced to their source (instance, policy, or pack), explainable (`explain()` prints `overlay(form) -> fullscreen [pack:app-first] size=compact input=touch`), unit-testable without rendering, stamped on the DOM.
@@ -44,6 +44,7 @@ Goal: **no breakpoints in application code** - precisely, no pattern-choosing br
 | `protean-ui` | umbrella, re-exports `@protean-ui/react` |
 | `@protean-ui/react` | the five semantic components plus the environment store and provider; ships `reference.css` |
 | `@protean-ui/core` | framework-agnostic traits and policy engine (no React, no DOM) |
+| `@protean-ui/css` | the presentation-scoped token contract (`tokens.css`) and the reference stylesheet (`reference.css`) |
 
 ## Honest roadmap
 
@@ -51,7 +52,6 @@ Stated plainly, in the order we intend to close them:
 
 - **Tablet-touch differentiation.** The default policy branches on input only at compact size today - we refuse to ship speculative rules unvalidated on real devices, so medium and expanded treat touch and mouse alike until we have data.
 - **Container-boundary geometry.** Overlay decisions are container-scoped today (`ProteanBoundary` - a dialog in a 420px panel presents the compact way on any monitor), but the sheet still slides from the viewport edge; portal-to-boundary geometry and container-scoped chrome (via CSS container queries) remain.
-- **Presentation-scoped token package.** The reference stylesheet demonstrates the token contract (`--protean-shape` set per presentation); a standalone themable package comes after the API settles.
 - **An unanchored sheet option upstream** (the current sheet pins the floating-ui positioner with CSS).
 - **Device and end-to-end testing.** The bar-overflow and tablet-rail cells are verified in jsdom and in the iOS Simulator (real WebKit, iPhone 16 Pro and iPad Pro); physical hardware and automated e2e remain.
 

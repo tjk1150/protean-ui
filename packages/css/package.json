@@ -1,0 +1,34 @@
+{
+  "name": "@protean-ui/css",
+  "version": "0.1.0-alpha.1",
+  "description": "Presentation-scoped design tokens and the reference stylesheet for Protean UI",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tjk1150/protean-ui.git",
+    "directory": "packages/css"
+  },
+  "homepage": "https://github.com/tjk1150/protean-ui",
+  "keywords": [
+    "adaptive",
+    "design-tokens",
+    "css",
+    "ui"
+  ],
+  "sideEffects": [
+    "*.css"
+  ],
+  "exports": {
+    "./tokens.css": "./tokens.css",
+    "./reference.css": "./reference.css"
+  },
+  "files": [
+    "tokens.css",
+    "reference.css",
+    "README.md",
+    "LICENSE"
+  ],
+  "publishConfig": {
+    "access": "public"
+  }
+}

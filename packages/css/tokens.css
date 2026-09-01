@@ -1,0 +1,65 @@
+/* Protean UI token contract.
+
+   The one governing principle: values follow the presentation, never the
+   viewport. This file is the whole vocabulary - presentations SET tokens
+   here; structural rules (reference.css, or your own) CONSUME them. There
+   is deliberately not a single media query in this file.
+
+   Import it alone to keep the vocabulary and write your own structure:
+
+     import '@protean-ui/css/tokens.css'
+
+   Rebind at either level, from any unlayered stylesheet:
+
+     :root { --protean-accent: #3182f6; }              global
+     [data-presentation='modal'] { --protean-shape: 20px; }   per presentation */
+
+@layer protean {
+  /* Global knobs - bind these to your design system. */
+  :root {
+    --protean-surface: Canvas;
+    --protean-ink: CanvasText;
+    --protean-muted: color-mix(in srgb, CanvasText 62%, Canvas);
+    --protean-hairline: color-mix(in srgb, CanvasText 16%, Canvas);
+    --protean-accent: AccentColor;
+    --protean-scrim: rgb(0 0 0 / 0.4);
+    --protean-target: 44px;
+    --protean-motion-pop: 150ms;
+    --protean-motion-sheet: 220ms;
+  }
+
+  /* Shape and density follow the overlay presentation.
+     A floating card keeps all four corners; a sheet touches the bottom edge,
+     so only its top corners are shaped; a fullscreen surface is no longer a
+     card at all and loses them. */
+  [data-scope='overlay'][data-part='popup'][data-presentation='modal'] {
+    --protean-shape: 14px;
+    --protean-pad: 24px;
+  }
+
+  [data-scope='overlay'][data-part='popup'][data-presentation='sheet'] {
+    --protean-shape: 16px 16px 0 0;
+    --protean-pad: 20px;
+  }
+
+  [data-scope='overlay'][data-part='popup'][data-presentation='fullscreen'] {
+    --protean-shape: 0;
+    --protean-pad: 24px;
+  }
+
+  [data-scope='overlay'][data-part='popup'][data-presentation='popover'] {
+    --protean-shape: 12px;
+    --protean-pad: 16px;
+  }
+
+  /* Select surfaces carry their own density. */
+  [data-scope='select'][data-part='popup'][data-presentation='popover'] {
+    --protean-shape: 10px;
+    --protean-pad: 4px;
+  }
+
+  [data-scope='select'][data-part='popup'][data-presentation='sheet'] {
+    --protean-shape: 16px 16px 0 0;
+    --protean-pad: 12px;
+  }
+}

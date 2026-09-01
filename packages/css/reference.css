@@ -1,0 +1,589 @@
+/* Protean UI reference stylesheet.
+
+   Import it, or copy it and make it yours:
+
+     import '@protean-ui/css/reference.css'
+
+   The contract, in three rules:
+
+   1. Values follow the presentation, never the viewport. The token contract
+      lives in ./tokens.css: presentations SET tokens (--protean-shape,
+      --protean-pad, motion durations); the structural rules below CONSUME
+      them. No media query in this package changes a radius or a padding -
+      those change only when the presentation changes. Rebind a token to
+      restyle every part under it; import tokens.css alone to keep the
+      vocabulary and write your own structure.
+
+   2. Everything lives in `@layer protean`, so any unlayered rule you write
+      wins automatically, whatever its specificity.
+
+   3. Overlay and Select rules are keyed to Protean's own data attributes and
+      render through portals, so they apply document-wide and are safe by
+      construction. Chrome (Navigation, Screen, PrimaryAction) participates in
+      page layout, so it applies only inside a `.protean-defaults` ancestor
+      that you add deliberately - and its media queries assume the default
+      thresholds (600/840) and the default app-first policy. If you override
+      thresholds or force presentations per instance, style those cases in
+      your own CSS. */
+
+@import './tokens.css';
+
+@layer protean {
+  /* ------------------------------------------------------------------ */
+  /* Overlay (Dialog): modal / sheet / fullscreen / popover              */
+  /* ------------------------------------------------------------------ */
+
+  [data-scope='overlay'][data-part='backdrop'] {
+    position: fixed;
+    inset: 0;
+    background: var(--protean-scrim);
+  }
+
+  [data-scope='overlay'][data-part='title'] {
+    margin: 0 0 12px;
+    font-size: 1.1rem;
+    font-weight: 600;
+  }
+
+  [data-scope='overlay'][data-part='popup'] {
+    box-sizing: border-box;
+    background: var(--protean-surface);
+    color: var(--protean-ink);
+    border-radius: var(--protean-shape, 0);
+  }
+
+  /* A floating dialog surface keeps its corners on every side. */
+  [data-scope='overlay'][data-part='popup'][data-presentation='modal'] {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: min(92vw, 420px);
+    padding: var(--protean-pad, 24px);
+    box-shadow: 0 20px 60px -20px rgb(0 0 0 / 0.4);
+  }
+
+  /* A sheet touches the bottom edge, so only its top corners are shaped. */
+  [data-scope='overlay'][data-part='popup'][data-presentation='sheet'] {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    padding: var(--protean-pad, 20px) var(--protean-pad, 20px)
+      calc(var(--protean-pad, 20px) + env(safe-area-inset-bottom));
+    box-shadow: 0 -12px 40px -12px rgb(0 0 0 / 0.35);
+  }
+
+  /* A fullscreen surface is no longer a floating card: no corners at all. */
+  [data-scope='overlay'][data-part='popup'][data-presentation='fullscreen'] {
+    position: fixed;
+    inset: 0;
+    padding: var(--protean-pad, 24px) 20px calc(var(--protean-pad, 24px) + env(safe-area-inset-bottom));
+    overflow-y: auto;
+  }
+
+  [data-scope='overlay'][data-part='popup'][data-presentation='popover'] {
+    border: 1px solid var(--protean-hairline);
+    padding: var(--protean-pad, 16px);
+    width: 320px;
+    box-shadow: 0 12px 32px -12px rgb(0 0 0 / 0.3);
+  }
+
+  /* ------------------------------------------------------------------ */
+  /* Select: popover / sheet / (native renders the platform control)     */
+  /* ------------------------------------------------------------------ */
+
+  [data-scope='select'][data-part='trigger'] {
+    appearance: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    min-width: 180px;
+    min-height: var(--protean-target);
+    border: 1px solid var(--protean-hairline);
+    border-radius: 8px;
+    background: var(--protean-surface);
+    color: var(--protean-ink);
+    padding: 10px 12px;
+    font-size: 1rem;
+    cursor: pointer;
+
+    &::after {
+      content: '';
+      width: 8px;
+      height: 8px;
+      border-right: 1.6px solid var(--protean-muted);
+      border-bottom: 1.6px solid var(--protean-muted);
+      transform: rotate(45deg) translateY(-2px);
+    }
+  }
+
+  [data-scope='select'][data-part='popup'] {
+    background: var(--protean-surface);
+    color: var(--protean-ink);
+    border-radius: var(--protean-shape, 0);
+  }
+
+  /* The filter input of a searchable select sits at the top of the popup. */
+  [data-scope='select'][data-part='search'] {
+    box-sizing: border-box;
+    width: 100%;
+    min-height: var(--protean-target);
+    padding: 10px 12px;
+    border: 0;
+    border-bottom: 1px solid var(--protean-hairline);
+    background: transparent;
+    color: var(--protean-ink);
+    font-size: 1rem;
+
+    &:focus-visible {
+      outline: 2px solid var(--protean-accent);
+      outline-offset: -2px;
+    }
+  }
+
+  [data-scope='select'][data-part='empty'] {
+    padding: 12px;
+    color: var(--protean-muted);
+    font-size: 0.95rem;
+  }
+
+  [data-scope='select'][data-part='item'] {
+    display: flex;
+    align-items: center;
+    border-radius: 8px;
+    padding: 8px 12px;
+    font-size: 0.95rem;
+    cursor: default;
+
+    &[data-highlighted] {
+      background: color-mix(in srgb, var(--protean-accent) 10%, transparent);
+    }
+
+    &[data-selected] {
+      color: var(--protean-accent);
+      font-weight: 600;
+    }
+  }
+
+  [data-scope='select'][data-part='popup'][data-presentation='popover'] {
+    border: 1px solid var(--protean-hairline);
+    padding: var(--protean-pad, 4px);
+    min-width: 180px;
+    max-height: 320px;
+    overflow-y: auto;
+    box-shadow: 0 12px 32px -12px rgb(0 0 0 / 0.3);
+  }
+
+  [data-scope='select'][data-part='backdrop'][data-presentation='sheet'] {
+    position: fixed;
+    inset: 0;
+    background: var(--protean-scrim);
+  }
+
+  /* The positioner carries floating-ui inline styles; the sheet presentation
+     is deliberately unanchored, so these pin it to the bottom edge with
+     !important. A gesture-capable Drawer-backed adapter is the longer-term
+     replacement. */
+  [data-scope='select'][data-part='positioner'][data-presentation='sheet'] {
+    position: fixed !important;
+    inset: auto 0 0 0 !important;
+    transform: none !important;
+    width: auto !important;
+  }
+
+  [data-scope='select'][data-part='popup'][data-presentation='sheet'] {
+    padding: var(--protean-pad, 12px) var(--protean-pad, 12px) calc(var(--protean-pad, 12px) + env(safe-area-inset-bottom));
+    max-height: 60dvh;
+    overflow-y: auto;
+    box-shadow: 0 -12px 40px -12px rgb(0 0 0 / 0.35);
+
+    & [data-part='item'] {
+      min-height: var(--protean-target);
+      font-size: 1rem;
+    }
+  }
+
+  /* ------------------------------------------------------------------ */
+  /* Motion follows the presentation too: sheets slide, floats fade.     */
+  /* ------------------------------------------------------------------ */
+
+  @media (prefers-reduced-motion: no-preference) {
+    [data-scope='overlay'][data-part='popup'][data-presentation='sheet'],
+    [data-scope='select'][data-part='popup'][data-presentation='sheet'] {
+      animation: protean-slide-up var(--protean-motion-sheet, 220ms) ease-out;
+    }
+
+    [data-scope='overlay'][data-part='popup'][data-presentation='modal'],
+    [data-scope='overlay'][data-part='popup'][data-presentation='fullscreen'],
+    [data-scope='overlay'][data-part='popup'][data-presentation='popover'],
+    [data-scope='select'][data-part='popup'][data-presentation='popover'] {
+      animation: protean-fade-in var(--protean-motion-pop, 150ms) ease-out;
+    }
+  }
+
+  @keyframes protean-slide-up {
+    from {
+      transform: translateY(24px);
+      opacity: 0;
+    }
+    to {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
+
+  @keyframes protean-fade-in {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  /* ================================================================== */
+  /* Chrome below: opt in with a `.protean-defaults` ancestor.           */
+  /* ================================================================== */
+
+  /* ------------------------------------------------------------------ */
+  /* Navigation: bar / drawer / rail / sidebar over one nav > ul         */
+  /* ------------------------------------------------------------------ */
+
+  .protean-defaults [data-scope='navigation'] {
+    background: var(--protean-surface);
+
+    & [data-part='drawer-toggle'] {
+      display: none;
+      appearance: none;
+      border: 1px solid var(--protean-hairline);
+      background: var(--protean-surface);
+      color: var(--protean-ink);
+      border-radius: 8px;
+      padding: 8px 14px;
+      font-size: 0.9rem;
+      cursor: pointer;
+    }
+
+    & [data-part='list'] {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+      display: flex;
+    }
+
+    /* The overflow toggle is a bar-only affordance. */
+    & [data-part='overflow-toggle-item'] {
+      display: none;
+    }
+
+    & [data-part='link'] {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 14px;
+      border-radius: 10px;
+      text-decoration: none;
+      border: 0;
+      background: transparent;
+      color: var(--protean-muted);
+      font-size: 0.9rem;
+      cursor: pointer;
+
+      &[aria-current='page'] {
+        color: var(--protean-accent);
+        font-weight: 600;
+      }
+    }
+
+    & [data-part='icon'] {
+      display: inline-flex;
+
+      & svg {
+        width: 20px;
+        height: 20px;
+      }
+    }
+  }
+
+  @media (hover: hover) {
+    .protean-defaults [data-scope='navigation'] [data-part='link']:hover {
+      background: color-mix(in srgb, var(--protean-accent) 8%, transparent);
+    }
+  }
+
+  /* compact x touch: bottom tab bar */
+  @media (width < 600px) and (pointer: coarse) {
+    .protean-defaults [data-scope='navigation'] {
+      position: sticky;
+      bottom: 0;
+      border-top: 1px solid var(--protean-hairline);
+      padding-bottom: env(safe-area-inset-bottom);
+
+      & [data-part='list'] {
+        justify-content: space-around;
+      }
+
+      & [data-part='link'] {
+        flex-direction: column;
+        gap: 4px;
+        padding: 8px 12px;
+        min-width: 56px;
+        font-size: 11px;
+      }
+
+      & li[data-overflow] {
+        display: none;
+      }
+
+      & [data-part='overflow-toggle-item'] {
+        display: block;
+      }
+
+      & [data-part='overflow-toggle'] {
+        appearance: none;
+        border: 0;
+        background: transparent;
+        color: var(--protean-muted);
+        cursor: pointer;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 4px;
+        padding: 8px 12px;
+        min-width: 56px;
+        font-size: 11px;
+
+        &[aria-expanded='true'] {
+          color: var(--protean-accent);
+        }
+      }
+
+      /* Open: the same list morphs into a bottom panel with every item. */
+      &[data-overflow-open] {
+        & [data-part='list'] {
+          position: fixed;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          z-index: 10;
+          flex-direction: column;
+          align-items: stretch;
+          gap: 2px;
+          max-height: 70dvh;
+          overflow-y: auto;
+          padding: 12px 12px calc(12px + env(safe-area-inset-bottom));
+          background: var(--protean-surface);
+          border-top: 1px solid var(--protean-hairline);
+          box-shadow: 0 -16px 48px -24px rgb(0 0 0 / 0.45);
+        }
+
+        & li[data-overflow] {
+          display: block;
+        }
+
+        & [data-part='link'],
+        & [data-part='overflow-toggle'] {
+          flex-direction: row;
+          justify-content: flex-start;
+          width: 100%;
+          gap: 10px;
+          min-height: var(--protean-target);
+          padding: 10px 14px;
+          font-size: 0.95rem;
+        }
+      }
+    }
+  }
+
+  /* compact x fine pointer: toggle strip + drawer panel */
+  @media (width < 600px) and (pointer: fine) {
+    .protean-defaults [data-scope='navigation'] {
+      border-bottom: 1px solid var(--protean-hairline);
+      padding: 10px 14px;
+
+      & [data-part='drawer-toggle'] {
+        display: inline-flex;
+      }
+
+      & [data-part='list'] {
+        display: none;
+      }
+
+      &[data-drawer-open] [data-part='list'] {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+        position: fixed;
+        top: var(--protean-drawer-top, 0px);
+        bottom: 0;
+        left: 0;
+        z-index: 10;
+        width: min(280px, 80vw);
+        background: var(--protean-surface);
+        border-right: 1px solid var(--protean-hairline);
+        padding: 12px;
+        box-shadow: 24px 0 48px -32px rgb(0 0 0 / 0.3);
+      }
+    }
+  }
+
+  /* medium: navigation rail */
+  @media (600px <= width < 840px) {
+    .protean-defaults [data-scope='navigation'] {
+      position: sticky;
+      top: 0;
+      align-self: start;
+      height: 100dvh;
+      width: 80px;
+      border-right: 1px solid var(--protean-hairline);
+      padding: 16px 8px;
+
+      & [data-part='list'] {
+        flex-direction: column;
+        gap: 8px;
+      }
+
+      & [data-part='link'] {
+        flex-direction: column;
+        gap: 4px;
+        padding: 10px 6px;
+        font-size: 11px;
+        text-align: center;
+      }
+    }
+  }
+
+  /* expanded: sidebar */
+  @media (width >= 840px) {
+    .protean-defaults [data-scope='navigation'] {
+      position: sticky;
+      top: 0;
+      align-self: start;
+      height: 100dvh;
+      width: 232px;
+      border-right: 1px solid var(--protean-hairline);
+      padding: 20px 12px;
+
+      & [data-part='list'] {
+        flex-direction: column;
+        gap: 4px;
+      }
+
+      & [data-part='link'][aria-current='page'] {
+        background: color-mix(in srgb, var(--protean-accent) 10%, transparent);
+      }
+    }
+  }
+
+  /* ------------------------------------------------------------------ */
+  /* Screen: app shell on compact, document on medium and expanded       */
+  /* ------------------------------------------------------------------ */
+
+  .protean-defaults [data-scope='screen'] {
+    display: grid;
+    height: 100dvh;
+    grid-template: 'content' 1fr 'actions' auto 'nav' auto / 1fr;
+
+    & > [data-part='navigation'] {
+      display: contents;
+    }
+
+    & > [data-part='content'] {
+      grid-area: content;
+      overflow-y: auto;
+      min-width: 0;
+      padding: 32px 20px;
+    }
+
+    & > [data-part='actions'] {
+      grid-area: actions;
+    }
+  }
+
+  @media (width < 600px) and (pointer: fine) {
+    .protean-defaults [data-scope='screen'] {
+      grid-template: 'nav' auto 'content' 1fr 'actions' auto / 1fr;
+    }
+  }
+
+  @media (width >= 600px) {
+    .protean-defaults [data-scope='screen'] {
+      height: auto;
+      min-height: 100dvh;
+      grid-template: 'nav content' 1fr 'nav actions' auto / auto 1fr;
+
+      & > [data-part='content'] {
+        overflow-y: visible;
+      }
+
+      & > [data-part='actions'] {
+        padding: 0 20px;
+      }
+    }
+  }
+
+  /* ------------------------------------------------------------------ */
+  /* PrimaryAction: action-bar / sticky-footer / inline                  */
+  /* ------------------------------------------------------------------ */
+
+  .protean-defaults [data-scope='primary-action'] {
+    & [data-part='button'] {
+      appearance: none;
+      border: none;
+      background: var(--protean-accent);
+      color: #ffffff;
+      border-radius: 10px;
+      padding: 12px 20px;
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    & [data-part='button']:disabled {
+      opacity: 0.5;
+      cursor: default;
+    }
+  }
+
+  /* action bar: compact x touch, dodges the virtual keyboard */
+  @media (width < 600px) and (pointer: coarse) {
+    .protean-defaults [data-scope='primary-action'] {
+      padding: 12px 16px;
+      background: var(--protean-surface);
+      border-top: 1px solid var(--protean-hairline);
+      transform: translateY(calc(-1 * var(--protean-vk-offset, 0px)));
+
+      & [data-part='button'] {
+        width: 100%;
+        min-height: 48px;
+        font-size: 1rem;
+      }
+    }
+
+    .protean-defaults
+      [data-scope='screen']:not(:has([data-scope='navigation']))
+      [data-scope='primary-action'] {
+      padding-bottom: calc(12px + env(safe-area-inset-bottom));
+    }
+  }
+
+  /* sticky footer: compact x fine pointer */
+  @media (width < 600px) and (pointer: fine) {
+    .protean-defaults [data-scope='primary-action'] {
+      padding: 10px 16px;
+      background: var(--protean-surface);
+      border-top: 1px solid var(--protean-hairline);
+      display: flex;
+      justify-content: flex-end;
+    }
+  }
+
+  /* inline: medium and expanded */
+  @media (width >= 600px) {
+    .protean-defaults [data-scope='primary-action'] {
+      padding: 8px 0 40px;
+    }
+  }
+}
