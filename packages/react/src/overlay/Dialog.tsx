@@ -11,6 +11,7 @@ import {
 import * as React from 'react'
 import { createPortal } from 'react-dom'
 import { BoundaryContext } from '../boundary'
+import { composeTrigger } from '../compose'
 import { focusableSelector, restoreFocus, trackFocus } from './continuity'
 import { useProteanContext, useReadTraits, useTraits } from '../provider'
 
@@ -151,26 +152,38 @@ function LiveDialogRoot({
 }
 
 export interface DialogTriggerProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  readonly children: React.ReactNode
+  /* Compose the trigger onto another element (Base UI render convention):
+     the action owner stays outermost -
+     <Dialog.Trigger render={<Tooltip.Trigger aria-label="Share"/>}>. */
+  readonly render?: React.ReactElement<Record<string, unknown>>
+  readonly children?: React.ReactNode
 }
 
-export function DialogTrigger({ children, onClick, ...rest }: DialogTriggerProps): React.JSX.Element {
+export function DialogTrigger({
+  children,
+  onClick,
+  render,
+  ...rest
+}: DialogTriggerProps): React.JSX.Element {
   const { open, setOpen, triggerRef, decision } = useDialogLocalContext('Trigger')
+  const behavior = {
+    ...rest,
+    type: 'button' as const,
+    'data-scope': 'overlay',
+    'data-part': 'trigger',
+    'data-presentation': decision?.presentation,
+    'aria-haspopup': 'dialog' as const,
+    'aria-expanded': open,
+    onClick: (event: React.MouseEvent<HTMLButtonElement>) => {
+      onClick?.(event)
+      if (!event.defaultPrevented) setOpen(!open)
+    }
+  }
+  if (render) {
+    return composeTrigger(render, behavior, triggerRef, children)
+  }
   return (
-    <button
-      {...rest}
-      type="button"
-      ref={triggerRef}
-      data-scope="overlay"
-      data-part="trigger"
-      data-presentation={decision?.presentation}
-      aria-haspopup="dialog"
-      aria-expanded={open}
-      onClick={(event) => {
-        onClick?.(event)
-        if (!event.defaultPrevented) setOpen(!open)
-      }}
-    >
+    <button {...behavior} ref={triggerRef}>
       {children}
     </button>
   )

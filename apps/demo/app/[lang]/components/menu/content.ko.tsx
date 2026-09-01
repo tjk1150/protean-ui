@@ -43,6 +43,8 @@ export default function MenuKo() {
           <thead><tr><th>속성</th><th>타입</th><th>설명</th></tr></thead>
           <tbody>
             <tr><td>Root: presentation</td><td>모습 지정</td><td>이 메뉴만 다르게 열고 싶을 때 지정해요.</td></tr>
+            <tr><td>Trigger: onClick · disabled ...</td><td></td><td>버튼 속성이 전부 통과해요.</td></tr>
+            <tr><td>Trigger: render</td><td>ReactElement</td><td>다른 요소에 트리거 행동을 합쳐요 - 힌트 달린 버튼 패턴은 함께 쓰기 문서에 있어요.</td></tr>
             <tr><td>Item: onSelect</td><td>() =&gt; void</td><td>항목을 고르면 실행되고, 메뉴는 닫혀요.</td></tr>
             <tr><td>Item: destructive</td><td>boolean</td><td>삭제 같은 파괴적 액션 표시예요. <code>data-variant=&quot;danger&quot;</code>로 찍혀서 참고 스타일시트가 붉게 칠해요.</td></tr>
             <tr><td>Item: disabled</td><td>boolean</td><td>비활성이에요. 스크린 리더에도 그대로 전달돼요.</td></tr>

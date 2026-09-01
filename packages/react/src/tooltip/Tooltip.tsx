@@ -76,43 +76,50 @@ export function TooltipRoot({ presentation, children }: TooltipRootProps): React
 
 /* A hinted button is still a button: every button prop passes through, so a
    tooltip composes with an action (onClick), a disabled state, or a form. In
-   popover mode the consumer onClick runs alongside the toggletip open. */
-export interface TooltipTriggerProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  readonly children: React.ReactNode
+   popover mode the consumer onClick runs alongside the toggletip open.
+   forwardRef makes this the canonical render target for an action owner:
+   <Dialog.Trigger render={<Tooltip.Trigger aria-label="Share"/>}>. */
+export interface TooltipTriggerProps extends React.ComponentPropsWithoutRef<'button'> {
+  /* Optional because a render target receives its children from the composing
+     trigger: <Dialog.Trigger render={<Tooltip.Trigger/>}>label</Dialog.Trigger>. */
+  readonly children?: React.ReactNode
 }
 
-export function TooltipTrigger({ children, disabled, ...rest }: TooltipTriggerProps): React.JSX.Element {
-  const { decision } = useTooltipLocalContext('Trigger')
-  const shared = {
-    ...rest,
-    'data-scope': 'tooltip',
-    'data-part': 'trigger',
-    'data-presentation': decision?.presentation
-  } as const
+export const TooltipTrigger = React.forwardRef<HTMLButtonElement, TooltipTriggerProps>(
+  function TooltipTrigger({ children, disabled, ...rest }, ref): React.JSX.Element {
+    const { decision } = useTooltipLocalContext('Trigger')
+    const shared = {
+      ...rest,
+      'data-scope': 'tooltip',
+      'data-part': 'trigger',
+      'data-presentation': decision?.presentation
+    } as const
 
-  if (!decision) {
+    if (!decision) {
+      return (
+        <button {...shared} disabled={disabled} type="button" ref={ref}>
+          {children}
+        </button>
+      )
+    }
+    /* Base UI consumes `disabled` as "do not open the hint" and drops the DOM
+       attribute; rendering our own element keeps the button natively disabled.
+       Base merges the element's ref with its own. */
+    const element = <button {...shared} disabled={disabled} type="button" ref={ref} />
+    if (decision.presentation === 'tooltip') {
+      return (
+        <BaseTooltip.Trigger disabled={disabled} render={element}>
+          {children}
+        </BaseTooltip.Trigger>
+      )
+    }
     return (
-      <button {...shared} disabled={disabled} type="button">
+      <BasePopover.Trigger disabled={disabled} render={element}>
         {children}
-      </button>
+      </BasePopover.Trigger>
     )
   }
-  /* Base UI consumes `disabled` as "do not open the hint" and drops the DOM
-     attribute; rendering our own element keeps the button natively disabled. */
-  const element = <button {...shared} disabled={disabled} type="button" />
-  if (decision.presentation === 'tooltip') {
-    return (
-      <BaseTooltip.Trigger disabled={disabled} render={element}>
-        {children}
-      </BaseTooltip.Trigger>
-    )
-  }
-  return (
-    <BasePopover.Trigger disabled={disabled} render={element}>
-      {children}
-    </BasePopover.Trigger>
-  )
-}
+)
 
 export interface TooltipContentProps {
   readonly className?: string

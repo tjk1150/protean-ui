@@ -117,6 +117,32 @@ body:has([data-scope='overlay'][data-presentation='sheet'])
   <Tooltip.Content>Removes this row.</Tooltip.Content>
 </Tooltip.Root>`}</code></pre>
 
+      <h2>Two roles on one element: render</h2>
+      <p>
+        When one button needs a hint and also opens a dialog or menu, hand the
+        action owner&apos;s trigger (Dialog, Menu) another element via
+        <code>render</code>. Exactly one button reaches the DOM, with the behavior
+        and accessibility wiring merged onto it - the Base UI render convention.
+      </p>
+      <pre><code>{`<Tooltip.Root presentation="tooltip">  {/* see the note below */}
+  <Menu.Root>
+    <Menu.Trigger render={<Tooltip.Trigger aria-label="More actions" />}>
+      <MoreIcon />
+    </Menu.Trigger>
+    <Menu.Content>...</Menu.Content>
+  </Menu.Root>
+  <Tooltip.Content>More actions</Tooltip.Content>
+</Tooltip.Root>`}</code></pre>
+      <div className="callout">
+        <strong>Keep the hint hover-only on an action button.</strong> The default
+        policy turns hints into tap-toggled popovers where hover does not exist -
+        but on a button that acts, one tap would then do two things. Give
+        <code>Tooltip.Root</code> <code>presentation=&quot;tooltip&quot;</code> and the hint
+        opens only on hover, silently absent on touch - the accessible name is
+        already carried by <code>aria-label</code>. A styled host button
+        (<code>render=&#123;&lt;button className=&quot;...&quot;/&gt;&#125;</code>) composes the same way.
+      </div>
+
       <h2>Proof it runs</h2>
       <p>
         The docs site you are reading is the Screen + Navigation assembly, and the

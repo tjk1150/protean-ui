@@ -43,6 +43,8 @@ export default function MenuPage() {
           <thead><tr><th>Prop</th><th>Type</th><th>Notes</th></tr></thead>
           <tbody>
             <tr><td>Root: presentation</td><td>overlay override</td><td>force this one menu</td></tr>
+            <tr><td>Trigger: onClick, disabled ...</td><td></td><td>every button prop passes through</td></tr>
+            <tr><td>Trigger: render</td><td>ReactElement</td><td>composes the trigger onto another element - the hinted-button pattern lives in Using them together</td></tr>
             <tr><td>Item: onSelect</td><td>() =&gt; void</td><td>runs on pick; the menu closes</td></tr>
             <tr><td>Item: destructive</td><td>boolean</td><td>marks a destructive action - stamped <code>data-variant=&quot;danger&quot;</code>, tinted red by the reference stylesheet</td></tr>
             <tr><td>Item: disabled</td><td>boolean</td><td>disabled, announced as such</td></tr>

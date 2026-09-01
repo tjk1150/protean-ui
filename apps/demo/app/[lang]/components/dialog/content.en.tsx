@@ -73,7 +73,10 @@ export default function DialogDocPage() {
       </div>
       <p>
         <code>Dialog.Trigger</code> and <code>Dialog.Close</code> are plain buttons with
-        the wiring done; both accept every button prop. All parts stamp{' '}
+        the wiring done; both accept every button prop, and the trigger composes onto
+        another element (a styled button, a <code>Tooltip.Trigger</code>) via{' '}
+        <code>render</code> - see{' '}
+        <Link href="/en/concepts/composition">Using them together</Link>. All parts stamp{' '}
         <code>data-scope</code>, <code>data-part</code>, and{' '}
         <code>data-presentation</code> for styling.
       </p>

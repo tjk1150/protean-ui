@@ -112,6 +112,32 @@ body:has([data-scope='overlay'][data-presentation='sheet'])
   <Tooltip.Content>이 행을 삭제해요.</Tooltip.Content>
 </Tooltip.Root>`}</code></pre>
 
+      <h2>한 요소에 역할 두 개: render</h2>
+      <p>
+        버튼 하나가 힌트도 갖고 다이얼로그나 메뉴도 열어야 하면, 행동의 주인
+        (Dialog · Menu)의 트리거에 <code>render</code>로 다른 요소를 건네요. 버튼은
+        DOM에 하나만 생기고, 행동과 접근성 배선이 그 위에 합쳐져요. Base UI의 render
+        관례 그대로예요.
+      </p>
+      <pre><code>{`<Tooltip.Root presentation="tooltip">  {/* 아래 설명을 보세요 */}
+  <Menu.Root>
+    <Menu.Trigger render={<Tooltip.Trigger aria-label="더 많은 작업" />}>
+      <MoreIcon />
+    </Menu.Trigger>
+    <Menu.Content>...</Menu.Content>
+  </Menu.Root>
+  <Tooltip.Content>더 많은 작업</Tooltip.Content>
+</Tooltip.Root>`}</code></pre>
+      <div className="callout">
+        <strong>행동이 있는 버튼의 힌트는 호버 전용으로 두세요.</strong> 기본 규칙은
+        호버가 없는 환경에서 힌트를 탭 토글 팝오버로 바꾸는데, 행동이 있는 버튼에서는
+        탭 한 번이 두 가지(힌트 + 행동)를 하게 돼요. <code>Tooltip.Root</code>에
+        <code>presentation=&quot;tooltip&quot;</code>을 주면 힌트가 호버에서만 열리고,
+        터치에서는 조용히 사라져요 - 이름은 <code>aria-label</code>이 이미 지키고
+        있으니까요. 스타일드 버튼(<code>render=&#123;&lt;button className=&quot;...&quot;/&gt;&#125;</code>)도
+        같은 방식으로 건네면 돼요.
+      </div>
+
       <h2>실제로 굴러가는 증거</h2>
       <p>
         지금 보고 있는 이 문서 사이트가 Screen + Navigation 조합이고, 토스 미니앱

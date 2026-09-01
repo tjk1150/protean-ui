@@ -84,25 +84,23 @@ export function MenuRoot({
   )
 }
 
-export interface MenuTriggerProps {
-  readonly className?: string
-  readonly 'aria-label'?: string
-  readonly children: React.ReactNode
+/* A menu trigger is still a button: every button prop passes through, and
+   `render` composes it onto another element (Base UI merges behavior, refs
+   included) - <Menu.Trigger render={<Tooltip.Trigger aria-label="More"/>}>. */
+export interface MenuTriggerProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+  readonly render?: React.ReactElement<Record<string, unknown>>
+  readonly children?: React.ReactNode
 }
 
-export function MenuTrigger({
-  className,
-  'aria-label': ariaLabel,
-  children
-}: MenuTriggerProps): React.JSX.Element {
+export function MenuTrigger({ children, render, ...rest }: MenuTriggerProps): React.JSX.Element {
   const { decision } = useMenuLocalContext('Trigger')
   return (
     <BaseMenu.Trigger
-      className={className}
-      aria-label={ariaLabel}
+      {...rest}
       data-scope="menu"
       data-part="trigger"
       data-presentation={decision?.presentation}
+      {...(render ? { render } : {})}
     >
       {children}
     </BaseMenu.Trigger>
