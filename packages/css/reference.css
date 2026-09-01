@@ -206,6 +206,43 @@
   }
 
   /* ------------------------------------------------------------------ */
+  /* Tooltip: a hover hint where hover exists, a tap toggletip where not */
+  /* ------------------------------------------------------------------ */
+
+  [data-scope='tooltip'][data-part='trigger'] {
+    appearance: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid var(--protean-hairline);
+    border-radius: 999px;
+    background: transparent;
+    color: var(--protean-muted);
+    min-width: 22px;
+    min-height: 22px;
+    padding: 0 4px;
+    font-size: 0.8rem;
+    cursor: default;
+
+    &:focus-visible {
+      outline: 2px solid var(--protean-accent);
+      outline-offset: 2px;
+    }
+  }
+
+  [data-scope='tooltip'][data-part='popup'] {
+    background: var(--protean-surface);
+    color: var(--protean-ink);
+    border: 1px solid var(--protean-hairline);
+    border-radius: var(--protean-shape, 6px);
+    padding: var(--protean-pad, 8px);
+    max-width: 280px;
+    font-size: 0.85rem;
+    line-height: 1.5;
+    box-shadow: 0 8px 24px -12px rgb(0 0 0 / 0.3);
+  }
+
+  /* ------------------------------------------------------------------ */
   /* Menu: an anchored popover for pointers, an action sheet for touch   */
   /* ------------------------------------------------------------------ */
 

@@ -6,6 +6,7 @@ import * as Dialog from './overlay/index.parts'
 import * as Menu from './menu/index.parts'
 import * as Navigation from './navigation/index.parts'
 import * as Select from './select/index.parts'
+import * as Tooltip from './tooltip/index.parts'
 import { ProteanProvider } from './provider'
 import { installEnvironment } from './test/environment-mock'
 
@@ -124,6 +125,37 @@ describe('axe on key open states', () => {
     )
     fireEvent.click(screen.getByRole('button', { name: 'More actions' }))
     await expectClean('menu-sheet')
+  })
+
+  it('hover tooltip open', async () => {
+    installEnvironment({ width: 1280, coarse: false, hover: true })
+    render(
+      <ProteanProvider>
+        <Tooltip.Root>
+          <Tooltip.Trigger aria-label="Shipping fee info">?</Tooltip.Trigger>
+          <Tooltip.Content>Free over 30,000 won.</Tooltip.Content>
+        </Tooltip.Root>
+      </ProteanProvider>
+    )
+    const trigger = screen.getByRole('button', { name: 'Shipping fee info' })
+    fireEvent.keyDown(document.body, { key: 'Tab' })
+    trigger.focus()
+    fireEvent.focus(trigger)
+    await expectClean('tooltip')
+  })
+
+  it('tap toggletip open', async () => {
+    installEnvironment({ width: 375, coarse: true, hover: false })
+    render(
+      <ProteanProvider>
+        <Tooltip.Root>
+          <Tooltip.Trigger aria-label="Shipping fee info">?</Tooltip.Trigger>
+          <Tooltip.Content>Free over 30,000 won.</Tooltip.Content>
+        </Tooltip.Root>
+      </ProteanProvider>
+    )
+    fireEvent.click(screen.getByRole('button', { name: 'Shipping fee info' }))
+    await expectClean('toggletip')
   })
 
   it('searchable select open', async () => {

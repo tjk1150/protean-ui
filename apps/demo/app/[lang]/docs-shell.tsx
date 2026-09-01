@@ -31,6 +31,7 @@ const entries: readonly NavEntry[] = [
   { path: '/components/navigation', label: { ko: 'Navigation', en: 'Navigation' } },
   { path: '/components/screen', label: { ko: 'Screen', en: 'Screen' } },
   { path: '/components/primary-action', label: { ko: 'PrimaryAction', en: 'PrimaryAction' } },
+  { path: '/components/tooltip', label: { ko: 'Tooltip', en: 'Tooltip' } },
   { path: '/components/boundary', label: { ko: 'Boundary', en: 'Boundary' } },
   { group: { ko: '라이브 데모', en: 'Live demos' } },
   { path: '/delete-demo', label: { ko: '삭제 데모', en: 'The deletion demo' }, external: true },

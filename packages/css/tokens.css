@@ -53,6 +53,17 @@
     --protean-pad: 16px;
   }
 
+  /* Hints: a hover tooltip is tighter than its tap-opened twin. */
+  [data-scope='tooltip'][data-part='popup'][data-presentation='tooltip'] {
+    --protean-shape: 6px;
+    --protean-pad: 8px;
+  }
+
+  [data-scope='tooltip'][data-part='popup'][data-presentation='popover'] {
+    --protean-shape: 10px;
+    --protean-pad: 12px;
+  }
+
   /* Menus share the select surface density. */
   [data-scope='menu'][data-part='popup'][data-presentation='popover'] {
     --protean-shape: 10px;

@@ -33,6 +33,12 @@ export type {
   MenuTriggerProps
 } from './menu/Menu'
 export * as Select from './select/index.parts'
+export * as Tooltip from './tooltip/index.parts'
+export type {
+  TooltipContentProps,
+  TooltipRootProps,
+  TooltipTriggerProps
+} from './tooltip/Tooltip'
 export type {
   SelectContentProps,
   SelectItemProps,

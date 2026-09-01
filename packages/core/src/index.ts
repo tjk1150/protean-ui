@@ -13,6 +13,7 @@ export { defaultDeadband, resolveSizeWithHysteresis } from './hysteresis'
 
 export {
   asPolicy,
+  decideHint,
   decideNavigation,
   decideOverlay,
   decidePrimaryAction,
@@ -22,6 +23,8 @@ export {
   type ActionQuery,
   type Decision,
   type DecisionDomain,
+  type HintPresentation,
+  type HintQuery,
   type DecisionSource,
   type InstanceOverride,
   type NavigationPresentation,

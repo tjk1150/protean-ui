@@ -2,10 +2,12 @@ import { describe, expect, it } from 'vitest'
 import {
   appFirst,
   asPolicy,
+  decideHint,
   decideNavigation,
   decideOverlay,
   decidePrimaryAction,
   type ActionPresentation,
+  type HintPresentation,
   type InputProfile,
   type NavigationPresentation,
   type OverlayPresentation,
@@ -57,6 +59,14 @@ const NAVIGATION_TABLE: Record<SizeClass, Record<InputProfile, NavigationPresent
   expanded: { touch: 'sidebar', pointer: 'sidebar', hybrid: 'sidebar' }
 }
 
+/* Hints hang off hover capability: touch has no hover, so the tooltip
+   pattern itself cannot fire there - it becomes a tap-opened popover. */
+const HINT_TABLE: Record<SizeClass, Record<InputProfile, HintPresentation>> = {
+  compact: { touch: 'popover', pointer: 'tooltip', hybrid: 'tooltip' },
+  medium: { touch: 'popover', pointer: 'tooltip', hybrid: 'tooltip' },
+  expanded: { touch: 'popover', pointer: 'tooltip', hybrid: 'tooltip' }
+}
+
 const ACTION_TABLE: Record<SizeClass, Record<InputProfile, ActionPresentation>> = {
   compact: { touch: 'action-bar', pointer: 'sticky-footer', hybrid: 'sticky-footer' },
   medium: { touch: 'inline', pointer: 'inline', hybrid: 'inline' },
@@ -87,13 +97,25 @@ describe('app-first pack decision table', () => {
           ACTION_TABLE[size][input]
         )
       })
+      it(`hint ${size} x ${input} -> ${HINT_TABLE[size][input]}`, () => {
+        expect(decideHint(policy, traits(size, input)).presentation).toBe(
+          HINT_TABLE[size][input]
+        )
+      })
     }
   }
 
   it('covers the full cartesian space', () => {
     const overlayCells = 3 * SIZES.length * INPUTS.length
     const chromeCells = 2 * SIZES.length * INPUTS.length
-    expect(overlayCells + chromeCells).toBe(45)
+    const hintCells = SIZES.length * INPUTS.length
+    expect(overlayCells + chromeCells + hintCells).toBe(54)
+  })
+
+  it('hint honors an instance override', () => {
+    const decision = decideHint(policy, traits('expanded', 'pointer'), 'popover')
+    expect(decision.presentation).toBe('popover')
+    expect(decision.source).toBe('instance')
   })
 
   it('an empty instance override object falls through to the policy', () => {
