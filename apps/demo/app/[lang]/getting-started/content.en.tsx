@@ -49,6 +49,30 @@ const nextConfig = {
         wrong.
       </p>
 
+      <h2>Style it</h2>
+      <p>
+        Protean imposes no visual language, but it ships a reference stylesheet you can
+        import as-is, override token by token, or copy wholesale:
+      </p>
+      <pre><code>{`import "@protean-ui/react/reference.css";`}</code></pre>
+      <pre><code>{`/* rebind the palette */
+:root {
+  --protean-surface: #ffffff;
+  --protean-accent: #3182f6;
+}
+
+/* reshape one presentation - values hang off the presentation, not the viewport */
+[data-presentation="modal"] {
+  --protean-shape: 20px;
+}`}</code></pre>
+      <p>
+        The file has one governing principle: <strong>values follow the presentation,
+        never the viewport</strong>. A sheet rounds only its top corners, a fullscreen
+        surface has none, a modal keeps all four - the radius changes because the role
+        changed, not because the window narrowed. Everything sits in{' '}
+        <code>@layer protean</code>, so any unlayered rule you write wins automatically.
+      </p>
+
       <h2>Own the policy</h2>
       <p>
         When you want different conventions, the policy is a file in your repository, not

@@ -9,6 +9,13 @@
   --bg: #f6f7f9;
   --surface: #ffffff;
   --accent: #2b5ce6;
+
+  /* Bind the demo palette to the reference-stylesheet tokens. */
+  --protean-surface: var(--surface);
+  --protean-ink: var(--ink);
+  --protean-muted: var(--muted);
+  --protean-hairline: var(--line);
+  --protean-accent: var(--accent);
 }
 
 body {
@@ -203,28 +210,23 @@ a {
   min-height: 44px;
 }
 
-/* Overlay styling through the Protean data-attribute contract */
+/* Protean overlay and select surfaces are styled by the packaged reference
+   stylesheet (imported in the root layout); the demo only binds its palette
+   to the --protean-* tokens above. The .manual-* rules below are the
+   hand-written baseline that the deletion demo compares against. */
 
-[data-scope="overlay"][data-part="backdrop"],
 .manual-backdrop {
   position: fixed;
   inset: 0;
   background: rgb(0 0 0 / 0.4);
 }
 
-[data-scope="overlay"][data-part="title"],
 .manual-title {
   margin: 0 0 12px;
   font-size: 1.1rem;
   font-weight: 600;
 }
 
-[data-scope="overlay"][data-part="popup"] {
-  background: var(--surface);
-  color: var(--ink);
-}
-
-[data-scope="overlay"][data-part="popup"][data-presentation="modal"],
 .manual-modal {
   position: fixed;
   top: 50%;
@@ -237,7 +239,6 @@ a {
   box-shadow: 0 20px 60px -20px rgb(0 0 0 / 0.4);
 }
 
-[data-scope="overlay"][data-part="popup"][data-presentation="sheet"],
 .manual-sheet {
   position: fixed;
   left: 0;
@@ -249,142 +250,12 @@ a {
   box-shadow: 0 -12px 40px -12px rgb(0 0 0 / 0.35);
 }
 
-[data-scope="overlay"][data-part="popup"][data-presentation="fullscreen"] {
-  position: fixed;
-  inset: 0;
-  padding: 24px 20px calc(24px + env(safe-area-inset-bottom));
-  overflow-y: auto;
-}
-
-[data-scope="overlay"][data-part="popup"][data-presentation="popover"] {
-  border: 1px solid var(--line);
-  border-radius: 12px;
-  padding: 16px;
-  width: 320px;
-  box-shadow: 0 12px 32px -12px rgb(0 0 0 / 0.3);
-}
-
 @media (prefers-reduced-motion: no-preference) {
-  [data-scope="overlay"][data-part="popup"][data-presentation="sheet"],
   .manual-sheet {
     animation: protean-slide-up 220ms ease-out;
   }
 
-  [data-scope="overlay"][data-part="popup"][data-presentation="modal"],
-  [data-scope="overlay"][data-part="popup"][data-presentation="popover"],
   .manual-modal {
     animation: protean-fade-in 150ms ease-out;
   }
 }
-
-@keyframes protean-slide-up {
-  from {
-    transform: translateY(24px);
-    opacity: 0;
-  }
-  to {
-    transform: translateY(0);
-    opacity: 1;
-  }
-}
-
-@keyframes protean-fade-in {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-
-/* Select through the same decision layer (contextual role) */
-
-[data-scope='select'][data-part='trigger'] {
-  appearance: none;
-  display: inline-flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 8px;
-  min-width: 180px;
-  min-height: 44px;
-  border: 1px solid var(--line);
-  border-radius: 8px;
-  background: var(--surface);
-  color: var(--ink);
-  padding: 10px 12px;
-  font-size: 1rem;
-  cursor: pointer;
-
-  &::after {
-    content: '';
-    width: 8px;
-    height: 8px;
-    border-right: 1.6px solid var(--muted);
-    border-bottom: 1.6px solid var(--muted);
-    transform: rotate(45deg) translateY(-2px);
-  }
-}
-
-[data-scope='select'][data-part='popup'] {
-  background: var(--surface);
-  color: var(--ink);
-}
-
-[data-scope='select'][data-part='item'] {
-  display: flex;
-  align-items: center;
-  border-radius: 8px;
-  padding: 8px 12px;
-  font-size: 0.95rem;
-  cursor: default;
-
-  &[data-highlighted] {
-    background: color-mix(in srgb, var(--accent) 10%, transparent);
-  }
-
-  &[data-selected] {
-    color: var(--accent);
-    font-weight: 600;
-  }
-}
-
-[data-scope='select'][data-part='popup'][data-presentation='popover'] {
-  border: 1px solid var(--line);
-  border-radius: 10px;
-  padding: 4px;
-  min-width: 180px;
-  max-height: 320px;
-  overflow-y: auto;
-  box-shadow: 0 12px 32px -12px rgb(0 0 0 / 0.3);
-}
-
-[data-scope='select'][data-part='backdrop'][data-presentation='sheet'] {
-  position: fixed;
-  inset: 0;
-  background: rgb(0 0 0 / 0.4);
-}
-
-/* The positioner carries floating-ui inline styles; the sheet presentation
-   is deliberately unanchored, so the reference styles pin it to the bottom
-   edge with !important. A gesture-capable Drawer-backed adapter is the
-   longer-term replacement. */
-[data-scope='select'][data-part='positioner'][data-presentation='sheet'] {
-  position: fixed !important;
-  inset: auto 0 0 0 !important;
-  transform: none !important;
-  width: auto !important;
-}
-
-[data-scope='select'][data-part='popup'][data-presentation='sheet'] {
-  border-radius: 16px 16px 0 0;
-  padding: 12px 12px calc(12px + env(safe-area-inset-bottom));
-  max-height: 60dvh;
-  overflow-y: auto;
-  box-shadow: 0 -12px 40px -12px rgb(0 0 0 / 0.35);
-
-  & [data-part='item'] {
-    min-height: 44px;
-    font-size: 1rem;
-  }
-}
-
