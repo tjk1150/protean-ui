@@ -63,7 +63,7 @@ owns the decisions. Attempts to port that to the web wholesale - design-system b
 failed repeatedly on brand lock-in. What remains is unbundling: behavior (focus, ARIA)
 is already solved by the headless libraries, the visual language must stay each team's
 own, and the pattern-decision layer in between is the one that is still empty and still
-universalizable. Protean is that layer. (The full argument: [LIVE_DEMO_URL]/en/why)
+universalizable. Protean is that layer. (The full argument: https://protean-ui-jintaes-projects.vercel.app/en/why)
 
 ## What Protean is
 
@@ -141,6 +141,6 @@ is in the repository, data included.
 
 - Install: `npm install protean-ui` (pre-alpha)
 - Repository: https://github.com/tjk1150/protean-ui
-- Docs and live demo: [LIVE_DEMO_URL]
-- Why this exists: [LIVE_DEMO_URL]/en/why - Design principles: [LIVE_DEMO_URL]/en/concepts/design-principles
+- Docs and live demo: https://protean-ui-jintaes-projects.vercel.app
+- Why this exists: https://protean-ui-jintaes-projects.vercel.app/en/why - Design principles: https://protean-ui-jintaes-projects.vercel.app/en/concepts/design-principles
 - Phase 0 verdict: https://github.com/tjk1150/protean-ui/blob/main/docs/phase-0-verdict.md
