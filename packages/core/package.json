@@ -1,14 +1,44 @@
 {
   "name": "@protean-ui/core",
-  "version": "0.0.0",
-  "private": true,
+  "version": "0.1.0-alpha.0",
   "description": "Framework-agnostic trait model and adaptation policy engine for Protean UI",
   "type": "module",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tjk1150/protean-ui.git",
+    "directory": "packages/core"
+  },
+  "homepage": "https://github.com/tjk1150/protean-ui",
+  "keywords": [
+    "adaptive",
+    "responsive",
+    "policy",
+    "design-system",
+    "ui"
+  ],
+  "sideEffects": false,
   "exports": {
     ".": "./src/index.ts"
   },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "publishConfig": {
+    "access": "public",
+    "exports": {
+      ".": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      }
+    },
+    "main": "./dist/index.js",
+    "types": "./dist/index.d.ts"
+  },
   "scripts": {
+    "build": "tsc -p tsconfig.build.json && node ../../scripts/add-js-extensions.mjs dist",
     "test": "vitest run",
     "typecheck": "tsc --noEmit"
   },

@@ -1,13 +1,13 @@
 {
-  "name": "@protean-ui/react",
+  "name": "protean-ui",
   "version": "0.1.0-alpha.0",
-  "description": "Semantic adaptive components for React, driven by the Protean policy engine",
+  "description": "Adaptive UI runtime for React: declare what the UI means, let a policy decide how it presents. Umbrella for @protean-ui/react.",
   "type": "module",
   "license": "MIT",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/tjk1150/protean-ui.git",
-    "directory": "packages/react"
+    "directory": "packages/protean-ui"
   },
   "homepage": "https://github.com/tjk1150/protean-ui",
   "keywords": [
@@ -15,21 +15,14 @@
     "responsive",
     "react",
     "components",
-    "dialog",
-    "bottom-sheet",
-    "navigation",
     "design-system"
   ],
-  "sideEffects": [
-    "./reference.css"
-  ],
+  "sideEffects": false,
   "exports": {
-    ".": "./src/index.ts",
-    "./reference.css": "./reference.css"
+    ".": "./src/index.ts"
   },
   "files": [
     "dist",
-    "reference.css",
     "README.md",
     "LICENSE"
   ],
@@ -39,34 +32,25 @@
       ".": {
         "types": "./dist/index.d.ts",
         "default": "./dist/index.js"
-      },
-      "./reference.css": "./reference.css"
+      }
     },
     "main": "./dist/index.js",
     "types": "./dist/index.d.ts"
   },
   "scripts": {
     "build": "tsc -p tsconfig.build.json && node ../../scripts/add-js-extensions.mjs dist",
-    "test": "vitest run",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@base-ui/react": "^1.7.0",
-    "@protean-ui/core": "workspace:*"
+    "@protean-ui/react": "workspace:*"
   },
   "peerDependencies": {
     "react": ">=18",
     "react-dom": ">=18"
   },
   "devDependencies": {
-    "@testing-library/react": "^16.3.3",
     "@types/node": "^26.4.0",
     "@types/react": "^19.2.18",
-    "@types/react-dom": "^19.2.5",
-    "jsdom": "^30.0.1",
-    "react": "^19",
-    "react-dom": "^19",
-    "typescript": "^5.9.0",
-    "vitest": "^4.1.11"
+    "typescript": "^5.9.0"
   }
 }
