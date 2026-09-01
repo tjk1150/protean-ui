@@ -1,6 +1,6 @@
 {
   "name": "@protean-ui/core",
-  "version": "0.1.0-alpha.2",
+  "version": "0.1.0-alpha.3",
   "description": "Framework-agnostic trait model and adaptation policy engine for Protean UI",
   "type": "module",
   "license": "MIT",

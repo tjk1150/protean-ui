@@ -1,6 +1,6 @@
 {
   "name": "protean-ui",
-  "version": "0.1.0-alpha.2",
+  "version": "0.1.0-alpha.3",
   "description": "Adaptive UI runtime for React: declare what the UI means, let a policy decide how it presents. Umbrella for @protean-ui/react.",
   "type": "module",
   "license": "MIT",
