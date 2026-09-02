@@ -27,9 +27,12 @@ jobs:
       - uses: pnpm/action-setup@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: 22
+          node-version: 24
           cache: pnpm
-          registry-url: https://registry.npmjs.org
+      # The OIDC exchange lives in the npm CLI (>= 11.5.1), which pnpm
+      # delegates the registry PUT to. No registry-url / token config: with a
+      # trusted publisher registered, an npm this new authenticates itself.
+      - run: npm install -g npm@latest
       - run: pnpm install --frozen-lockfile
       - run: SKIP_SCENARIO=1 pnpm gate
       - name: Verify tag matches package versions
