@@ -1,6 +1,6 @@
 {
   "name": "@protean-ui/react",
-  "version": "0.1.0-alpha.7",
+  "version": "0.1.0-alpha.8",
   "description": "Semantic adaptive components for React, driven by the Protean policy engine",
   "type": "module",
   "license": "MIT",
