@@ -1,85 +1,87 @@
 import Link from 'next/link'
 
-export default function DesignPrinciplesKo() {
+export default function PatternAdaptationKo() {
   return (
     <div className="doc" lang="ko">
-      <h1>설계 원리</h1>
+      <h1>상황에 맞는 패턴 선택</h1>
       <p className="lede">
-        &quot;그냥 media query를 컴포넌트로 감싼 것 아닌가요?&quot;라는 질문에 답하는
-        페이지예요. Protean이 어떤 층으로 이루어져 있고, breakpoint 방식과 무엇이
-        구조적으로 다른지 설명해요.
+        같은 &quot;확인 대화&quot;라도 데스크톱에서는 작은 모달이, 폰에서는 바텀
+        시트가 맞아요. 이 선택을 앱 코드의 분기가 아니라 Protean이 하게 만드는 것 -
+        그게 패턴 적응이에요. 이 페이지는 그 선택이 정확히 어떻게, 언제 일어나는지
+        설명해요.
       </p>
 
-      <h2>네 개의 층</h2>
-      <p>Protean은 한 방향으로 흐르는 파이프라인이에요.</p>
+      <h2>같은 의미, 다른 패턴</h2>
+      <p>
+        UI에는 의미가 있어요. &quot;되돌릴 수 없는 걸 확인받는 대화&quot;,
+        &quot;주소를 입력받는 폼&quot;, &quot;항목에 딸린 부가 메뉴&quot;. 의미는
+        환경이 바뀌어도 그대로인데, 그 의미를 <strong>어떤 UX 패턴으로 보여줄지</strong>는
+        환경마다 달라요.
+      </p>
       <div className="tableWrap">
         <table>
-          <thead><tr><th>층</th><th>하는 일</th><th>사는 곳</th></tr></thead>
+          <thead><tr><th>선언하는 의미</th><th>데스크톱 + 마우스</th><th>폰 + 터치</th></tr></thead>
           <tbody>
-            <tr><td>인지</td><td>환경 신호(화면 폭, 포인터 종류, 호버 가능 여부)를 어휘로 바꿔요. 결과는 &#123;size, input&#125; 같은 트레이트예요.</td><td>@protean-ui/core</td></tr>
-            <tr><td>판단</td><td>(역할, 트레이트)를 규칙에 대입해서 Decision 값을 만들어요. React도 DOM도 없는 순수 함수예요.</td><td>@protean-ui/core</td></tr>
-            <tr><td>실행</td><td>정해진 모습을 그려요. 포커스 이동, ESC 닫기, ARIA는 Base UI에 맡겨요.</td><td>@protean-ui/react</td></tr>
-            <tr><td>표현</td><td>data 속성만 남겨요. 색과 모양은 여러분의 CSS(또는 참고 스타일시트)가 정해요.</td><td>여러분의 CSS</td></tr>
+            <tr><td><code>role=&quot;confirmation&quot;</code> 확인 대화</td><td>가운데 모달</td><td>바텀 시트</td></tr>
+            <tr><td><code>role=&quot;form&quot;</code> 입력 폼</td><td>가운데 모달</td><td>전체 화면</td></tr>
+            <tr><td><code>role=&quot;contextual&quot;</code> 부가 메뉴</td><td>앵커 팝오버</td><td>바텀 시트</td></tr>
+            <tr><td>내비게이션</td><td>사이드바</td><td>하단 탭 바</td></tr>
           </tbody>
         </table>
       </div>
-      <div className="callout">
-        <strong>판단 층이 심장이에요.</strong> 기본 규칙 전체가 25줄짜리 순수 함수
-        객체이고, 통째로 갈아끼울 수 있어요. breakpoint 방식에서는 이 &quot;의견&quot;이
-        앱 전체의 CSS와 조건문에 흩어져 있어서 꺼내 볼 수도, 바꿔 낄 수도 없어요.
-      </div>
+      <p>
+        이 전환이 CSS로 안 되는 이유가 핵심이에요. 팝오버와 전체 화면 다이얼로그는
+        폰트 크기가 다른 게 아니라 <strong>DOM 구조, 포커스 규칙, 닫는 방법, 접근성
+        연결이 다른 별개의 물건</strong>이에요. 그래서 지금까지 모든 앱이{' '}
+        <code>isMobile ? &lt;A/&gt; : &lt;B/&gt;</code>를 손으로 써 왔고, Protean은
+        정확히 그 분기를 대신해요.
+      </p>
 
       <h2>버튼 한 번 누르면 일어나는 일</h2>
       <pre><code>{`<Dialog.Root role="confirmation">   // 앱이 아는 전부: "이건 확인 대화"
 
 사용자가 트리거를 눌러요
-  → 환경을 읽어요          { size: "expanded", input: "pointer" }     [인지]
-  → 규칙에 대입해요        인스턴스 지정? 없음 → 프로젝트 규칙? 위임
-                           → 기본 규칙: "작은 화면+터치면 시트, 아니면 모달"
-  → Decision이 나와요      { presentation: "modal", source: "pack" }  [판단]
-  → 모달로 열어요          포커스·ESC·ARIA는 Base UI가 처리          [실행]
-  → data-presentation="modal"  여러분의 CSS가 모양을 입혀요           [표현]`}</code></pre>
+  → 환경을 읽어요       화면 크기 등급 + 입력 수단
+  → 규칙에 대입해요     이 화면만의 지정? 없음 → 프로젝트 규칙? 위임
+                        → 기본 규칙: "작은 화면 + 터치면 시트, 아니면 모달"
+  → 모습이 정해져요     모달
+  → 모달로 열어요       포커스 이동 · ESC 닫기 · 접근성 연결까지 함께
+  → data-presentation="modal"   모양은 CSS가 입혀요`}</code></pre>
       <p>
-        같은 코드를 폰에서 실행하면 인지가 <code>&#123; size: &quot;compact&quot;, input:
-        &quot;touch&quot; &#125;</code>를 내놓고, 판단이 시트를 고르고, 실행이 바텀
-        시트를 띄워요. 앱 코드에는 여전히 breakpoint가 하나도 없어요.
+        같은 코드를 폰에서 실행하면 읽히는 환경이 달라지고, 규칙이 시트를 고르고,
+        바텀 시트가 떠요. 앱 코드에는 여전히 분기가 하나도 없어요.
       </p>
 
       <h2>결정에는 &quot;시점&quot;이 있어요</h2>
-      <p>
-        서버는 사용자의 화면 폭을 몰라요. 그래서 Protean에는 원칙이 하나 있어요.
-      </p>
+      <p>서버는 사용자의 화면 폭을 몰라요. 그래서 Protean에는 원칙이 하나 있어요.</p>
       <div className="callout">
         서버가 틀릴 수 있는 결정은, CSS로 표현할 수 있거나 상호작용 시점으로 미뤄져야
         해요.
       </div>
       <ul>
         <li>
-          <strong>다이얼로그와 셀렉트는 여는 순간 결정해요.</strong> 닫혀 있는 동안은
-          결정 자체가 없어서 서버 HTML에 오버레이가 0바이트예요. 서버는 틀릴 기회가
-          없어요. 열려 있는 동안은 결정을 고정해서, 창 크기를 바꿔도 사용 중인 UI가
-          갑자기 갈아엎어지지 않아요.
+          <strong>다이얼로그·셀렉트·메뉴는 여는 순간 결정해요.</strong> 닫혀 있는
+          동안은 결정 자체가 없어서 서버 HTML에 오버레이가 0바이트예요. 서버는 틀릴
+          기회가 없어요. 열려 있는 동안은 결정을 고정해서, 창 크기를 바꿔도 사용
+          중인 UI가 갑자기 갈아엎어지지 않아요. 다음에 열 때 다시 판단해요.
         </li>
         <li>
           <strong>내비게이션과 화면 뼈대는 미룰 수 없어요.</strong> 항상 보이니까요.
           대신 네 가지 모습이 전부 같은 HTML이고, 첫 그림은 CSS가 정해요. 서버가
-          무엇을 보내든 마크업이 같으니 틀릴 수 없고, 화면이 밀리지 않고, JavaScript
-          없이도 동작해요.
+          무엇을 보내든 마크업이 같으니 첫 배치가 틀릴 수 없고, 화면이 밀리지
+          않아요.
         </li>
       </ul>
       <p>
-        이 규율 덕분에 hydration 불일치와 첫 화면 깜빡임이 &quot;열심히 고친 버그&quot;가
-        아니라 <strong>&quot;구조적으로 생길 수 없는 버그&quot;</strong>가 돼요. 자세한
-        내용은 <Link href="/ko/concepts/ssr">서버 렌더링</Link>에 있어요.
+        이 규율의 결과는 <Link href="/ko/advanced/server-rendering">서버 렌더링</Link>
+        에서 자세히 볼 수 있어요.
       </p>
 
       <h2>breakpoint 방식과 무엇이 다른가요?</h2>
       <ol>
         <li>
           <strong>바뀌는 단위가 달라요.</strong> media query는 같은 패턴의 CSS 속성을
-          바꿔요. Protean은 패턴 자체를 바꿔요. 팝오버와 전체 화면 다이얼로그는 DOM
-          구조, 포커스 규칙, 닫기 방식, ARIA 역할이 다른 별개의 물건이라서 CSS만으로는
-          오갈 수 없어요.
+          바꿔요. Protean은 패턴 자체를 바꿔요.
         </li>
         <li>
           <strong>결정의 시점이 있어요.</strong> media query는 항상 켜져 있는 선언이라
@@ -87,51 +89,56 @@ export default function DesignPrinciplesKo() {
           &lt;Dialog/&gt;</code> 레시피가 서버 렌더링에서 깜빡이는 이유가 그거예요.
         </li>
         <li>
-          <strong>결정이 값이에요.</strong> 누가 정했는지 추적되고(<code>source</code>),
-          한 줄로 설명되고(<code>explain</code>), 렌더링 없이 테스트되고, DOM에
-          찍혀요. media query에게는 &quot;왜 지금 이 모습이야?&quot;를 물을 수 없어요.
+          <strong>결정이 값이에요.</strong> 판단의 재료(화면 등급과 입력 수단 - 이
+          묶음을 <strong>트레이트</strong>라고 불러요)와 결과가 값으로 남아서, 누가
+          정했는지 추적되고, 개발 모드 콘솔에 한 줄로 설명되고, 렌더링 없이
+          테스트되고, DOM에 <code>data-presentation</code>으로 찍혀요. media
+          query에게는 &quot;왜 지금 이 모습이야?&quot;를 물을 수 없어요.
         </li>
         <li>
           <strong>호출부는 의미만 말해요.</strong> <code>role=&quot;confirmation&quot;</code>이
-          호출부에 있고, 그게 무엇이 될지는 규칙 파일 한 곳에 있어요. 나중에 새 판단
-          기준(컨테이너 크기, 가상 키보드, 폴더블)이 생겨도 인지와 판단 층만 바뀌고
-          호출부는 전부 그대로예요. breakpoint 방식은 기준이 하나 늘 때마다 모든
-          호출부에 조건이 곱해져요.
+          호출부에 있고, 그게 무엇이 될지는 규칙 한 곳에 있어요. 나중에 새 판단
+          기준이 생겨도 호출부는 전부 그대로예요. breakpoint 방식은 기준이 하나 늘
+          때마다 모든 호출부에 조건이 곱해져요.
         </li>
       </ol>
 
       <h2>값은 모습을 따라가요</h2>
       <p>
-        화면이 좁아졌다고 radius를 24에서 16으로 &quot;보정&quot;하지 않아요. 대신 UI의
-        역할이 바뀔 때 값의 정책이 함께 바뀌어요. 다이얼로그가 전체 화면이 되면 더는
-        떠 있는 카드가 아니니 모서리가 없어지고, 바텀 시트가 되면 바닥에 붙으니 위쪽
-        모서리만 둥글어요. 참고 스타일시트에는 radius를 바꾸는 media query가 단 하나도
-        없어요. 값은 전부 presentation에 붙어 있어요. 쓰는 방법은{' '}
-        <Link href="/ko/getting-started">시작하기의 &quot;모양 입히기&quot;</Link>에
-        있어요.
+        화면이 좁아졌다고 radius를 24에서 16으로 &quot;보정&quot;하지 않아요. 대신
+        UI의 역할이 바뀔 때 값의 정책이 함께 바뀌어요. 다이얼로그가 전체 화면이 되면
+        더는 떠 있는 카드가 아니니 모서리가 없어지고, 바텀 시트가 되면 바닥에 붙으니
+        위쪽 모서리만 둥글어요. 참고 스타일시트에는 radius를 바꾸는 media query가 단
+        하나도 없어요 - 값은 전부 선택된 모습에 붙어 있어서, 모양을 위한 별도의
+        결정은 필요하지 않아요. 행 높이와 탭 타깃처럼 <strong>같은 모습 안에서도</strong>{' '}
+        갈리는 값은 별도의 결정이 맞고, 그게{' '}
+        <Link href="/ko/concepts/density">밀도</Link>예요.
       </p>
 
       <h2>기본 규칙이 지금 보는 것, 안 보는 것</h2>
-      <p>정직하게 적어 둘게요. 현재 수집되는 판단 기준은 이래요.</p>
+      <p>정직하게 적어 둘게요. 현재 판단에 쓰이거나 수집되는 재료는 이래요.</p>
       <ul>
-        <li>화면 크기: compact(600px 미만) · medium · expanded(840px 이상)</li>
+        <li>화면 크기 등급: compact(600px 미만) · medium · expanded(840px 이상)</li>
         <li>입력 수단: touch · pointer · hybrid</li>
-        <li>화면 키보드(virtualKeyboard): 떠 있는지 여부 — 여러분의 규칙에서 참조할 수 있어요</li>
+        <li>호버 가능 여부 - 힌트(툴팁)가 참조해요</li>
+        <li>모션 축소 선호 - 수집돼요; 참고 스타일시트의 모션은 CSS 미디어쿼리가 직접 처리해요</li>
+        <li>화면 키보드 여부 - 수집만 되고, 기본 규칙은 아직 쓰지 않아요</li>
       </ul>
       <p>
-        그리고 기본 규칙(app-first)은 입력 수단을 <strong>compact에서만</strong>{' '}
-        따지고, 화면 키보드는 아직 사용하지 않아요. 중간 크기 이상에서는 터치 태블릿과
-        마우스 데스크톱이 같은 패턴을 받아요(터치 타깃 크기 같은 차이는 CSS 몫이에요).
-        이건 버그가 아니라 결정이에요. 실제 기기에서 검증하지 못한 추측성 규칙을
-        기본값에 넣지 않는다는 원칙이고, 태블릿 분화는 로드맵에 있어요. 컨테이너 단위
-        판단은 오버레이에 한해 배송됐어요 - ProteanBoundary 안에서 선언한 다이얼로그는
-        뷰포트가 아니라 그 패널의 폭으로 판정해요. 규칙이 1급 API라서, 이런 축이 추가될 때 여러분의 호출부는 한 줄도
-        바뀌지 않아요.
+        기본 <strong>패턴</strong> 규칙은 입력 수단을 compact에서만 갈라요 - 중간
+        크기 이상의 터치 태블릿과 마우스 데스크톱은 같은 패턴을 받아요. 실제
+        기기에서 검증하지 못한 추측성 규칙을 기본값에 넣지 않는다는 원칙이고, 태블릿
+        분화는 로드맵에 있어요. 반면 <strong>밀도</strong>와 <strong>힌트</strong>는
+        크기와 무관하게 입력 수단을 봐요. 컨테이너 단위 판단은 오버레이에 한해
+        배송됐어요 - <Link href="/ko/advanced/container-boundary">컨테이너 기준
+        적응</Link>을 보세요. 규칙이 1급 API라서, 이런 축이 추가될 때 여러분의
+        호출부는 한 줄도 바뀌지 않아요.
       </p>
 
       <p>
-        다음: <Link href="/ko/why">왜 만들었나요</Link>에서 이 구조가 겨냥하는 더 큰
-        그림을 볼 수 있어요.
+        다음: <Link href="/ko/concepts/density">밀도</Link>에서 두 번째 결정을,{' '}
+        <Link href="/ko/guides/customize-decisions">적응 결과 맞춤 설정</Link>에서
+        규칙을 내 것으로 만드는 법을 보세요.
       </p>
     </div>
   )

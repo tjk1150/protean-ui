@@ -1,3 +1,5 @@
+import Link from 'next/link'
+
 export default function AccessibilityPage() {
   return (
     <div className="doc">
@@ -56,21 +58,27 @@ export default function AccessibilityPage() {
         <li>axe: zero violations across the navigation presentations and the fullscreen dialog state.</li>
         <li>
           On an open modal, one fewer flagged node than the manual recipe built on the
-          same primitives - the remaining flags are the backend&apos;s focus-guard
-          sentinels, a known screening artifact present in both implementations.
+          same primitives - the remaining flags are the invisible helper elements that
+          keep focus from escaping, which the scanner marks in both implementations; a
+          known screening artifact.
         </li>
         <li>
           In the real-app migration, 699 existing tests - including keyboard-trap and
           focus-restore assertions - stayed green after the swap.
         </li>
       </ul>
+      <p>
+        Scan figures shift between releases; the current numbers live on{' '}
+        <Link href="/en/about/status">Quality and support status</Link>.
+      </p>
 
       <h2>Capability is not modality</h2>
       <p>
-        The input profile changes affordances - target sizes, hover styles - never
-        capability. Keyboard operation works in every presentation, because tablets have
-        keyboards and phones have switch access. Reduced-motion preferences flow through
-        the traits so presentation animations can honor them centrally.
+        The input method may change the pattern and the density - never what the user
+        can do. Keyboard operation works in every presentation, because tablets have
+        keyboards and phones have switch access. The reduced-motion preference is
+        honored directly by the reference stylesheet&apos;s CSS media queries, so
+        presentation motion quiets down all at once.
       </p>
     </div>
   )

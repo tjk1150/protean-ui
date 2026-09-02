@@ -1,139 +1,151 @@
 import Link from 'next/link'
 
-export default function DesignPrinciplesPage() {
+export default function PatternAdaptationPage() {
   return (
     <div className="doc">
-      <h1>Design principles</h1>
+      <h1>Pattern adaptation</h1>
       <p className="lede">
-        This page answers the fair question: &quot;isn&apos;t this just media queries
-        wrapped in components?&quot; It maps Protean&apos;s layers and names what is
-        structurally different from breakpoint-driven code.
+        The same &quot;confirmation&quot; wants a small modal on desktop and a bottom
+        sheet on a phone. Making that choice Protean&apos;s job instead of a branch in
+        your code - that is pattern adaptation. This page explains exactly how, and
+        when, the choice happens.
       </p>
 
-      <h2>Four layers</h2>
-      <p>Protean is a one-directional pipeline.</p>
+      <h2>Same meaning, different pattern</h2>
+      <p>
+        UI has meaning: &quot;a dialog confirming something irreversible&quot;, &quot;a
+        form collecting an address&quot;, &quot;a menu attached to an item&quot;. The
+        meaning survives every environment - <strong>which UX pattern shows it</strong>{' '}
+        does not.
+      </p>
       <div className="tableWrap">
         <table>
-          <thead><tr><th>Layer</th><th>Job</th><th>Lives in</th></tr></thead>
+          <thead><tr><th>Declared meaning</th><th>Desktop + mouse</th><th>Phone + touch</th></tr></thead>
           <tbody>
-            <tr><td>Perception</td><td>turns raw signals (viewport width, pointer kind, hover capability) into a vocabulary: traits like &#123;size, input&#125;</td><td>@protean-ui/core</td></tr>
-            <tr><td>Decision</td><td>maps (role, traits) through a policy to a Decision value - a pure function, no React, no DOM</td><td>@protean-ui/core</td></tr>
-            <tr><td>Execution</td><td>renders the decided presentation; focus, dismissal, and ARIA are delegated to Base UI</td><td>@protean-ui/react</td></tr>
-            <tr><td>Expression</td><td>stamps data attributes only; color and shape belong to your CSS (or the reference stylesheet)</td><td>your CSS</td></tr>
+            <tr><td><code>role=&quot;confirmation&quot;</code></td><td>centered modal</td><td>bottom sheet</td></tr>
+            <tr><td><code>role=&quot;form&quot;</code></td><td>centered modal</td><td>fullscreen</td></tr>
+            <tr><td><code>role=&quot;contextual&quot;</code></td><td>anchored popover</td><td>bottom sheet</td></tr>
+            <tr><td>navigation</td><td>sidebar</td><td>bottom tab bar</td></tr>
           </tbody>
         </table>
       </div>
-      <div className="callout">
-        <strong>The decision layer is the heart.</strong> The entire default rule set is a
-        25-line pure-function object you can swap wholesale. In breakpoint-driven code
-        that opinion is smeared across every call site&apos;s CSS and conditionals -
-        impossible to inspect, impossible to replace.
-      </div>
+      <p>
+        Why CSS cannot do this swap is the crux: a popover and a fullscreen dialog do
+        not differ in font size - they are <strong>different objects, with different
+        DOM structure, focus rules, dismissal, and accessibility wiring</strong>. That
+        is why every app has hand-written <code>isMobile ? &lt;A/&gt; : &lt;B/&gt;</code>,
+        and it is exactly the branch Protean replaces.
+      </p>
 
-      <h2>One click, end to end</h2>
+      <h2>What one button press sets off</h2>
       <pre><code>{`<Dialog.Root role="confirmation">   // all the app knows: "this is a confirmation"
 
-the user clicks the trigger
-  → read the environment    { size: "expanded", input: "pointer" }    [perception]
-  → consult the policy      instance override? no → project rules? delegate
-                            → pack: "compact+touch means sheet, else modal"
-  → a Decision comes back   { presentation: "modal", source: "pack" } [decision]
-  → open as a modal         focus, ESC, ARIA handled by Base UI       [execution]
-  → data-presentation="modal"   your CSS paints it                    [expression]`}</code></pre>
+the user presses the trigger
+  → read the environment    size class + input method
+  → apply the rules         per-instance override? none → project rules? defer
+                            → default: "small screen + touch means sheet, else modal"
+  → a presentation is set   modal
+  → open as a modal         focus, ESC, accessibility wired along
+  → data-presentation="modal"   CSS paints the look`}</code></pre>
       <p>
-        Run the same code on a phone: perception yields{' '}
-        <code>&#123; size: &quot;compact&quot;, input: &quot;touch&quot; &#125;</code>,
-        the decision is a sheet, execution mounts a bottom sheet. The app code still
-        contains zero breakpoints.
+        Run the same code on a phone: the environment reads differently, the rules
+        pick a sheet, and a bottom sheet opens. The app code still contains zero
+        branches.
       </p>
 
       <h2>Decisions have a moment</h2>
-      <p>The server cannot know the viewport. So Protean holds one invariant:</p>
+      <p>The server does not know the user&apos;s screen. Hence one rule:</p>
       <div className="callout">
-        A decision the server could get wrong must be expressible in CSS, or deferred to
-        interaction time.
+        A decision the server could get wrong must be expressible in CSS, or deferred
+        to interaction time.
       </div>
       <ul>
         <li>
-          <strong>Dialogs and selects decide at open time.</strong> While closed there is
-          no decision at all - zero overlay bytes in server HTML, so the server has no
-          opportunity to be wrong. While open, the decision is pinned: resizing never
-          rips the UI out from under the user.
+          <strong>Dialogs, selects, and menus decide when they open.</strong> While
+          closed there is no decision at all - the served HTML carries zero overlay
+          markup, so the server has no chance to be wrong. While open, the decision is
+          pinned so the UI is not swapped out from under the user mid-use; it decides
+          again next time.
         </li>
         <li>
           <strong>Navigation and the screen skeleton cannot defer</strong> - they are
-          always visible. So all four presentations are one HTML tree and CSS decides
-          first paint. Identical markup regardless of what the server guessed: no
-          mismatch, no layout shift, works without JavaScript.
+          always visible. So all four presentations are one identical HTML tree, and
+          CSS draws the first picture. Whatever the server sends, the markup is the
+          same: the first layout cannot be wrong and nothing shifts.
         </li>
       </ul>
       <p>
-        This discipline turns hydration mismatch and first-paint flash from bugs you fix
-        into <strong>bugs that cannot exist</strong>. Details in{' '}
-        <Link href="/en/concepts/ssr">server rendering</Link>.
+        The consequences live in{' '}
+        <Link href="/en/advanced/server-rendering">Server rendering</Link>.
       </p>
 
-      <h2>What makes this not-a-breakpoint</h2>
+      <h2>How is this different from breakpoints?</h2>
       <ol>
         <li>
-          <strong>The unit of change is the interaction contract.</strong> A media query
-          restyles one pattern; Protean exchanges the pattern. A popover and a fullscreen
-          dialog differ in DOM, focus rules, dismissal, and ARIA - no stylesheet can turn
-          one into the other.
+          <strong>A different unit changes.</strong> A media query changes CSS
+          properties of the same pattern. Protean changes the pattern itself.
         </li>
         <li>
-          <strong>Timing is first-class.</strong> Media queries are always-on
-          declarations with no concept of &quot;when&quot; - which is exactly why{' '}
-          <code>isMobile ? &lt;Sheet/&gt; : &lt;Dialog/&gt;</code> recipes flash on SSR.
+          <strong>Decisions have a moment.</strong> A media query is an always-on
+          declaration with no concept of &quot;when&quot; - which is why the{' '}
+          <code>isMobile ? &lt;Sheet/&gt; : &lt;Dialog/&gt;</code> recipe flashes
+          under server rendering.
         </li>
         <li>
-          <strong>Decisions are values.</strong> Traced (<code>source</code>), explained
-          (<code>explain</code>), unit-tested without rendering, stamped on the DOM. You
-          cannot ask a media query why.
+          <strong>Decisions are values.</strong> The inputs (size class and input
+          method - together called <strong>traits</strong>) and the result exist as a
+          value: traced to whoever decided, explained in one console line in dev,
+          testable without rendering, stamped on the DOM as{' '}
+          <code>data-presentation</code>. You cannot ask a media query why the UI
+          looks the way it does.
         </li>
         <li>
           <strong>Call sites speak meaning only.</strong>{' '}
           <code>role=&quot;confirmation&quot;</code> lives at the call site; what it
-          becomes lives in one policy file. New decision axes (container size, virtual
-          keyboard, foldables) change the perception and decision layers - never the call
-          sites. With breakpoints, every new axis multiplies conditions at every call
-          site.
+          becomes lives in one place. When a new input joins the judgment later, call
+          sites do not change. With breakpoints, every new axis multiplies conditions
+          across every call site.
         </li>
       </ol>
 
       <h2>Values follow the presentation</h2>
       <p>
-        Protean never &quot;corrects&quot; a radius because the window narrowed. Values
-        change when the role changes: a dialog that goes fullscreen is no longer a
-        floating card, so its corners disappear; a sheet touches the bottom edge, so only
-        its top corners are shaped. The reference stylesheet contains not a single media
-        query that changes a radius - every value hangs off a presentation. See{' '}
-        <Link href="/en/getting-started">&quot;Style it&quot; in getting started</Link>.
+        A narrower screen never &quot;corrects&quot; a radius from 24 to 16. Instead,
+        when the UI&apos;s role changes, the value policy changes with it: a fullscreen
+        dialog is no longer a floating card, so it loses its corners; a bottom sheet
+        touches the bottom, so only its top corners round. The reference stylesheet
+        contains not a single media query on radius - every such value hangs off the
+        chosen presentation, so shape needs no separate decision. Values that differ{' '}
+        <strong>within the same presentation</strong> - row heights, tap targets - do
+        deserve one, and that is <Link href="/en/concepts/density">density</Link>.
       </p>
 
-      <h2>What the default policy sees - and what it does not</h2>
-      <p>In the interest of honesty: here is what perception currently collects.</p>
+      <h2>What the default rules see - and do not</h2>
+      <p>Stated honestly, the inputs currently used or collected:</p>
       <ul>
-        <li>size class: compact (below 600px), medium, expanded (840px and up)</li>
-        <li>input profile: touch, pointer, hybrid</li>
-        <li>virtualKeyboard: whether the on-screen keyboard is up - available to your policies</li>
+        <li>size class: compact (below 600px) · medium · expanded (840px and up)</li>
+        <li>input method: touch · pointer · hybrid</li>
+        <li>hover capability - consulted by hints (tooltips)</li>
+        <li>reduced-motion preference - collected; the reference stylesheet handles motion via CSS media queries directly</li>
+        <li>virtual keyboard - collected, not yet consulted by the defaults</li>
       </ul>
       <p>
-        And the app-first pack branches on input <strong>only at compact size</strong>,
-        and does not consult the keyboard yet. On medium and expanded viewports a touch
-        tablet receives the same patterns as a mouse desktop (parametric differences
-        like touch-target size belong to CSS). That is a decision, not an oversight: we
-        do not ship speculative rules we have not validated on real devices.
-        Tablet-touch differentiation is on the roadmap; container-scoped decisions
-        shipped for overlays (declare inside a ProteanBoundary and the size class is
-        measured from that panel, not the viewport) -
-        and because the policy is a first-class API, adding those axes will not change
-        a single call site of yours.
+        The default <strong>pattern</strong> rules branch on input only at compact -
+        a touch tablet and a mouse desktop get the same patterns at medium and up. We
+        refuse to ship speculative rules unvalidated on real devices; tablet
+        differentiation is on the roadmap. <strong>Density</strong> and{' '}
+        <strong>hints</strong>, by contrast, read the input method at every size.
+        Container-scoped judgment ships for overlays - see{' '}
+        <Link href="/en/advanced/container-boundary">container-scoped adaptation</Link>.
+        Because the rules are a first-class API, adding such an axis never touches
+        your call sites.
       </p>
 
       <p>
-        Next: <Link href="/en/why">why this exists</Link> - the larger picture this
-        structure is aimed at.
+        Next: <Link href="/en/concepts/density">Density</Link> for the second
+        decision, and{' '}
+        <Link href="/en/guides/customize-decisions">Customize the decisions</Link> to
+        make the rules your own.
       </p>
     </div>
   )

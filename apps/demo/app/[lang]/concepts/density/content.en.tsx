@@ -19,8 +19,7 @@ export default function DensityPage() {
         <pre><code>{`:root { --target: 40px; }
 @media (pointer: coarse) { :root { --target: 48px; } }`}</code></pre>
         CSS renders exceptionally well. What Protean owns is choosing a density from
-        inputs CSS cannot see - a user setting, the pattern decision, container
-        context.
+        inputs CSS cannot see - a user setting, and the pattern decision.
       </div>
 
       <h2>How density is decided</h2>
@@ -28,8 +27,8 @@ export default function DensityPage() {
         <table>
           <thead><tr><th>Input</th><th>Result</th><th>Decided by</th></tr></thead>
           <tbody>
-            <tr><td>a precise pointer</td><td>comfortable</td><td>a CSS media query - zero JavaScript</td></tr>
-            <tr><td>touch</td><td>touch</td><td>a CSS media query - zero JavaScript</td></tr>
+            <tr><td>a precise pointer</td><td>comfortable</td><td>a CSS media query - page content needs no JS</td></tr>
+            <tr><td>touch</td><td>touch</td><td>a CSS media query - page content needs no JS</td></tr>
             <tr><td>opened as a sheet</td><td>always touch</td><td>pattern coupling - a sheet is a thumb surface whatever the profile</td></tr>
             <tr><td>a user setting</td><td>overrides everything</td><td><code>&lt;ProteanProvider density=&quot;compact&quot;&gt;</code></td></tr>
             <tr><td>compact</td><td>only by explicit choice</td><td>the default rule never guesses</td></tr>
@@ -53,8 +52,10 @@ export default function DensityPage() {
       <p>
         Popups (dialog, menu, select, tooltip) are portaled, so ancestor stamps never
         reach them - <strong>the components stamp <code>data-density</code> on their own
-        popups</strong>, the same contract as <code>data-presentation</code>. Nothing
-        for you to wire.
+        popups</strong>, the same contract as <code>data-presentation</code>, nothing
+        for you to wire. A popup is a surface where a decision already happens at
+        open; the density stamp rides that decision, adding no measurement and no
+        re-render.
       </p>
 
       <h2>Tokens respond</h2>
@@ -83,31 +84,19 @@ export default function DensityPage() {
   padding: clamp(8px, 3cqi, var(--protean-target));
 }`}</code></pre>
 
-      <h2>Why shape is not a separate decision</h2>
+      <h2>Why is there nothing like this for shape?</h2>
       <p>
-        We evaluated a shape domain as the next geometry axis, and the verdict is{' '}
-        <strong>we are not building one</strong>. The reason is simple: shape is
-        already decided. Popovers are 12px, modals 14px, sheets round only their top
-        corners, fullscreen has none - a token ({`--protean-shape`}) keyed to{' '}
-        <code>data-presentation</code> covers all eleven surfaces with nothing
-        missing.
-      </p>
-      <p>
-        The contrast with density is the criterion. Density varied{' '}
-        <strong>within the same presentation</strong> - input modality and a user
-        setting split the value. Multiple inputs make a decision, and a decision
-        earned a domain. Shape has exactly one input: the presentation. One input is
-        not a decision, it is a lookup table, and lookup tables live in CSS. The
-        remaining axis of variation is brand, and that is a one-line token rebind:
-      </p>
-      <pre><code>{`[data-presentation='modal'] { --protean-shape: 20px; }`}</code></pre>
-      <p>
-        Pattern-shape coupling is already free - shape keys off the presentation
-        stamp, so when Protean changes the pattern the shape follows atomically, and
-        the portal problem is solved by the same stamp. A shape domain would add
-        surface while adding no capability. The principle at the top of this page
-        applies to Protean itself: what CSS and tokens already solve does not get
-        forced into a feature.
+        Corner radius is already decided - popovers 12px, modals 14px, sheets round
+        only their top corners, fullscreen none, every value hanging off the chosen
+        presentation. When something has exactly one input, it is a lookup table, not
+        a decision, and lookup tables belong to CSS. A brand changes it with one
+        token line
+        (<code>[data-presentation=&apos;modal&apos;] {'{'} --protean-shape: 20px {'}'}</code>).
+        The principle lives in{' '}
+        <Link href="/en/concepts/pattern-adaptation">Pattern adaptation</Link> under
+        &quot;values follow the presentation&quot;. Density earns a decision for the
+        opposite reason: its values split <strong>within the same presentation</strong>,
+        by input method and user setting.
       </p>
 
       <h2>Why steps, not proportional scaling?</h2>
@@ -122,8 +111,8 @@ export default function DensityPage() {
 
       <p>
         Compare the two implementations (Protean vs hand-rolled) side by side in the{' '}
-        <Link href="/density-spike">density demo</Link>. The reasoning is one{' '}
-        <code>explain()</code> away: <code>density -&gt; compact [instance]</code>.
+        <Link href="/density-spike">density demo</Link>. Dev mode prints the
+        reasoning: <code>density -&gt; compact [instance] size=expanded input=pointer</code>.
       </p>
     </div>
   )

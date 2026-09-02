@@ -3,7 +3,7 @@ export default function CompositionPage() {
     <div className="doc">
       <h1>Using them together</h1>
       <p className="lede">
-        Nine roles in one app - does that tangle? Most combinations structurally
+        Ten roles in one app - does that tangle? Most combinations structurally
         cannot: the components do not know about each other. This page explains why,
         and the four places that genuinely deserve care.
       </p>
@@ -46,10 +46,11 @@ export default function CompositionPage() {
 
       <h2>Why it does not tangle</h2>
       <p>
-        Components share exactly two things: a read-only view of the environment
-        (the traits) and a pure policy function. Every overlay decides
-        independently, <strong>at the moment it opens</strong>; there is no channel
-        through which one component reads or writes another&apos;s state. Three
+        There is no channel through which one component reads or writes
+        another&apos;s state. What they do share are <strong>values that are the same
+        for everyone</strong> - the read-only environment, the rules, a density
+        setting - and every overlay decides independently,{' '}
+        <strong>at the moment it opens</strong>. Three
         dialogs, two selects, and a menu on one screen each behave exactly as they
         would alone. Nesting works the same way - open a select inside a dialog and
         Base UI handles focus and stacking while each decides for itself.

@@ -32,7 +32,7 @@ export default function SsrPage() {
         bottom bar, drawer, rail, and sidebar in the{' '}
         <Link href="/navigation-spike">navigation spike</Link> are four CSS states of the
         same <code>nav &gt; ul</code>. The same HTML is served to every client - measured
-        cumulative layout shift is 0, and the layout is correct with JavaScript disabled.
+        cumulative layout shift is 0, and the first layout is correct even before JavaScript arrives - interactions such as opening the drawer do need JavaScript.
       </p>
       <p>
         The JavaScript <code>data-presentation</code> stamp is informational and drives

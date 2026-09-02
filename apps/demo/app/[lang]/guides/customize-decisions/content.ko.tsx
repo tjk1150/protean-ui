@@ -1,18 +1,69 @@
-export default function TraitsAndPolicyKo() {
+import Link from 'next/link'
+
+export default function CustomizeDecisionsKo() {
   return (
     <div className="doc" lang="ko">
-      <h1>판단 기준과 규칙</h1>
+      <h1>적응 결과 맞춤 설정</h1>
       <p className="lede">
-        Protean의 모든 동작은 한 줄로 요약돼요. <strong>환경을 읽어서 판단 기준으로
-        정리하고, 규칙에 대입해서, 보여줄 모습을 정한다.</strong> 이 페이지에서는 그 세
-        단계를 하나씩 살펴봐요.
+        기본 규칙이 우리 서비스와 안 맞을 때 바꾸는 방법이에요. 바꾸는 층은 셋이고,
+        가까운 것이 이겨요: 이 화면 하나 → 프로젝트 규칙 → 규칙 묶음. 셋 다 픽셀이
+        아니라 환경 이름으로 말해요.
       </p>
 
-      <h2>판단 기준(트레이트)이 뭔가요?</h2>
+      <h2>1. 이 화면 하나만 바꾸기</h2>
+      <p>특정 화면 하나만 다르게 열고 싶을 때는 컴포넌트에 직접 지정해요.</p>
+      <pre><code>{`// 항상 바텀 시트로 열래요
+<Dialog.Root presentation="sheet" />
+
+// 작은 화면에서만 전체 화면으로 열래요
+<Dialog.Root presentation={{ compact: "fullscreen" }} />`}</code></pre>
+
+      <h2>2. 프로젝트 규칙 만들기</h2>
       <p>
-        트레이트(trait)는 지금 사용 환경을 몇 개의 이름으로 정리한 거예요. 앱 코드와
-        규칙은 &quot;768px&quot; 같은 픽셀 숫자를 절대 보지 않아요. 픽셀은 분류기 안,
-        딱 한 곳에만 있어요.
+        서비스 전체의 관습을 바꾸고 싶으면 규칙 파일을 프로젝트에 만들어요. Tailwind
+        설정 파일처럼, 팀의 결정이 코드로 남아요.
+      </p>
+      <pre><code>{`// protean.config.ts
+import { appFirst, definePolicy } from "@protean-ui/react";
+
+export const policy = definePolicy({
+  extends: appFirst, // 기본 규칙에서 시작해요
+  overlay: ({ traits, role, defaults }) =>
+    // 작은 화면의 입력 폼은 전체 화면 대신 바텀 시트로 열래요
+    role === "form" && traits.size === "compact" ? "sheet" : defaults(),
+});`}</code></pre>
+      <pre><code>{`// 앱 최상단에서 한 번만 감싸 주세요
+import { ProteanProvider } from "@protean-ui/react";
+import { policy } from "./protean.config";
+
+<ProteanProvider policy={policy}>{children}</ProteanProvider>`}</code></pre>
+      <p>
+        <code>defaults()</code>를 부르면 나머지 판단은 기본 규칙에 맡길 수 있어서,
+        바꾸고 싶은 한 가지만 적으면 돼요.
+      </p>
+
+      <h2>3. 규칙 묶음 자체를 교체하기</h2>
+      <p>
+        <code>extends: appFirst</code> 없이 처음부터 쓰면 완전히 다른 관습의 규칙
+        묶음을 만들 수 있어요. 조직 공용 패키지로 배포해서 여러 프로젝트가 같은
+        규칙을 쓰게 하는 것도 가능해요.
+      </p>
+
+      <h2>왜 이렇게 열렸는지 궁금할 때</h2>
+      <p>
+        모든 판단 결과는 DOM에 <code>data-presentation</code>으로 남고, 개발
+        모드에서는 콘솔에 이유가 찍혀요. 누가 정했는지(기본 규칙 · 프로젝트 규칙 ·
+        컴포넌트 지정)도 함께요.
+      </p>
+      <pre><code>{`[protean] overlay(form) -> fullscreen [pack:app-first] size=compact input=touch
+// "입력 폼 다이얼로그를 전체 화면으로 열었어요.
+//  기본 규칙(app-first)이 정했고, 화면은 compact, 입력은 터치였어요."`}</code></pre>
+
+      <h2>판단의 재료: 트레이트</h2>
+      <p>
+        규칙 함수가 받는 <code>traits</code>는 지금 사용 환경을 몇 개의 이름으로
+        정리한 값이에요. 규칙과 오버라이드는 이 이름으로만 말해요 - 픽셀 숫자는
+        분류 단계 한 곳에만 있어요.
       </p>
       <div className="tableWrap">
         <table>
@@ -22,8 +73,8 @@ export default function TraitsAndPolicyKo() {
           <tbody>
             <tr>
               <td>size</td>
-              <td>compact (600px 미만) · medium (600~840px) · expanded (840px 초과)</td>
-              <td>창 너비로 정해요. 안드로이드의 화면 크기 등급과 같은 기준이고, 숫자는 바꿀 수 있어요.</td>
+              <td>compact (600px 미만) · medium (600~840px 미만) · expanded (840px 이상)</td>
+              <td>창 너비로 정해요. 안드로이드의 화면 크기 등급과 같은 기준이고, 경계 숫자는 <code>ProteanProvider</code>의 thresholds로 바꿀 수 있어요.</td>
             </tr>
             <tr>
               <td>input</td>
@@ -32,7 +83,7 @@ export default function TraitsAndPolicyKo() {
             </tr>
             <tr>
               <td>그 외</td>
-              <td>hover, reducedMotion, virtualKeyboard</td>
+              <td>hover · reducedMotion · virtualKeyboard</td>
               <td>호버 가능 여부, 동작 줄이기 설정, 화면 키보드가 떠 있는지예요.</td>
             </tr>
           </tbody>
@@ -40,37 +91,16 @@ export default function TraitsAndPolicyKo() {
       </div>
       <p>
         경계 근처에서 창 크기를 미세하게 조절해도 UI가 파르르 떨리지 않도록, 등급이
-        바뀌려면 경계를 16px 이상 넘어야 해요. 터치 노트북처럼 마우스와 터치가 둘 다
-        되는 기기는 구조는 마우스 기준으로, 버튼 크기만 터치 기준으로 맞춰요.
-      </p>
-
-      <h2>왜 화면 크기와 입력 수단을 함께 보나요?</h2>
-      <p>
-        화면 폭만으로는 &quot;폰&quot;과 &quot;좁게 줄인 데스크톱 창&quot;을 구분할 수
-        없어요. 그런데 두 사용자에게 자연스러운 UI는 달라요. 폰 사용자에게는 엄지로
-        닿기 좋은 바텀 시트, 마우스 사용자에게는 작은 모달이죠. 폭만 보는 방식(널리
-        쓰이는 수동 레시피 전부)은 이 둘을 같게 취급해요. Protean이 두 축을 보는 이유가
-        바로 이거예요.
-      </p>
-
-      <h2>규칙(정책)은 어떻게 생겼나요?</h2>
-      <p>규칙은 순수 함수예요. 같은 입력이면 언제나 같은 답이 나와요.</p>
-      <pre><code>{`환경 측정값           -- 창 크기, 미디어 쿼리 등
-      |
-판단 기준으로 정리     -- 픽셀이 존재하는 유일한 곳
-      |
-규칙에 대입           -- (기준, 역할) => 보여줄 모습
-      |
-판단 결과             -- { presentation, 누가 정했는지, 당시 기준 }`}</code></pre>
-      <p>
-        판단 결과가 평범한 값이라는 점이 중요해요. 그래서 서버에서도 계산할 수 있고,
-        단독으로 테스트할 수 있고, 콘솔에서 이유를 확인할 수 있어요.
+        바뀌려면 경계를 16px 이상 넘어야 해요. 터치 노트북처럼 둘 다 되는
+        기기(hybrid)는 패턴을 마우스 기준으로 판단해요. 화면 폭과 입력 수단을 함께
+        보는 이유는 <Link href="/ko/concepts/pattern-adaptation">상황에 맞는 패턴
+        선택</Link>에 있어요 - 좁은 데스크톱 창은 폰이 아니니까요.
       </p>
 
       <h2>기본 규칙: app-first</h2>
       <p>
-        기본 규칙은 누군가의 취향이 아니라, iOS와 안드로이드 앱들이 이미 검증한 관습을
-        옮긴 거예요.
+        기본 규칙은 누군가의 취향이 아니라, iOS와 안드로이드 앱들이 이미 검증한
+        관습을 옮긴 거예요.
       </p>
       <div className="tableWrap">
         <table>
@@ -83,33 +113,10 @@ export default function TraitsAndPolicyKo() {
             <tr><td>다이얼로그: contextual (맥락 메뉴)</td><td>바텀 시트</td><td>팝오버</td></tr>
             <tr><td>내비게이션</td><td>하단 탭 바 (마우스면 서랍)</td><td>medium은 레일, expanded는 사이드바</td></tr>
             <tr><td>주 행동 버튼</td><td>하단 고정 바 (마우스면 하단 붙박이)</td><td>본문 속 제자리</td></tr>
+            <tr><td>밀도</td><td colSpan={2}>터치는 touch, 마우스는 comfortable - 크기와 무관하게요. <Link href="/ko/concepts/density">밀도</Link> 참고</td></tr>
           </tbody>
         </table>
       </div>
-
-      <h2>규칙을 바꾸는 세 가지 방법</h2>
-      <p>가까운 것이 이겨요. 셋 다 픽셀이 아니라 기준 이름으로 말해요.</p>
-      <ol>
-        <li>
-          <strong>이 컴포넌트 하나만:</strong>{' '}
-          <code>presentation=&quot;sheet&quot;</code> 또는{' '}
-          <code>presentation=&#123;&#123; compact: &quot;fullscreen&quot; &#125;&#125;</code>
-        </li>
-        <li>
-          <strong>프로젝트 전체:</strong> <code>protean.config.ts</code>에서{' '}
-          <code>definePolicy</code>로 기본 규칙을 덮어써요. <code>defaults()</code>를
-          부르면 나머지는 기본 규칙에 맡길 수 있어요.
-        </li>
-        <li>
-          <strong>규칙 묶음 자체를 교체:</strong> app-first 대신 다른 규칙 묶음을 만들어
-          쓸 수 있어요.
-        </li>
-      </ol>
-      <p>
-        판단 결과에는 누가 정했는지(기본 규칙인지, 프로젝트 규칙인지, 컴포넌트
-        지정인지)가 함께 기록돼요. 디버깅할 때 &quot;왜 시트로 열렸지?&quot;를 추측할
-        필요가 없어요.
-      </p>
     </div>
   )
 }

@@ -17,7 +17,7 @@ export default function DensityKo() {
         <pre><code>{`:root { --target: 40px; }
 @media (pointer: coarse) { :root { --target: 48px; } }`}</code></pre>
         CSS는 렌더링을 아주 잘해요. protean이 맡는 건 CSS가 볼 수 없는 입력 -
-        사용자 설정, 패턴 결정, 컨테이너 문맥 - 으로 <strong>어떤 밀도를 선택할지</strong>
+        사용자 설정, 그리고 패턴 결정 - 으로 <strong>어떤 밀도를 선택할지</strong>
         정하는 일이에요.
       </div>
 
@@ -26,8 +26,8 @@ export default function DensityKo() {
         <table>
           <thead><tr><th>입력</th><th>결과</th><th>누가</th></tr></thead>
           <tbody>
-            <tr><td>정밀한 포인터</td><td>comfortable</td><td>CSS 미디어쿼리 - JavaScript 0</td></tr>
-            <tr><td>터치</td><td>touch</td><td>CSS 미디어쿼리 - JavaScript 0</td></tr>
+            <tr><td>정밀한 포인터</td><td>comfortable</td><td>CSS 미디어쿼리 - 페이지 콘텐츠는 JS 없이 적용돼요</td></tr>
+            <tr><td>터치</td><td>touch</td><td>CSS 미디어쿼리 - 페이지 콘텐츠는 JS 없이 적용돼요</td></tr>
             <tr><td>시트로 열림</td><td>언제나 touch</td><td>패턴 결합 - 프로필이 뭐든 시트는 엄지 표면이에요</td></tr>
             <tr><td>사용자 설정</td><td>전체 오버라이드</td><td><code>&lt;ProteanProvider density=&quot;compact&quot;&gt;</code></td></tr>
             <tr><td>compact</td><td>명시 선택으로만</td><td>기본 규칙은 절대 추측하지 않아요</td></tr>
@@ -50,8 +50,9 @@ export default function DensityKo() {
       <p>
         팝업(다이얼로그, 메뉴, 셀렉트, 툴팁)은 포털로 떠서 조상 스탬프가 닿지
         않아요. 그래서 <strong>컴포넌트가 자기 팝업에 <code>data-density</code>를 직접
-        찍어요</strong> - <code>data-presentation</code>과 똑같은 계약이에요. 여러분이
-        할 일은 없어요.
+        찍어요</strong> - <code>data-presentation</code>과 똑같은 계약이고, 여러분이
+        할 일은 없어요. 팝업은 어차피 여는 순간 판단이 일어나는 표면이라, 밀도
+        스탬프도 그 판단에 편승할 뿐 측정이나 리렌더가 추가되지 않아요.
       </p>
 
       <h2>토큰이 반응해요</h2>
@@ -80,28 +81,17 @@ export default function DensityKo() {
   padding: clamp(8px, 3cqi, var(--protean-target));
 }`}</code></pre>
 
-      <h2>모양(shape)은 왜 별도 결정이 아닌가요?</h2>
+      <h2>모양(shape)에는 왜 이런 게 없나요?</h2>
       <p>
-        기하 축의 다음 후보로 shape 도메인을 검토했고, 결론은{' '}
-        <strong>만들지 않는다</strong>예요. 이유는 간단해요: 모양은 이미 결정되고
-        있어요. 팝오버는 12px, 모달은 14px, 시트는 위 모서리만, 풀스크린은 0 -
-        전부 <code>data-presentation</code>에 키잉된 토큰({`--protean-shape`})이
-        표면 11곳을 빠짐없이 덮고 있어요.
-      </p>
-      <p>
-        밀도와의 차이가 판정 기준이에요. 밀도는 <strong>같은 presentation 안에서</strong>{' '}
-        입력 방식과 사용자 설정이 값을 갈랐어요 - 입력이 여럿이니 결정이고, 결정이라
-        도메인이 됐어요. 모양의 입력은 presentation 하나뿐이에요. 입력이 하나인 것은
-        결정이 아니라 대응표이고, 대응표의 집은 CSS예요. 남는 변주 축은 브랜드인데,
-        그건 토큰 리바인딩 한 줄이에요:
-      </p>
-      <pre><code>{`[data-presentation='modal'] { --protean-shape: 20px; }`}</code></pre>
-      <p>
-        패턴-모양 결합도 이미 공짜예요 - 모양이 presentation 스탬프에 키잉돼 있어서,
-        Protean이 패턴을 바꾸면 모양이 원자적으로 따라와요. 포털 문제도 같은 스탬프가
-        이미 풀었고요. 그러니 shape 도메인은 능력을 하나도 더하지 않으면서 표면만
-        늘려요. &quot;CSS와 토큰으로 충분한 문제는 억지로 기능으로 만들지 않는다&quot; -
-        이 페이지 맨 위의 원칙이 여기에도 적용된 거예요.
+        모서리 곡률은 이미 결정되고 있어요 - 팝오버 12px, 모달 14px, 시트는 위
+        모서리만, 풀스크린은 0. 전부 선택된 모습에 붙은 토큰이라, 입력이 모습
+        하나뿐이면 그건 결정이 아니라 대응표고, 대응표는 CSS가 맡는 게 맞아요.
+        브랜드가 바꾸고 싶으면 토큰 한 줄이면 돼요
+        (<code>[data-presentation=&apos;modal&apos;] {'{'} --protean-shape: 20px {'}'}</code>).
+        원리는 <Link href="/ko/concepts/pattern-adaptation">상황에 맞는 패턴
+        선택</Link>의 &quot;값은 모습을 따라가요&quot;에 있어요. 밀도가 별도의 결정인
+        이유는 반대예요 - <strong>같은 모습 안에서도</strong> 입력 수단과 사용자
+        설정이 값을 가르니까요.
       </p>
 
       <h2>왜 비례 축소가 아니라 단계인가요?</h2>
@@ -115,8 +105,8 @@ export default function DensityKo() {
 
       <p>
         직접 만져보려면 <Link href="/density-spike">밀도 데모</Link>에서 두 구현(protean
-        vs 수제)을 나란히 비교해 보세요. 판정 근거는{' '}
-        <code>explain()</code>이 말해줘요: <code>density -&gt; compact [instance]</code>.
+        vs 수제)을 나란히 비교해 보세요. 개발 모드 콘솔이 판정 근거를 말해줘요:{' '}
+        <code>density -&gt; compact [instance] size=expanded input=pointer</code>.
       </p>
     </div>
   )
