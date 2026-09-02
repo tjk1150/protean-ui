@@ -1,6 +1,7 @@
 'use client'
 
 import { Navigation, Screen } from '@protean-ui/react'
+import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import type { ReactNode } from 'react'
 
@@ -11,44 +12,70 @@ type NavEntry =
   | {
       readonly path: string
       readonly label: { ko: string; en: string }
-      readonly external?: boolean
     }
 
+/* Sidebar = the reading order. The pager below the content follows it. */
 const entries: readonly NavEntry[] = [
-  { path: '', label: { ko: '개요', en: 'Overview' } },
-  { path: '/getting-started', label: { ko: '시작하기', en: 'Getting started' } },
-  { path: '/why', label: { ko: '왜 만들었나요', en: 'Why this exists' } },
-  { group: { ko: '개념', en: 'Concepts' } },
-  { path: '/concepts/design-principles', label: { ko: '설계 원리', en: 'Design principles' } },
-  { path: '/concepts/traits-and-policy', label: { ko: '판단 기준과 규칙', en: 'Traits and policy' } },
-  { path: '/concepts/ssr', label: { ko: '서버 렌더링', en: 'Server rendering' } },
-  { path: '/concepts/composition', label: { ko: '함께 쓰기', en: 'Using together' } },
-  { path: '/concepts/coverage', label: { ko: '이걸로 다 되나요', en: 'Is it enough' } },
+  { group: { ko: '시작하기', en: 'Getting started' } },
+  { path: '', label: { ko: 'Protean UI란?', en: 'What is Protean UI?' } },
+  { path: '/getting-started', label: { ko: '10분 시작하기', en: 'Start in 10 minutes' } },
+  { group: { ko: '핵심 개념', en: 'Core concepts' } },
+  { path: '/concepts/pattern-adaptation', label: { ko: '상황에 맞는 패턴 선택', en: 'Pattern adaptation' } },
   { path: '/concepts/density', label: { ko: '밀도', en: 'Density' } },
-  { path: '/concepts/accessibility', label: { ko: '접근성', en: 'Accessibility' } },
-  { path: '/concepts/quality', label: { ko: '품질과 테스트', en: 'Quality and testing' } },
-  { group: { ko: '컴포넌트', en: 'Components' } },
+  { group: { ko: '패턴 컴포넌트', en: 'Pattern components' } },
   { path: '/components/dialog', label: { ko: 'Dialog', en: 'Dialog' } },
   { path: '/components/select', label: { ko: 'Select', en: 'Select' } },
   { path: '/components/menu', label: { ko: 'Menu', en: 'Menu' } },
   { path: '/components/navigation', label: { ko: 'Navigation', en: 'Navigation' } },
-  { path: '/components/screen', label: { ko: 'Screen', en: 'Screen' } },
   { path: '/components/list-detail', label: { ko: 'ListDetail', en: 'ListDetail' } },
-  { path: '/components/supporting-pane', label: { ko: 'SupportingPane', en: 'SupportingPane' } },
   { path: '/components/primary-action', label: { ko: 'PrimaryAction', en: 'PrimaryAction' } },
-  { path: '/components/actions', label: { ko: 'Actions', en: 'Actions' } },
   { path: '/components/tooltip', label: { ko: 'Tooltip', en: 'Tooltip' } },
-  { path: '/components/boundary', label: { ko: 'Boundary', en: 'Boundary' } },
-  { group: { ko: '라이브 데모', en: 'Live demos' } },
-  { path: '/delete-demo', label: { ko: '삭제 데모', en: 'The deletion demo' }, external: true },
-  { path: '/navigation-spike', label: { ko: '내비게이션 데모', en: 'Navigation spike' }, external: true },
-  { path: '/boundary-demo', label: { ko: '컨테이너 경계 데모', en: 'Container boundary' }, external: true },
-  { path: '/continuity-demo', label: { ko: '전환 연속성 데모', en: 'Transition continuity' }, external: true },
-  { path: '/list-detail-demo', label: { ko: '리스트-디테일 데모', en: 'List-detail' }, external: true },
-  { path: '/density-spike', label: { ko: '밀도 데모', en: 'Density demo' }, external: true },
-  { path: '/screen-demo', label: { ko: '화면 데모', en: 'Screen demo' }, external: true },
-  { path: '/ssr-proof', label: { ko: 'SSR 증명', en: 'SSR proof' }, external: true },
+  { group: { ko: '레이아웃 도우미 - CSS 중심', en: 'Layout helpers - CSS-driven' } },
+  { path: '/layout/screen', label: { ko: 'Screen', en: 'Screen' } },
+  { path: '/layout/actions', label: { ko: 'Actions', en: 'Actions' } },
+  { path: '/layout/supporting-pane', label: { ko: 'SupportingPane', en: 'SupportingPane' } },
+  { group: { ko: '사용 가이드', en: 'Guides' } },
+  { path: '/guides/customize-decisions', label: { ko: '적응 결과 맞춤 설정', en: 'Customize the decisions' } },
+  { path: '/guides/composition', label: { ko: '함께 쓰기', en: 'Using together' } },
+  { path: '/guides/accessibility', label: { ko: '접근성', en: 'Accessibility' } },
+  { group: { ko: '심화', en: 'Advanced' } },
+  { path: '/advanced/server-rendering', label: { ko: '서버 렌더링', en: 'Server rendering' } },
+  { path: '/advanced/container-boundary', label: { ko: '컨테이너 기준 적응', en: 'Container-scoped adaptation' } },
+  { group: { ko: '프로젝트', en: 'Project' } },
+  { path: '/about/scope', label: { ko: '제공 범위와 비목표', en: 'Scope and non-goals' } },
+  { path: '/about/status', label: { ko: '품질·지원 상태', en: 'Quality and support status' } },
+  { path: '/about/why', label: { ko: '왜 만들었나요', en: 'Why this exists' } },
 ]
+
+const pages = entries.filter((entry): entry is Exclude<NavEntry, { group: object }> => 'path' in entry)
+
+function Pager({ lang, pathname }: { lang: DocsLang; pathname: string }) {
+  const index = pages.findIndex((page) => pathname === `/${lang}${page.path}`)
+  if (index === -1) return null
+  const prev = index > 0 ? pages[index - 1] : null
+  const next = index < pages.length - 1 ? pages[index + 1] : null
+  if (!prev && !next) return null
+  return (
+    <nav className="docsPager" aria-label={lang === 'ko' ? '문서 순서' : 'Document order'}>
+      {prev ? (
+        <Link href={`/${lang}${prev.path}`} rel="prev">
+          <span>{lang === 'ko' ? '이전' : 'Previous'}</span>
+          {prev.label[lang]}
+        </Link>
+      ) : (
+        <span />
+      )}
+      {next ? (
+        <Link href={`/${lang}${next.path}`} rel="next" data-next>
+          <span>{lang === 'ko' ? '다음' : 'Next'}</span>
+          {next.label[lang]}
+        </Link>
+      ) : (
+        <span />
+      )}
+    </nav>
+  )
+}
 
 export function DocsShell({ lang, children }: { lang: DocsLang; children: ReactNode }) {
   const pathname = usePathname()
@@ -73,14 +100,14 @@ export function DocsShell({ lang, children }: { lang: DocsLang; children: ReactN
         >
           {entries.map((entry) =>
             'group' in entry ? (
-              <li key={entry.group.en} data-part="group-label" aria-hidden="true">
+              <li key={entry.group.en} data-part="group-label">
                 {entry.group[lang]}
               </li>
             ) : (
               <Navigation.Item
                 key={entry.path}
-                href={entry.external ? entry.path : `/${lang}${entry.path}`}
-                current={!entry.external && pathname === `/${lang}${entry.path}`}
+                href={`/${lang}${entry.path}`}
+                current={pathname === `/${lang}${entry.path}`}
               >
                 {entry.label[lang]}
               </Navigation.Item>
@@ -88,7 +115,10 @@ export function DocsShell({ lang, children }: { lang: DocsLang; children: ReactN
           )}
         </Navigation.Root>
       </Screen.Navigation>
-      <Screen.Content className="docsContent">{children}</Screen.Content>
+      <Screen.Content className="docsContent">
+        {children}
+        <Pager lang={lang} pathname={pathname} />
+      </Screen.Content>
     </Screen.Root>
   )
 }

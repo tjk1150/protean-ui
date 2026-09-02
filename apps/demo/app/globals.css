@@ -259,3 +259,39 @@ a {
     animation: protean-fade-in 150ms ease-out;
   }
 }
+
+/* 문서 하단 이전/다음 페이저 */
+.docsPager {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  margin: 48px auto 0;
+  max-width: 720px;
+  padding-top: 20px;
+  border-top: 1px solid color-mix(in srgb, CanvasText 14%, Canvas);
+}
+.docsPager a {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  max-width: 48%;
+  padding: 10px 14px;
+  border: 1px solid color-mix(in srgb, CanvasText 16%, Canvas);
+  border-radius: 10px;
+  text-decoration: none;
+  color: inherit;
+  font-weight: 600;
+  font-size: 0.92rem;
+}
+.docsPager a span {
+  font-size: 0.72rem;
+  font-weight: 500;
+  opacity: 0.6;
+}
+.docsPager a[data-next] {
+  margin-left: auto;
+  text-align: right;
+}
+.docsPager a:hover {
+  border-color: color-mix(in srgb, CanvasText 34%, Canvas);
+}
