@@ -1,6 +1,6 @@
 {
   "name": "@protean-ui/css",
-  "version": "0.1.0-alpha.6",
+  "version": "0.1.0-alpha.7",
   "description": "Presentation-scoped design tokens and the reference stylesheet for Protean UI",
   "license": "MIT",
   "repository": {
