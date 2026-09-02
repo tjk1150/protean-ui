@@ -3,7 +3,10 @@
    The one governing principle: values follow the presentation, never the
    viewport. This file is the whole vocabulary - presentations SET tokens
    here; structural rules (reference.css, or your own) CONSUME them. There
-   is deliberately not a single media query in this file.
+   is deliberately not a single SIZE media query in this file - the one
+   media query below reads pointer capability, an environment trait CSS
+   can see natively: it is the density default, and it keeps the automatic
+   path at zero JavaScript.
 
    Import it alone to keep the vocabulary and write your own structure:
 
@@ -24,9 +27,46 @@
     --protean-accent: AccentColor;
     --protean-scrim: rgb(0 0 0 / 0.4);
     --protean-danger: #b3261e;
-    --protean-target: 44px;
     --protean-motion-pop: 150ms;
     --protean-motion-sheet: 220ms;
+
+    /* Density: a profile, not a value. Precise pointers read comfortable. */
+    --protean-target: 40px;
+    --protean-row: 36px;
+  }
+
+  /* Touch spreads out - decided by CSS alone, no JavaScript. */
+  @media (pointer: coarse) {
+    :root {
+      --protean-target: 48px;
+      --protean-row: 44px;
+    }
+  }
+
+  /* An explicit density stamp (a user setting via <ProteanProvider density>,
+     or your own data-density on any subtree) beats the pointer default.
+     Portaled popups stamp their own - ancestors cannot reach them. */
+  [data-density='compact'] {
+    --protean-target: 32px;
+    --protean-row: 28px;
+  }
+
+  [data-density='comfortable'] {
+    --protean-target: 40px;
+    --protean-row: 36px;
+  }
+
+  [data-density='touch'] {
+    --protean-target: 48px;
+    --protean-row: 44px;
+  }
+
+  /* Pattern coupling: a sheet is a thumb surface no matter the profile. */
+  [data-scope='overlay'][data-part='popup'][data-presentation='sheet'],
+  [data-scope='menu'][data-part='popup'][data-presentation='sheet'],
+  [data-scope='select'][data-part='popup'][data-presentation='sheet'] {
+    --protean-target: 48px;
+    --protean-row: 44px;
   }
 
   /* Shape and density follow the overlay presentation.

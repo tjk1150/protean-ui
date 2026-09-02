@@ -11,7 +11,7 @@ import {
 } from '@protean-ui/core'
 import * as React from 'react'
 import { BoundaryContext } from '../boundary'
-import { useProteanContext, useReadTraits } from '../provider'
+import { useDensityProfile, useProteanContext, useReadTraits } from '../provider'
 
 export interface SelectOption {
   readonly value: string
@@ -240,6 +240,7 @@ export interface SelectContentProps {
 }
 
 export function SelectContent({ children }: SelectContentProps): React.JSX.Element | null {
+  const density = useDensityProfile()
   const { decision, ariaLabel, searchable, searchPlaceholder, emptyLabel } =
     useSelectLocalContext('Content')
   const boundary = React.useContext(BoundaryContext)
@@ -278,6 +279,7 @@ export function SelectContent({ children }: SelectContentProps): React.JSX.Eleme
             data-scope="select"
             data-part="popup"
             data-presentation={presentation}
+            data-density={density.presentation}
             {...(ariaLabel ? { 'aria-label': ariaLabel } : {})}
             {...containedAttr}
           >
@@ -335,6 +337,7 @@ export function SelectContent({ children }: SelectContentProps): React.JSX.Eleme
           data-scope="select"
           data-part="popup"
           data-presentation={presentation}
+            data-density={density.presentation}
           {...containedAttr}
         >
           <BaseSelect.List data-scope="select" data-part="list">

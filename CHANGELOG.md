@@ -2,6 +2,32 @@
 
 All four packages (`protean-ui`, `@protean-ui/react`, `@protean-ui/core`, `@protean-ui/css`) are versioned and released together. Pre-alpha: APIs move without notice until 0.1.0.
 
+## 0.1.0-alpha.8 - 2026-09-02
+
+- **Density** - the sixth policy domain, and the first geometry semantic:
+  `compact | comfortable | touch`. Protean never computes pixels; it decides
+  which profile applies (touch input reads touch, a precise pointer reads
+  comfortable, and the denser compact is reachable only by explicit choice) and
+  tokens carry the values. The automatic path is pure CSS - the pointer default
+  lives in a `(pointer: coarse)` media query in `tokens.css`, zero JavaScript.
+- `<ProteanProvider density>` carries a user's density setting (the Gmail-style
+  option) as an instance override; `useDensityProfile()` exposes the decision.
+- **Portaled surfaces stamp their own `data-density`** (dialog, menu, select,
+  tooltip popups) - ancestor-based selectors can never reach a portal, so the
+  components carry the profile themselves, exactly like `data-presentation`.
+- New tokens `--protean-target` (32/40/48) and `--protean-row` (28/36/44)
+  respond to the profile; sheet popups force touch metrics whatever the profile
+  (a sheet is a thumb surface). This also fixes a real defect: the reference
+  chrome previously served touch-sized 44px targets to every environment -
+  desktop menus now sit desktop-dense.
+- Honest boundary, stated in the docs: app-wide density keyed only to screen or
+  pointer needs three lines of CSS, not Protean. Protean owns the decision when
+  the inputs are things CSS cannot see - a user setting, the pattern decision,
+  container context.
+- Decision table grows to 72 cells; the density demo (`/density-spike`)
+  compares the Protean wiring against an honest hand-rolled implementation side
+  by side.
+
 ## 0.1.0-alpha.7 - 2026-09-02
 
 - **Controlled open state everywhere.** `Menu.Root`, `Select.Root`, `Tooltip.Root`, and `SupportingPane.Root` now accept `open` / `defaultOpen` / `onOpenChange`, matching Dialog - wire any openable surface to routing, analytics, or an external close. Decisions still happen at open time, controlled or not; a hint opened via a controlled prop appears only after hydration (the mount gate is unchanged).

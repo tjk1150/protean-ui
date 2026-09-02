@@ -10,7 +10,7 @@ import {
   type InstanceOverride
 } from '@protean-ui/core'
 import * as React from 'react'
-import { useProteanContext, useTraits } from '../provider'
+import { useDensityProfile, useProteanContext, useTraits } from '../provider'
 
 /* A hint on a trigger. Where hover exists it is a classic tooltip; where it
    does not (touch), the tooltip pattern itself cannot fire, so it becomes a
@@ -145,6 +145,7 @@ export interface TooltipContentProps {
 
 export function TooltipContent({ className, children }: TooltipContentProps): React.JSX.Element | null {
   const { decision } = useTooltipLocalContext('Content')
+  const density = useDensityProfile()
 
   if (!decision) return null
 
@@ -153,7 +154,8 @@ export function TooltipContent({ className, children }: TooltipContentProps): Re
     className,
     'data-scope': 'tooltip',
     'data-part': 'popup',
-    'data-presentation': presentation
+    'data-presentation': presentation,
+    'data-density': density.presentation
   } as const
 
   if (presentation === 'tooltip') {

@@ -1,6 +1,7 @@
 'use client'
 
 import { Dialog as BaseDialog } from '@base-ui/react/dialog'
+import { useDensityProfile } from '../provider'
 import { Drawer as BaseDrawer } from '@base-ui/react/drawer'
 import { Popover as BasePopover } from '@base-ui/react/popover'
 import type { OverlayPresentation } from '@protean-ui/core'
@@ -58,6 +59,7 @@ function ModalPresentation({
   contentHost,
   children
 }: OverlayPresentationProps): React.JSX.Element {
+  const density = useDensityProfile()
   const contained = portalContainer !== undefined
   return (
     <BaseDialog.Root open={open} onOpenChange={(next) => onOpenChange(next)}>
@@ -65,6 +67,7 @@ function ModalPresentation({
         <BaseDialog.Backdrop {...dataAttributes(decision.presentation, 'backdrop', contained)} />
         <BaseDialog.Popup
           {...dataAttributes(decision.presentation, 'popup', contained)}
+          data-density={density.presentation}
           className={className}
           {...(alert ? { role: 'alertdialog' as const } : {})}
           {...(describedBy ? { 'aria-describedby': describedBy } : {})}
@@ -98,6 +101,7 @@ function SheetPresentation({
   contentHost,
   children
 }: OverlayPresentationProps): React.JSX.Element {
+  const density = useDensityProfile()
   const contained = portalContainer !== undefined
   return (
     <BaseDrawer.Root open={open} onOpenChange={(next) => onOpenChange(next)} swipeDirection="down">
@@ -106,6 +110,7 @@ function SheetPresentation({
         <BaseDrawer.Viewport {...dataAttributes(decision.presentation, 'viewport', contained)}>
           <BaseDrawer.Popup
             {...dataAttributes(decision.presentation, 'popup', contained)}
+          data-density={density.presentation}
             className={className}
             {...(alert ? { role: 'alertdialog' as const } : {})}
             {...(describedBy ? { 'aria-describedby': describedBy } : {})}
@@ -141,12 +146,14 @@ function PopoverPresentation({
   contentHost,
   children
 }: OverlayPresentationProps): React.JSX.Element {
+  const density = useDensityProfile()
   return (
     <BasePopover.Root open={open} onOpenChange={(next) => onOpenChange(next)}>
       <BasePopover.Portal>
         <BasePopover.Positioner anchor={triggerRef} side="bottom" align="start" sideOffset={8}>
           <BasePopover.Popup
             {...dataAttributes(decision.presentation, 'popup')}
+          data-density={density.presentation}
             className={className}
             {...(alert ? { role: 'alertdialog' as const } : {})}
             {...(describedBy ? { 'aria-describedby': describedBy } : {})}

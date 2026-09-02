@@ -24,6 +24,7 @@ const entries: readonly NavEntry[] = [
   { path: '/concepts/ssr', label: { ko: '서버 렌더링', en: 'Server rendering' } },
   { path: '/concepts/composition', label: { ko: '함께 쓰기', en: 'Using together' } },
   { path: '/concepts/coverage', label: { ko: '이걸로 다 되나요', en: 'Is it enough' } },
+  { path: '/concepts/density', label: { ko: '밀도', en: 'Density' } },
   { path: '/concepts/accessibility', label: { ko: '접근성', en: 'Accessibility' } },
   { path: '/concepts/quality', label: { ko: '품질과 테스트', en: 'Quality and testing' } },
   { group: { ko: '컴포넌트', en: 'Components' } },
@@ -44,6 +45,7 @@ const entries: readonly NavEntry[] = [
   { path: '/boundary-demo', label: { ko: '컨테이너 경계 데모', en: 'Container boundary' }, external: true },
   { path: '/continuity-demo', label: { ko: '전환 연속성 데모', en: 'Transition continuity' }, external: true },
   { path: '/list-detail-demo', label: { ko: '리스트-디테일 데모', en: 'List-detail' }, external: true },
+  { path: '/density-spike', label: { ko: '밀도 데모', en: 'Density demo' }, external: true },
   { path: '/screen-demo', label: { ko: '화면 데모', en: 'Screen demo' }, external: true },
   { path: '/ssr-proof', label: { ko: 'SSR 증명', en: 'SSR proof' }, external: true },
 ]

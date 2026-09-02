@@ -108,10 +108,10 @@ Numbers from the repository, not projections:
 
 - 73% less application code at the overlay call site (55 lines to 15 - measured against
   the hand-written recipe, not against wrapper libraries).
-- Bundle: 7.0KB gzip for react with all ten roles, 1.2KB for core (excluding Base
-  UI). One role via its public subpath (`@protean-ui/react/dialog`) is 3.0KB, and that
+- Bundle: 7.1KB gzip for react with all ten roles, 1.2KB for core (excluding Base
+  UI). One role via its public subpath (`@protean-ui/react/dialog`) is 3.1KB, and that
   tree-shakeability is enforced by the release gate as a contract.
-- 229 library tests. The default policy is verified as an exhaustive 63-cell decision
+- 245 library tests. The default policy is verified as an exhaustive 72-cell decision
   table, alongside boundary-value, state-transition, and negative suites; a release gate
   (`pnpm gate`) blocks every publish - a wrong decision cell is a blocked release, not a
   statistic.

@@ -3,12 +3,14 @@ import {
   appFirst,
   asPolicy,
   decideHint,
+  decideDensity,
   decideListDetail,
   decideNavigation,
   decideOverlay,
   decidePrimaryAction,
   type ActionPresentation,
   type HintPresentation,
+  type DensityProfile,
   type ListDetailPresentation,
   type InputProfile,
   type NavigationPresentation,
@@ -82,6 +84,15 @@ const ACTION_TABLE: Record<SizeClass, Record<InputProfile, ActionPresentation>> 
   expanded: { touch: 'inline', pointer: 'inline', hybrid: 'inline' }
 }
 
+/* Density branches on input only: touch spreads out, a pointer reads
+   comfortable, and the denser 'compact' is reachable only by explicit
+   choice - never guessed. */
+const DENSITY_TABLE: Record<SizeClass, Record<InputProfile, DensityProfile>> = {
+  compact: { touch: 'touch', pointer: 'comfortable', hybrid: 'comfortable' },
+  medium: { touch: 'touch', pointer: 'comfortable', hybrid: 'comfortable' },
+  expanded: { touch: 'touch', pointer: 'comfortable', hybrid: 'comfortable' }
+}
+
 describe('app-first pack decision table', () => {
   for (const role of Object.keys(OVERLAY_TABLE) as OverlayRole[]) {
     for (const size of SIZES) {
@@ -109,6 +120,11 @@ describe('app-first pack decision table', () => {
       it(`hint ${size} x ${input} -> ${HINT_TABLE[size][input]}`, () => {
         expect(decideHint(policy, traits(size, input)).presentation).toBe(
           HINT_TABLE[size][input]
+        )
+      })
+      it(`density ${size} x ${input} -> ${DENSITY_TABLE[size][input]}`, () => {
+        expect(decideDensity(policy, traits(size, input)).presentation).toBe(
+          DENSITY_TABLE[size][input]
         )
       })
       it(`listDetail ${size} x ${input} -> ${LIST_DETAIL_TABLE[size][input]}`, () => {
