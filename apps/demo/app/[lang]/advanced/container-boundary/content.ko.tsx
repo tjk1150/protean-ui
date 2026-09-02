@@ -20,7 +20,7 @@ export default function BoundaryKo() {
 
       <div className="callout">
         <Link href="/boundary-demo">컨테이너 경계 데모</Link>에서 직접 확인해 보세요.
-        같은 다이얼로그가 페이지에서는 모달로, 420px 패널 안에서는 시트로 열려요 -
+        같은 다이얼로그가 페이지에서는 모달로, 420px 패널 안에서는 compact 판정을 받아요 - 어떤 모습이 되는지는 여전히 규칙이 정해요(기본 규칙에서 마우스 환경의 입력 폼은 compact여도 모달이고, 데모의 시트는 규칙을 그렇게 정했기 때문이에요) -
         같은 창, 같은 규칙인데 선언한 위치만 다른 거예요.
       </div>
 

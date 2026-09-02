@@ -10,6 +10,13 @@ export default function ScreenDocPage() {
         Server Components.
       </p>
 
+      <div className="callout">
+        This is a <strong>CSS-driven layout helper</strong>: it provides structure and
+        markup without judging the situation, and the responsiveness belongs to the
+        reference stylesheet (or your own CSS). Its default look applies inside an
+        element carrying the <code>protean-defaults</code> class.
+      </div>
+
       <pre><code>{`<Screen.Root>
   <Screen.Navigation>
     <Navigation.Root aria-label="Primary">...</Navigation.Root>

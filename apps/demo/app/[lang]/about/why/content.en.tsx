@@ -105,7 +105,7 @@ export default function WhyPage() {
         pattern decisions.
       </div>
       <p>
-        How this becomes code: <Link href="/en/concepts/design-principles">design
+        How this becomes code: <Link href="/en/concepts/pattern-adaptation">design
         principles</Link>. Try it in ten minutes:{' '}
         <Link href="/en/getting-started">getting started</Link>.
       </p>

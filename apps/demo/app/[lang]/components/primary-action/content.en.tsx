@@ -32,8 +32,8 @@ export default function PrimaryActionDocPage() {
         <table>
           <thead><tr><th>Prop</th><th>Type</th><th>Notes</th></tr></thead>
           <tbody>
-            <tr><td>presentation</td><td>presentation | &#123; sizeClass: presentation &#125;</td><td>action-bar | sticky-footer | inline</td></tr>
-            <tr><td>...button props</td><td>type, disabled, onClick, form, ...</td><td>the inner element is a real button; submit wiring and loading states pass through untouched</td></tr>
+            <tr><td>presentation</td><td>presentation | &#123; sizeClass: presentation &#125;</td><td>pick from action-bar · sticky-footer · inline. Note: the override changes the decision and the DOM stamp. The reference stylesheet derives its default look from media queries, so to make an override visible, key your own CSS off the stamp - it is a data contract.</td></tr>
+            <tr><td>...button props</td><td>type, disabled, onClick, form, ...</td><td>the inner element is a real button, so standard button attributes (type, disabled, form wiring) pass through untouched</td></tr>
           </tbody>
         </table>
       </div>

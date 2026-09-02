@@ -1,3 +1,4 @@
+import Link from 'next/link'
 import { TooltipDemo } from './tooltip-demo'
 
 export default function TooltipPage() {
@@ -32,13 +33,13 @@ export default function TooltipPage() {
         </table>
       </div>
 
-      <h2>A new policy domain: hint</h2>
+      <h2>To change the judgment</h2>
       <p>
-        This decision is not an overlay role - it is its own policy domain,{' '}
-        <code>hint</code>. The default is &quot;tooltip where hover exists, popover
-        where it does not&quot;, overridable in your policy file
-        (<code>hint: ({'{ traits, defaults }'}) =&gt; ...</code>) or per instance via{' '}
-        <code>presentation</code>.
+        The default is &quot;tooltip where hover exists, tap-toggled popover where it
+        does not&quot;. Override one component with <code>presentation</code>, or
+        change the product-wide convention by overriding the <code>hint</code> entry
+        in your rules file - the same recipe as{' '}
+        <Link href="/en/guides/customize-decisions">Customize the decisions</Link>.
       </p>
 
       <div className="callout">

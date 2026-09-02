@@ -82,9 +82,11 @@ export default function SelectDocPage() {
   <Select.Content />
 </Select.Root>`}</code></pre>
       <p>
-        In searchable mode the list renders from <code>items</code>, so leave{' '}
-        <code>Select.Content</code> empty - Base UI has to own the filtered list and
-        the keyboard highlight together for them to stay correct.
+        In searchable mode the backend switches from Base UI&apos;s Select to its{' '}
+        <strong>Combobox</strong> - the proper accessible pattern binding a filter
+        input to a list. The list therefore renders from <code>items</code>; leave{' '}
+        <code>Select.Content</code> empty, since Base UI must manage the filtered
+        list and keyboard highlight together to stay accurate.
       </p>
     </div>
   )

@@ -1,57 +1,72 @@
-export default function QualityPage() {
+export default function StatusPage() {
   return (
     <div className="doc">
-      <h1>Quality and testing</h1>
+      <h1>Quality and support status</h1>
       <p className="lede">
-        How this library decides that it works. The frame is borrowed from the
-        standards: what quality means (ISO/IEC 25010), how to test for it
-        (ISO/IEC/IEEE 29119), and what passing means (the release gate).
+        Figures and support claims drift between releases, so they live on exactly one
+        page, with a date. When another page&apos;s number disagrees, this page is
+        right.
       </p>
+      <div className="callout">
+        <strong>As of 2026-09-02, 0.1.0-alpha.9.</strong> Pre-alpha - APIs move
+        without notice.
+      </div>
 
-      <h2>How it is tested</h2>
-      <p>
-        Suites are derived from named design techniques rather than intuition - each
-        technique dictates exactly which points must be covered.
-      </p>
+      <h2>Measured on that date</h2>
       <div className="tableWrap">
         <table>
-          <thead><tr><th>Technique</th><th>In Protean</th></tr></thead>
+          <thead><tr><th>Item</th><th>Value</th></tr></thead>
           <tbody>
-            <tr><td>Decision table</td><td>the app-first pack verified as an exhaustive 72-cell table - 3 overlay roles x 3 sizes x 3 inputs, plus navigation, primary action, hint, list-detail, and density. Editing the policy means consciously editing the table; the table is the documentation.</td></tr>
-            <tr><td>Boundary value analysis</td><td>size thresholds (599/600, 839/840), hysteresis in both directions (583/584, 615/616, 823/824, 855/856), the keyboard threshold (649/650), bar capacity (5/6) - one pixel on each side of every boundary.</td></tr>
-            <tr><td>State transition</td><td>decision pinned while open, re-decided at the next open; drawers and overflow panels closing when their presentation leaves.</td></tr>
-            <tr><td>Negative</td><td>double-clicked triggers, values missing from items, unmeasurable boundaries, browsers without visualViewport - odd usage must not break anything.</td></tr>
-            <tr><td>Scenario</td><td>a real 24-screen app migration that keeps its 699 existing tests green - the end-to-end basis.</td></tr>
+            <tr><td>Library tests</td><td>245 (decision engine 123 + React 122) - all must pass to publish</td></tr>
+            <tr><td>Default-rule exhaustion</td><td>a 72-cell decision table - 3 sizes x 3 inputs across 3 overlay roles, navigation, primary action, hint, list-detail, and density</td></tr>
+            <tr><td>Real-app scenario</td><td>a 24-screen app&apos;s 699 existing tests all green after migration</td></tr>
+            <tr><td>Bundle (gzip, excluding Base UI)</td><td>react 7.1KB whole · 3.1KB for a single role · decision engine 1.3KB - budgets (8 / 3.5 / 2KB) are gate-enforced</td></tr>
+            <tr><td>Accessibility scan</td><td>0 violations across navigation presentations and the fullscreen dialog - context on the accessibility page</td></tr>
           </tbody>
         </table>
       </div>
 
-      <h2>The pass line: the release gate</h2>
+      <h2>How it is tested</h2>
       <p>
-        Every version published to npm passes one command - <code>pnpm gate</code>.
-        Machine-checkable criteria run automatically; human ones print as a checklist.
+        Testing borrows the framing of ISO/IEC 25010 and ISO/IEC/IEEE 29119 and uses
+        named techniques: decision-table exhaustion, boundary values (599/600 and
+        839/840, anti-shiver in both directions), state transitions (pinned while
+        open, re-judged on reopen), negative inputs (double clicks, absent values,
+        unmeasurable containers), and the real-app integration scenario.
       </p>
-      <ul>
-        <li>100% of library tests (currently 245) plus a clean workspace typecheck</li>
-        <li>all 72 decision-table cells - one wrong cell is a blocked release, not a statistic</li>
-        <li>the 699-test real-app scenario suite green</li>
-        <li>bundle budgets: all roles under 8KB gzip (7.1 today); one role via its public subpath under 3.5KB tree-shaken (3.1 today - shakeability is a contract); core under 2KB (1.2)</li>
-        <li>zero overlay markup in the deployed site&apos;s server HTML (measured with curl)</li>
-        <li>manual checklist: axe, CLS 0, the browser matrix, docs-match-reality</li>
-      </ul>
-      <div className="callout">
-        <strong>Why no &quot;95% pass rate&quot;?</strong> A wrong decision cell or an
-        SSR regression is not the kind of problem a percentage should dilute. A failure
-        blocks the release; there are no exceptions.
+      <p>
+        Every version that reaches npm passes one release-gate command - everything in
+        the table above plus a workspace typecheck and a curl-measured check that the
+        deployed site&apos;s server HTML carries zero overlay markup. One wrong cell
+        blocks the release; publishing itself runs from CI on a tag push, with signed
+        provenance attached automatically.
+      </p>
+
+      <h2>Verified where</h2>
+      <div className="tableWrap">
+        <table>
+          <thead><tr><th>Environment</th><th>Status</th></tr></thead>
+          <tbody>
+            <tr><td>Chrome (desktop, several widths)</td><td>checked every release</td></tr>
+            <tr><td>Real WebKit in the iOS Simulator - iPhone 16 Pro, iPad Pro</td><td>tab bar, overflow, and rail verified</td></tr>
+            <tr><td>macOS Safari · Firefox</td><td>spot-checked - a full pass remains</td></tr>
+            <tr><td>Android · physical devices</td><td>not yet - on the roadmap</td></tr>
+          </tbody>
+        </table>
       </div>
 
-      <h2>Verified so far, and what remains</h2>
-      <p>
-        Chrome at several widths and real WebKit in the iOS Simulator (the bar and
-        overflow panel on iPhone 16 Pro, the rail on iPad Pro) are checked each release.
-        macOS Safari and Firefox are spot-checked; Android and physical hardware remain -
-        stated as such in the roadmap.
-      </p>
+      <h2>Support limits, stated plainly</h2>
+      <ul>
+        <li>React 18+ is declared and designed for (ref forwarding, for one), but execution testing runs on React 19. If 18 misbehaves, file an issue - reproduction goes first.</li>
+        <li>Tablet differentiation in the default pattern rules waits for real usage data - no speculative defaults.</li>
+        <li>The virtual keyboard is collected but not yet consulted by the defaults.</li>
+        <li>One maintainer today - offset by the gate, CI, and contribution docs, so the project&apos;s state lives in the repository rather than in one head.</li>
+      </ul>
+      <div className="callout">
+        <strong>Why no &quot;95% pass rate&quot;?</strong> A wrong decision cell or a
+        server-rendering regression is not a problem percentages may dilute. Failure
+        blocks; there are no exceptions.
+      </div>
     </div>
   )
 }

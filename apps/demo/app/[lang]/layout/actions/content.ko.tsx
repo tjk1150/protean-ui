@@ -10,6 +10,12 @@ export default function ActionsKo() {
         그 자리에서 펼쳐져요. 문서 편집기 상단 바, 카드의 도구 줄 같은 곳에 써요.
       </p>
 
+      <div className="callout">
+        이 컴포넌트는 <strong>CSS 중심 레이아웃 도우미</strong>예요. 상황 판단 없이
+        구조와 마크업을 제공하고, 반응은 참고 스타일시트(또는 여러분의 CSS)가 맡아요.
+        기본 모습은 <code>protean-defaults</code> 클래스를 붙인 요소 안에서 적용돼요.
+      </div>
+
       <div className="example">
         <span className="exampleLabel">직접 해 보세요 - 창을 600px보다 좁혀 보세요</span>
         <ActionsDemo

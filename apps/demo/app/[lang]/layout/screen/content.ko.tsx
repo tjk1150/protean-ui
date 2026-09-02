@@ -10,6 +10,12 @@ export default function ScreenKo() {
         컴포넌트 안에서도 그대로 써요.
       </p>
 
+      <div className="callout">
+        이 컴포넌트는 <strong>CSS 중심 레이아웃 도우미</strong>예요. 상황 판단 없이
+        구조와 마크업을 제공하고, 반응은 참고 스타일시트(또는 여러분의 CSS)가 맡아요.
+        기본 모습은 <code>protean-defaults</code> 클래스를 붙인 요소 안에서 적용돼요.
+      </div>
+
       <pre><code>{`<Screen.Root>
   <Screen.Navigation>
     <Navigation.Root aria-label="주 메뉴">...</Navigation.Root>

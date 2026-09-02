@@ -42,7 +42,7 @@ export default function MenuKo() {
         <table>
           <thead><tr><th>속성</th><th>타입</th><th>설명</th></tr></thead>
           <tbody>
-            <tr><td>Root: presentation</td><td>모습 지정</td><td>이 메뉴만 다르게 열고 싶을 때 지정해요.</td></tr>
+            <tr><td>Root: presentation</td><td>&quot;popover&quot; | &quot;sheet&quot; | &#123; 화면등급: 모습 &#125;</td><td>이 메뉴만 다르게 열고 싶을 때 지정해요. 메뉴가 의미 있게 그리는 모습은 팝오버와 시트 둘이에요.</td></tr>
             <tr><td>Root: open / defaultOpen / onOpenChange</td><td></td><td>열림 상태를 직접 관리할 수도, 맡길 수도 있어요.</td></tr>
             <tr><td>Trigger: onClick · disabled ...</td><td></td><td>버튼 속성이 전부 통과해요.</td></tr>
             <tr><td>Trigger: render</td><td>ReactElement</td><td>다른 요소에 트리거 행동을 합쳐요 - 힌트 달린 버튼 패턴은 함께 쓰기 문서에 있어요.</td></tr>

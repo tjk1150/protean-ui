@@ -80,9 +80,10 @@ export default function SelectKo() {
   <Select.Content />
 </Select.Root>`}</code></pre>
       <p>
-        검색 모드에서는 목록이 <code>items</code>에서 그려져서{' '}
-        <code>Select.Content</code>를 비워 두면 돼요. Base UI가 걸러진 목록과 키보드
-        하이라이트를 함께 관리해야 정확하거든요.
+        검색 모드에서는 뒷단이 Base UI의 Select가 아니라 <strong>Combobox</strong>로
+        바뀌어요 - 검색 입력과 목록을 묶는 정식 접근성 패턴이에요. 그래서 목록이{' '}
+        <code>items</code>에서 그려지고 <code>Select.Content</code>는 비워 두면 돼요.
+        걸러진 목록과 키보드 하이라이트를 Base UI가 함께 관리해야 정확하거든요.
       </p>
     </div>
   )

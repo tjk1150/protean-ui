@@ -79,7 +79,7 @@ export default function DialogKo() {
         <code>Dialog.Trigger</code>와 <code>Dialog.Close</code>는 연결이 끝나 있는
         평범한 버튼이에요. 버튼에 쓰는 속성을 그대로 받고, 트리거는{' '}
         <code>render</code>로 다른 요소(스타일드 버튼, <code>Tooltip.Trigger</code>)에
-        행동을 합칠 수 있어요 - <Link href="/ko/concepts/composition">함께 쓰기</Link>에
+        행동을 합칠 수 있어요 - <Link href="/ko/guides/composition">함께 쓰기</Link>에
         패턴이 있어요. 모든 조각에는{' '}
         <code>data-scope</code> · <code>data-part</code> ·{' '}
         <code>data-presentation</code> 속성이 붙어서 CSS 선택자로 스타일링해요.
@@ -87,7 +87,7 @@ export default function DialogKo() {
 
       <p>
         수동 분기 방식과 나란히 비교하려면 <Link href="/delete-demo">삭제 데모</Link>를,
-        서버 렌더링에서 왜 안전한지는 <Link href="/ko/concepts/ssr">서버 렌더링</Link>{' '}
+        서버 렌더링에서 왜 안전한지는 <Link href="/ko/advanced/server-rendering">서버 렌더링</Link>{' '}
         문서를 보세요.
       </p>
     </div>

@@ -1,3 +1,4 @@
+import Link from 'next/link'
 import { TooltipDemo } from './tooltip-demo'
 
 export default function TooltipKo() {
@@ -32,12 +33,13 @@ export default function TooltipKo() {
         </table>
       </div>
 
-      <h2>규칙도 새로 생겼어요: hint</h2>
+      <h2>판단을 바꾸고 싶다면</h2>
       <p>
-        이 판단은 오버레이 역할이 아니라 별도의 규칙 도메인 <code>hint</code>예요.
-        기본값은 &quot;호버가 있으면 tooltip, 없으면 popover&quot;이고, 다른 도메인처럼
-        규칙 파일에서 바꾸거나(<code>hint: ({'{ traits, defaults }'}) =&gt; ...</code>)
-        인스턴스에서 <code>presentation</code>으로 지정할 수 있어요.
+        기본 판단은 &quot;호버가 있으면 툴팁, 없으면 탭 토글 팝오버&quot;예요. 이
+        컴포넌트 하나만 바꾸려면 <code>presentation</code>을 지정하고, 서비스 전체의
+        관습을 바꾸려면 규칙 파일에서 <code>hint</code> 항목을 덮어써요 - 방법은{' '}
+        <Link href="/ko/guides/customize-decisions">적응 결과 맞춤 설정</Link>과
+        같아요.
       </p>
 
       <div className="callout">

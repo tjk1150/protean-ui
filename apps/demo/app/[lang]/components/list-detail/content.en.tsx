@@ -60,7 +60,7 @@ export default function ListDetailPage() {
           <tbody>
             <tr><td>Root: detailActive</td><td>boolean</td><td>whether a detail is active; in the stack it selects the visible screen</td></tr>
             <tr><td>Root: onBack</td><td>() =&gt; void</td><td>called by the Back part - usually clears the selection</td></tr>
-            <tr><td>Root: presentation</td><td>&quot;stack&quot; | &quot;panes&quot; | per-size record</td><td>force this one scaffold</td></tr>
+            <tr><td>Root: presentation</td><td>&quot;stack&quot; | &quot;panes&quot; | per-size record</td><td>force this one layout. Note: the override changes the decision and the DOM stamp. The reference stylesheet derives its default look from media queries, so to make an override visible, key your own CSS off the stamp - it is a data contract.</td></tr>
             <tr><td>List, Detail, Back</td><td></td><td>structural parts; div/button props pass through. Detail carries tabIndex=-1 to receive focus on stack transitions.</td></tr>
           </tbody>
         </table>

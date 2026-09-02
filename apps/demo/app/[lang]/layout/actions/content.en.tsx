@@ -10,6 +10,13 @@ export default function ActionsPage() {
         and expand in place when opened. Document toolbars, card tool rows.
       </p>
 
+      <div className="callout">
+        This is a <strong>CSS-driven layout helper</strong>: it provides structure and
+        markup without judging the situation, and the responsiveness belongs to the
+        reference stylesheet (or your own CSS). Its default look applies inside an
+        element carrying the <code>protean-defaults</code> class.
+      </div>
+
       <div className="example">
         <span className="exampleLabel">Try it - narrow the window below 600px</span>
         <ActionsDemo

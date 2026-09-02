@@ -31,7 +31,7 @@ export default function PrimaryActionKo() {
         <table>
           <thead><tr><th>속성</th><th>타입</th><th>설명</th></tr></thead>
           <tbody>
-            <tr><td>presentation</td><td>모습 이름 | &#123; 화면등급: 모습 &#125;</td><td>action-bar · sticky-footer · inline 중에서 직접 지정할 수 있어요.</td></tr>
+            <tr><td>presentation</td><td>모습 이름 | &#123; 화면등급: 모습 &#125;</td><td>action-bar · sticky-footer · inline 중에서 지정해요. 지정은 판단과 DOM 스탬프를 바꿔요. 참고 스타일시트의 기본 모습은 미디어쿼리 CSS가 정하니, 지정을 눈에 보이게 하려면 그 스탬프에 여러분의 CSS를 걸어 주세요 - 데이터 계약이에요.</td></tr>
             <tr><td>버튼 속성 전부</td><td>type, disabled, onClick, form ...</td><td>안쪽은 진짜 button 요소예요. 폼 제출 연결, 로딩 · 비활성 상태가 그대로 통과해요.</td></tr>
           </tbody>
         </table>

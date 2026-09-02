@@ -42,7 +42,7 @@ export default function NavigationDocPage() {
         <table>
           <thead><tr><th>Prop</th><th>Type</th><th>Notes</th></tr></thead>
           <tbody>
-            <tr><td>presentation</td><td>presentation | &#123; sizeClass: presentation &#125;</td><td>instance override (bar | drawer | rail | sidebar)</td></tr>
+            <tr><td>presentation</td><td>presentation | &#123; sizeClass: presentation &#125;</td><td>pick from bar · drawer · rail · sidebar. Note: the override changes the decision and the DOM stamp. The reference stylesheet derives its default look from media queries, so to make an override visible, key your own CSS off the stamp - it is a data contract.</td></tr>
             <tr><td>toggleLabel</td><td>string</td><td>label for the drawer toggle button</td></tr>
             <tr><td>maxBarItems</td><td>number, default 5</td><td>bar slots before items collapse behind the More tab (the tab itself takes one slot)</td></tr>
             <tr><td>overflowLabel</td><td>string, default &quot;More&quot;</td><td>label for the overflow tab</td></tr>

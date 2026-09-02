@@ -140,7 +140,8 @@ describe('app-first pack decision table', () => {
     const chromeCells = 2 * SIZES.length * INPUTS.length
     const hintCells = SIZES.length * INPUTS.length
     const listDetailCells = SIZES.length * INPUTS.length
-    expect(overlayCells + chromeCells + hintCells + listDetailCells).toBe(63)
+    const densityCells = SIZES.length * INPUTS.length
+    expect(overlayCells + chromeCells + hintCells + listDetailCells + densityCells).toBe(72)
   })
 
   it('hint honors an instance override', () => {

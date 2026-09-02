@@ -104,7 +104,7 @@ export default function WhyKo() {
       </div>
       <p>
         이 구조가 코드로 어떻게 구현됐는지는{' '}
-        <Link href="/ko/concepts/design-principles">설계 원리</Link>에서, 10분 만에
+        <Link href="/ko/concepts/pattern-adaptation">설계 원리</Link>에서, 10분 만에
         직접 써 보는 방법은 <Link href="/ko/getting-started">시작하기</Link>에서 볼 수
         있어요.
       </p>

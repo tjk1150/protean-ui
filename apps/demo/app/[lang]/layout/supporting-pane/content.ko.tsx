@@ -11,6 +11,12 @@ export default function SupportingPaneKo() {
         조각이에요(리스트-디테일, 피드와 함께요 - 피드는 CSS 그리드 몫이라 여기 없어요).
       </p>
 
+      <div className="callout">
+        이 컴포넌트는 <strong>CSS 중심 레이아웃 도우미</strong>예요. 상황 판단 없이
+        구조와 마크업을 제공하고, 반응은 참고 스타일시트(또는 여러분의 CSS)가 맡아요.
+        기본 모습은 <code>protean-defaults</code> 클래스를 붙인 요소 안에서 적용돼요.
+      </div>
+
       <div className="example">
         <span className="exampleLabel">직접 해 보세요 - 창을 600px보다 좁혀 보세요</span>
         <SupportingPaneDemo

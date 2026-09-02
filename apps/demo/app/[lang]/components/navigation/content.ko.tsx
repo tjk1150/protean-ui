@@ -36,7 +36,7 @@ export default function NavigationKo() {
       <p>
         네 모습이 전부 같은 HTML이라는 점이 핵심이에요. 서버가 무엇을 보내든 틀릴 수
         없고, 화면이 밀리지 않고, JavaScript 없이도 동작해요. 자세한 이유는{' '}
-        <Link href="/ko/concepts/ssr">서버 렌더링</Link> 문서에 있어요.
+        <Link href="/ko/advanced/server-rendering">서버 렌더링</Link> 문서에 있어요.
       </p>
 
       <h2>Navigation.Root</h2>
@@ -44,7 +44,7 @@ export default function NavigationKo() {
         <table>
           <thead><tr><th>속성</th><th>타입</th><th>설명</th></tr></thead>
           <tbody>
-            <tr><td>presentation</td><td>모습 이름 | &#123; 화면등급: 모습 &#125;</td><td>bar · drawer · rail · sidebar 중에서 직접 지정할 수 있어요. 이 문서 사이트는 compact는 drawer, 그 위는 sidebar로 지정했어요.</td></tr>
+            <tr><td>presentation</td><td>모습 이름 | &#123; 화면등급: 모습 &#125;</td><td>bar · drawer · rail · sidebar 중에서 지정해요. 지정은 판단과 DOM 스탬프를 바꿔요. 참고 스타일시트의 기본 모습은 미디어쿼리 CSS가 정하니, 지정을 눈에 보이게 하려면 그 스탬프에 여러분의 CSS를 걸어 주세요 - 데이터 계약이에요.</td></tr>
             <tr><td>toggleLabel</td><td>string</td><td>서랍을 여는 버튼의 라벨이에요.</td></tr>
             <tr><td>maxBarItems</td><td>number (기본 5)</td><td>하단 탭 바가 감당할 칸 수예요. 항목이 이보다 많으면 넘치는 항목이 &quot;더보기&quot; 뒤로 접혀요.</td></tr>
             <tr><td>overflowLabel</td><td>string (기본 &quot;More&quot;)</td><td>더보기 탭의 라벨이에요.</td></tr>

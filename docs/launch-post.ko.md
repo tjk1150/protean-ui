@@ -63,7 +63,7 @@ SAP UI5는 UA 스니핑입니다. unstyled 진영(Radix, Base UI, React Aria Com
 반복해서 실패했습니다. 남은 길은 언번들입니다. 행동(포커스, ARIA)은 headless 진영이
 이미 해결했고, 시각 언어는 각 팀의 것으로 남겨야 하고, 그 사이에서 아직 비어 있는
 패턴 결정 층만 공공재로 만드는 것. Protean이 그 층입니다. (전체 논증:
-https://protean-ui-jintaes-projects.vercel.app/ko/why)
+https://protean-ui-jintaes-projects.vercel.app/ko/about/why)
 
 ## Protean은 무엇인가
 
@@ -153,5 +153,5 @@ Coutaz, 1999)입니다. 이 프로젝트를 통과시킨 킬 크라이테리아 
 - 설치: `npm install @protean-ui/react` (프리알파)
 - 저장소: https://github.com/tjk1150/protean-ui
 - 문서와 라이브 데모: https://protean-ui-jintaes-projects.vercel.app
-- 왜 만들었나: https://protean-ui-jintaes-projects.vercel.app/ko/why · 설계 원리: https://protean-ui-jintaes-projects.vercel.app/ko/concepts/design-principles
+- 왜 만들었나: https://protean-ui-jintaes-projects.vercel.app/ko/about/why · 설계 원리: https://protean-ui-jintaes-projects.vercel.app/ko/concepts/pattern-adaptation
 - Phase 0 판정: https://github.com/tjk1150/protean-ui/blob/main/docs/phase-0-verdict.md

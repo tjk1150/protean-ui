@@ -20,8 +20,7 @@ export default function BoundaryPage() {
 
       <div className="callout">
         See it live in the <Link href="/boundary-demo">container boundary demo</Link>:
-        the same dialog opens as a modal at the page level and as a sheet inside a
-        420px panel - same window, same policy, different declaration site.
+        the same dialog is judged compact inside a 420px panel - which presentation that yields is still the rules’ call (under the defaults a pointer-environment form stays a modal even at compact; the demo’s sheet comes from a custom rule) - same window, same policy, different declaration site.
       </div>
 
       <h2>What changes</h2>

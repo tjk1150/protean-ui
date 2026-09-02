@@ -61,7 +61,7 @@ export default function ListDetailKo() {
           <tbody>
             <tr><td>Root: detailActive</td><td>boolean</td><td>상세가 활성인지예요. 스택에서는 어느 화면을 보일지를 정해요.</td></tr>
             <tr><td>Root: onBack</td><td>() =&gt; void</td><td>뒤로 버튼이 눌리면 호출돼요. 보통 선택 해제예요.</td></tr>
-            <tr><td>Root: presentation</td><td>&quot;stack&quot; | &quot;panes&quot; | &#123; 화면등급: 모습 &#125;</td><td>이 화면만 다르게 배치하고 싶을 때 지정해요.</td></tr>
+            <tr><td>Root: presentation</td><td>&quot;stack&quot; | &quot;panes&quot; | &#123; 화면등급: 모습 &#125;</td><td>이 화면만 다르게 배치하고 싶을 때 지정해요. 지정은 판단과 DOM 스탬프를 바꿔요. 참고 스타일시트의 기본 모습은 미디어쿼리 CSS가 정하니, 지정을 눈에 보이게 하려면 그 스탬프에 여러분의 CSS를 걸어 주세요 - 데이터 계약이에요.</td></tr>
             <tr><td>List · Detail · Back</td><td></td><td>구조 조각이에요. div/button 속성이 그대로 통과해요. Detail은 스택 전환 시 포커스를 받도록 tabIndex=-1이에요.</td></tr>
           </tbody>
         </table>
