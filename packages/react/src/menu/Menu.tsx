@@ -11,7 +11,7 @@ import {
 } from '@protean-ui/core'
 import * as React from 'react'
 import { BoundaryContext } from '../boundary'
-import { useProteanContext, useReadTraits } from '../provider'
+import { useDensityProfile, useProteanContext, useReadTraits } from '../provider'
 
 /* An actions menu: a contextual overlay, so it rides the same decision the
    Dialog contextual role and Select use - an anchored popover for pointers,
@@ -126,6 +126,10 @@ export interface MenuContentProps {
 export function MenuContent({ children }: MenuContentProps): React.JSX.Element | null {
   const { decision } = useMenuLocalContext('Content')
   const boundary = React.useContext(BoundaryContext)
+  /* Spike: the popup is portaled, so ancestor-based density selectors can
+     never reach it - the component stamps its own density, exactly like
+     data-presentation. */
+  const density = useDensityProfile()
 
   if (!decision) return null
 
@@ -160,6 +164,7 @@ export function MenuContent({ children }: MenuContentProps): React.JSX.Element |
           data-scope="menu"
           data-part="popup"
           data-presentation={presentation}
+          data-density={density.presentation}
           {...containedAttr}
         >
           {children}

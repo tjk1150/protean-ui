@@ -1,0 +1,123 @@
+/* 공유 비용: 밀도 -> 값 매핑. 어느 구현이든 팀이 항상 소유하는 부분이라
+   비교에서 양쪽에 동일하게 계상돼요. */
+
+.densitySpike {
+  max-width: 880px;
+  margin: 0 auto;
+  padding: 40px 20px 80px;
+  font-family: system-ui, sans-serif;
+  line-height: 1.7;
+}
+
+.densitySpike .split {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  align-items: start;
+}
+
+.densitySpike section {
+  border: 1px solid color-mix(in srgb, CanvasText 15%, Canvas);
+  border-radius: 12px;
+  padding: 16px;
+}
+
+.densitySpike h2 {
+  margin: 24px 0 8px;
+  font-size: 1.05rem;
+}
+.densitySpike section h2 {
+  margin-top: 0;
+}
+
+.densitySpike .controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  font-size: 0.85rem;
+}
+.densitySpike .controls label {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+.densitySpike .sheetToggle {
+  margin-left: auto;
+}
+.densitySpike .note {
+  font-size: 0.8rem;
+  opacity: 0.7;
+}
+
+/* ---- 공유 디자인 값 (양쪽 동일) ---- */
+.spikeCard {
+  --row: 36px; /* comfortable */
+  border: 1px solid color-mix(in srgb, CanvasText 20%, Canvas);
+  border-radius: 10px;
+  overflow: hidden;
+}
+@media (pointer: coarse) {
+  .spikeCard {
+    --row: 44px; /* touch 기본 - JS 없이 */
+  }
+}
+.spikeCard[data-density='compact'] {
+  --row: 28px;
+}
+.spikeCard[data-density='comfortable'] {
+  --row: 36px;
+}
+.spikeCard[data-density='touch'] {
+  --row: 44px;
+}
+/* 패턴 결합 - protean 쪽: 컴포넌트가 찍는 data-presentation에 걸면 끝 */
+.spikeCard[data-presentation='sheet'] {
+  --row: 44px;
+}
+/* 패턴 결합 - vanilla 쪽: 자기 시트 클래스에 한 번 더 (동기화 지점) */
+.vanillaSheet[data-sheet] {
+  --row: 44px;
+}
+
+.spikeCard ul {
+  list-style: none;
+  margin: 0;
+  padding: 4px;
+}
+.spikeCard li {
+  min-height: var(--row);
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  padding: 0 12px;
+  border-radius: 6px;
+  font-size: 0.9rem;
+}
+.spikeCard li:hover {
+  background: color-mix(in srgb, CanvasText 7%, Canvas);
+}
+.spikeCard .explain {
+  display: block;
+  padding: 8px 12px;
+  font-size: 0.72rem;
+  opacity: 0.6;
+  border-top: 1px dashed color-mix(in srgb, CanvasText 15%, Canvas);
+}
+
+/* ---- 통합 데모: 메뉴 행이 density 토큰을 소비하면 이렇게 된다 ---- */
+.integration {
+  border: 1px dashed color-mix(in srgb, CanvasText 20%, Canvas);
+  border-radius: 12px;
+  padding: 16px;
+}
+/* 팝업은 포털이라 조상 셀렉터가 닿지 않음 - 컴포넌트가 찍은 스탬프에 건다
+   (스파이크가 발견한 제품화 요구사항 #1) */
+[data-scope='menu'][data-part='popup'][data-density='compact'] [data-part='item'] {
+  min-height: 28px;
+  padding-block: 2px;
+  font-size: 0.85rem;
+  line-height: 1.3;
+}
+[data-scope='menu'][data-part='popup'][data-density='touch'] [data-part='item'] {
+  min-height: 48px;
+}

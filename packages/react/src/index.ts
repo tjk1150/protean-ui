@@ -15,6 +15,7 @@ export {
   defaultSsrTraits,
   usePolicy,
   useReadTraits,
+  useDensityProfile,
   useTraits,
   type ProteanProviderProps
 } from './provider'

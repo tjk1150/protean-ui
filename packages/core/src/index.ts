@@ -13,6 +13,7 @@ export { defaultDeadband, resolveSizeWithHysteresis } from './hysteresis'
 
 export {
   asPolicy,
+  decideDensity,
   decideHint,
   decideListDetail,
   decideNavigation,
@@ -24,6 +25,8 @@ export {
   type ActionQuery,
   type Decision,
   type DecisionDomain,
+  type DensityProfile,
+  type DensityQuery,
   type HintPresentation,
   type HintQuery,
   type ListDetailPresentation,

@@ -3,8 +3,11 @@
 import {
   appFirst,
   asPolicy,
+  decideDensity,
   defaultThresholds,
   resolveSizeClass,
+  type Decision,
+  type DensityProfile,
   type Policy,
   type PolicyPack,
   type TraitThresholds,
@@ -29,6 +32,9 @@ export interface ProteanContextValue {
   readonly store: EnvironmentStore | null
   readonly ssrTraits: Traits
   readonly thresholds: TraitThresholds
+  /* An explicit density choice (a user setting); undefined lets the policy
+     and the stylesheet's pointer defaults decide. */
+  readonly density?: DensityProfile
 }
 
 const ProteanContext = /*#__PURE__*/ React.createContext<ProteanContextValue | null>(null)
@@ -38,6 +44,7 @@ export interface ProteanProviderProps {
   readonly ssrTraits?: Traits
   readonly thresholds?: TraitThresholds
   readonly components?: Partial<OverlayComponents>
+  readonly density?: DensityProfile
   readonly children: React.ReactNode
 }
 
@@ -50,6 +57,7 @@ export function ProteanProvider({
   ssrTraits = defaultSsrTraits,
   thresholds = defaultThresholds,
   components,
+  density,
   children
 }: ProteanProviderProps): React.JSX.Element {
   const [store] = React.useState<EnvironmentStore | null>(() =>
@@ -62,9 +70,10 @@ export function ProteanProvider({
       components: { ...defaultOverlayComponents, ...components },
       store,
       ssrTraits,
-      thresholds
+      thresholds,
+      density
     }),
-    [policy, components, store, ssrTraits, thresholds]
+    [policy, components, store, ssrTraits, thresholds, density]
   )
 
   return <ProteanContext.Provider value={value}>{children}</ProteanContext.Provider>
@@ -103,6 +112,16 @@ export function useTraits(): Traits {
     store ? store.getTraits : () => ssrTraits,
     () => ssrTraits
   )
+}
+
+/* The density decision: an explicit provider-level choice (a user setting)
+   wins as an instance override; otherwise the policy decides from traits.
+   Stamp the result as data-density only when you need to override the
+   stylesheet's pointer-media defaults - the automatic path is pure CSS. */
+export function useDensityProfile(): Decision<DensityProfile> {
+  const { policy, density } = useProteanContext()
+  const traits = useTraits()
+  return decideDensity(policy, traits, density)
 }
 
 /* Reads traits at interaction time. Inside a ProteanBoundary the size class
