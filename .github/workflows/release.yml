@@ -1,0 +1,45 @@
+name: release
+
+# Publishes all four packages to npm when a version tag is pushed:
+#
+#   git tag v0.1.0-alpha.7 && git push origin v0.1.0-alpha.7
+#
+# Publishing uses npm trusted publishing (OIDC): npmjs.com is configured to
+# trust this exact repository and workflow file, so no npm token exists
+# anywhere - CI proves its identity to the registry per run, and provenance
+# is attached automatically. Configure once per package on npmjs.com:
+# package Settings -> Trusted publisher -> GitHub Actions
+# (repository tjk1150/protean-ui, workflow release.yml).
+
+on:
+  push:
+    tags: ['v*']
+
+permissions:
+  contents: read
+  id-token: write # OIDC token for npm trusted publishing
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+          registry-url: https://registry.npmjs.org
+      - run: pnpm install --frozen-lockfile
+      - run: SKIP_SCENARIO=1 pnpm gate
+      - name: Verify tag matches package versions
+        run: |
+          TAG="${GITHUB_REF_NAME#v}"
+          for f in packages/*/package.json; do
+            V=$(node -p "require('./$f').version")
+            if [ "$V" != "$TAG" ]; then
+              echo "::error::$f is $V but the tag is $TAG"; exit 1
+            fi
+          done
+      # Detached HEAD on a tag checkout, so skip pnpm's branch check.
+      - run: pnpm publish -r --access public --no-git-checks

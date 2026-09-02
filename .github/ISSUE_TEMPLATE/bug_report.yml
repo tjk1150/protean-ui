@@ -1,0 +1,31 @@
+name: Bug report
+description: Something behaves incorrectly
+labels: [bug]
+body:
+  - type: input
+    id: version
+    attributes:
+      label: Version
+      placeholder: "@protean-ui/react 0.1.0-alpha.6"
+    validations:
+      required: true
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened
+      description: What you did, what you expected, what you got instead. A minimal reproduction (StackBlitz, repo, or a snippet) makes fixes much faster.
+    validations:
+      required: true
+  - type: input
+    id: environment
+    attributes:
+      label: Environment
+      description: Browser and viewport situation matter here - decisions depend on them.
+      placeholder: "Chrome 130, 375px width, touch / Next.js 16 App Router, SSR"
+    validations:
+      required: true
+  - type: textarea
+    id: explain
+    attributes:
+      label: explain() output (if decision-related)
+      description: If a component picked the wrong presentation, paste the console explain() line or the element's data-presentation.

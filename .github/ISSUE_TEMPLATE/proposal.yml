@@ -1,0 +1,23 @@
+name: Component or feature proposal
+description: Propose a new role, presentation, or capability
+labels: [proposal]
+body:
+  - type: textarea
+    id: need
+    attributes:
+      label: What you are trying to build
+      description: The concrete UI situation, not the abstract feature.
+    validations:
+      required: true
+  - type: textarea
+    id: criterion
+    attributes:
+      label: Does the interaction contract change per environment?
+      description: A role earns a component only when the pattern itself changes across environments (DOM, focus, ARIA) - not just its layout. Say how it changes, e.g. "inline panel on desktop, bottom sheet on touch". If it is layout-only, the answer is usually CSS, and that is fine to conclude here too.
+    validations:
+      required: true
+  - type: textarea
+    id: today
+    attributes:
+      label: What you do today instead
+      description: The manual branch or workaround this would replace.

@@ -1,0 +1,5 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Documentation and live demos
+    url: https://protean-ui-jintaes-projects.vercel.app
+    about: Concepts, per-component pages (Korean and English), and live demos.
