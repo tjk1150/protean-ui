@@ -63,6 +63,7 @@ export default function SupportingPanePage() {
           <tbody>
             <tr><td>Root: paneLabel</td><td>string (required)</td><td>the pane&apos;s accessible name and the compact toggle&apos;s label</td></tr>
             <tr><td>Root: compact</td><td>&quot;sheet&quot; (default) | &quot;stacked&quot;</td><td>collapse into a sheet, or stack below the content; stacked renders no toggle at all</td></tr>
+            <tr><td>Root: open / defaultOpen / onOpenChange</td><td></td><td>controlled or uncontrolled sheet state</td></tr>
             <tr><td>Main · Pane</td><td></td><td>the content and the supporting region; Pane renders an <code>aside</code> (complementary)</td></tr>
           </tbody>
         </table>

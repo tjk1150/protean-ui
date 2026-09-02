@@ -36,10 +36,21 @@ function useTooltipLocalContext(part: string): TooltipLocalContextValue {
 
 export interface TooltipRootProps {
   readonly presentation?: InstanceOverride<HintPresentation>
+  /* Controlled open. The hint is mount-gated (the server renders a plain
+     button), so an open hint appears only after hydration. */
+  readonly open?: boolean
+  readonly defaultOpen?: boolean
+  readonly onOpenChange?: (open: boolean) => void
   readonly children: React.ReactNode
 }
 
-export function TooltipRoot({ presentation, children }: TooltipRootProps): React.JSX.Element {
+export function TooltipRoot({
+  presentation,
+  open,
+  defaultOpen,
+  onOpenChange,
+  children
+}: TooltipRootProps): React.JSX.Element {
   const { policy } = useProteanContext()
   const traits = useTraits()
   const [mounted, setMounted] = React.useState(false)
@@ -55,6 +66,12 @@ export function TooltipRoot({ presentation, children }: TooltipRootProps): React
 
   const value = React.useMemo<TooltipLocalContextValue>(() => ({ decision }), [decision])
 
+  const openProps = {
+    ...(open === undefined ? {} : { open }),
+    ...(defaultOpen === undefined ? {} : { defaultOpen }),
+    ...(onOpenChange === undefined ? {} : { onOpenChange: (next: boolean) => onOpenChange(next) })
+  }
+
   if (!decision) {
     return <TooltipLocalContext.Provider value={value}>{children}</TooltipLocalContext.Provider>
   }
@@ -62,14 +79,14 @@ export function TooltipRoot({ presentation, children }: TooltipRootProps): React
   if (decision.presentation === 'tooltip') {
     return (
       <TooltipLocalContext.Provider value={value}>
-        <BaseTooltip.Root>{children}</BaseTooltip.Root>
+        <BaseTooltip.Root {...openProps}>{children}</BaseTooltip.Root>
       </TooltipLocalContext.Provider>
     )
   }
 
   return (
     <TooltipLocalContext.Provider value={value}>
-      <BasePopover.Root>{children}</BasePopover.Root>
+      <BasePopover.Root {...openProps}>{children}</BasePopover.Root>
     </TooltipLocalContext.Provider>
   )
 }

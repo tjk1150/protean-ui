@@ -1,4 +1,5 @@
-import { render, screen } from '@testing-library/react'
+import { fireEvent, render, screen } from '@testing-library/react'
+import * as React from 'react'
 import { describe, expect, it, vi } from 'vitest'
 import { ProteanProvider } from '../provider'
 import { installEnvironment } from '../test/environment-mock'
@@ -79,4 +80,38 @@ describe('Select', () => {
     expect(native.tagName).toBe('SELECT')
     expect(native.querySelectorAll('option')).toHaveLength(2)
   })
+  it('opens from a controlled prop and reports transitions', () => {
+    installEnvironment({ width: 1280, coarse: false, hover: true })
+    const seen: boolean[] = []
+    function Harness() {
+      const [open, setOpen] = React.useState(false)
+      return (
+        <ProteanProvider>
+          <button onClick={() => setOpen(true)}>external open</button>
+          <Select.Root
+            aria-label="Billing cycle"
+            defaultValue="monthly"
+            open={open}
+            onOpenChange={(next) => {
+              seen.push(next)
+              setOpen(next)
+            }}
+          >
+            <Select.Trigger placeholder="Billing cycle" />
+            <Select.Content>
+              <Select.Item value="monthly">Monthly</Select.Item>
+              <Select.Item value="yearly">Yearly</Select.Item>
+            </Select.Content>
+          </Select.Root>
+        </ProteanProvider>
+      )
+    }
+    render(<Harness />)
+
+    expect(popup()).toBeNull()
+    fireEvent.click(screen.getByRole('button', { name: 'external open' }))
+    expect(popup()).not.toBeNull()
+    expect(screen.getByRole('listbox')).toBeTruthy()
+  })
+
 })

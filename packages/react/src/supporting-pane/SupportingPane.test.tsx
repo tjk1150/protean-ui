@@ -100,4 +100,41 @@ describe('SupportingPane', () => {
     const pane = screen.getByRole('complementary', { name: 'Metadata' })
     expect(pane.getAttribute('data-part')).toBe('pane')
   })
+  it('opens from a controlled prop and reports transitions', () => {
+    installEnvironment({ width: 375, coarse: true, hover: false })
+    const seen: boolean[] = []
+    function Harness() {
+      const [open, setOpen] = React.useState(false)
+      return (
+        <ProteanProvider>
+          <button onClick={() => setOpen(true)}>external open</button>
+          <SupportingPane.Root
+            paneLabel="Metadata"
+            open={open}
+            onOpenChange={(next) => {
+              seen.push(next)
+              setOpen(next)
+            }}
+          >
+            <SupportingPane.Main>
+              <p>The document body.</p>
+            </SupportingPane.Main>
+            <SupportingPane.Pane>
+              <p>Author, dates, size.</p>
+            </SupportingPane.Pane>
+          </SupportingPane.Root>
+        </ProteanProvider>
+      )
+    }
+    render(<Harness />)
+
+    expect(root().hasAttribute('data-open')).toBe(false)
+    fireEvent.click(screen.getByRole('button', { name: 'external open' }))
+    expect(root().hasAttribute('data-open')).toBe(true)
+
+    fireEvent.keyDown(screen.getByText('Author, dates, size.'), { key: 'Escape' })
+    expect(seen).toContain(false)
+    expect(root().hasAttribute('data-open')).toBe(false)
+  })
+
 })

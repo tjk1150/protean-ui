@@ -54,6 +54,7 @@ export default function TooltipPage() {
           <thead><tr><th>Prop</th><th>Type</th><th>Notes</th></tr></thead>
           <tbody>
             <tr><td>Root: presentation</td><td>&quot;tooltip&quot; | &quot;popover&quot; | per-size record</td><td>force this one hint</td></tr>
+            <tr><td>Root: open / defaultOpen / onOpenChange</td><td></td><td>controlled or uncontrolled; an open hint appears only after hydration</td></tr>
             <tr><td>Trigger: aria-label</td><td>string</td><td>required in practice when the trigger is a glyph like &quot;?&quot;</td></tr>
             <tr><td>Trigger: onClick, disabled ...</td><td></td><td>every button prop passes through - a hinted button can act; disabled locks button and hint together</td></tr>
           </tbody>

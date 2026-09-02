@@ -43,6 +43,8 @@ export interface SelectRootProps {
   readonly defaultValue?: string | null
   readonly onValueChange?: (value: string | null) => void
   readonly defaultOpen?: boolean
+  readonly open?: boolean
+  readonly onOpenChange?: (open: boolean) => void
   readonly items?: readonly SelectOption[]
   readonly name?: string
   readonly disabled?: boolean
@@ -60,6 +62,8 @@ export function SelectRoot({
   defaultValue,
   onValueChange,
   defaultOpen = false,
+  open: openProp,
+  onOpenChange,
   items,
   name,
   disabled,
@@ -83,10 +87,17 @@ export function SelectRoot({
     [policy, readTraits, presentation]
   )
 
-  const [open, setOpen] = React.useState(defaultOpen)
+  const [internalOpen, setInternalOpen] = React.useState(defaultOpen)
   const [decision, setDecision] = React.useState<Decision<OverlayPresentation> | null>(() =>
-    defaultOpen ? decide() : null
+    (openProp ?? defaultOpen) ? decide() : null
   )
+  const open = openProp ?? internalOpen
+
+  /* A controlled open can arrive from outside without passing through
+     handleOpenChange - decide then too. */
+  React.useEffect(() => {
+    if (open && !decision) setDecision(decide())
+  }, [open, decision, decide])
 
   const handleOpenChange = React.useCallback(
     (next: boolean) => {
@@ -97,9 +108,10 @@ export function SelectRoot({
           console.debug(`[protean] ${explain(nextDecision)}`)
         }
       }
-      setOpen(next)
+      setInternalOpen(next)
+      onOpenChange?.(next)
     },
-    [decide]
+    [decide, onOpenChange]
   )
 
   const optionFor = React.useCallback(

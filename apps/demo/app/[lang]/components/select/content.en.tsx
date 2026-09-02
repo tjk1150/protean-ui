@@ -43,6 +43,7 @@ export default function SelectDocPage() {
           <thead><tr><th>Prop</th><th>Type</th><th>Notes</th></tr></thead>
           <tbody>
             <tr><td>value / defaultValue / onValueChange</td><td>string | null</td><td>controlled or uncontrolled selection</td></tr>
+            <tr><td>open / defaultOpen / onOpenChange</td><td></td><td>the open state works the same way - wire it to routing or analytics</td></tr>
             <tr><td>items</td><td>&#123; value, label &#125;[]</td><td>label map for the trigger; required for native mode</td></tr>
             <tr><td>presentation</td><td>overlay override | &quot;native&quot;</td><td>&quot;native&quot; delegates to a platform select</td></tr>
             <tr><td>aria-label</td><td>string</td><td>names both the trigger and the native fallback</td></tr>

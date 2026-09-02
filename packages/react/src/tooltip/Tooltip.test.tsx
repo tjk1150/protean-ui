@@ -120,4 +120,36 @@ describe('Tooltip', () => {
       screen.getByRole('button', { name: 'Save' }).hasAttribute('disabled')
     ).toBe(true)
   })
+  it('opens from a controlled prop and reports transitions in popover mode', () => {
+    installEnvironment({ width: 375, coarse: true, hover: false })
+    const seen: boolean[] = []
+    function Harness() {
+      const [open, setOpen] = React.useState(false)
+      return (
+        <ProteanProvider>
+          <button onClick={() => setOpen(true)}>external open</button>
+          <Tooltip.Root
+            open={open}
+            onOpenChange={(next) => {
+              seen.push(next)
+              setOpen(next)
+            }}
+          >
+            <Tooltip.Trigger aria-label="Shipping fee info">?</Tooltip.Trigger>
+            <Tooltip.Content>Free over 30,000 won.</Tooltip.Content>
+          </Tooltip.Root>
+        </ProteanProvider>
+      )
+    }
+    render(<Harness />)
+
+    expect(popup()).toBeNull()
+    fireEvent.click(screen.getByRole('button', { name: 'external open' }))
+    expect(popup()).not.toBeNull()
+
+    fireEvent.click(screen.getByRole('button', { name: 'Shipping fee info' }))
+    expect(seen).toContain(false)
+    expect(popup()).toBeNull()
+  })
+
 })

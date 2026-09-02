@@ -61,6 +61,7 @@ export default function SupportingPaneKo() {
           <tbody>
             <tr><td>Root: paneLabel</td><td>string (필수)</td><td>패널의 접근 이름이자 컴팩트 토글의 라벨이에요.</td></tr>
             <tr><td>Root: compact</td><td>&quot;sheet&quot; (기본) | &quot;stacked&quot;</td><td>작은 화면에서 시트로 접을지, 본문 아래 쌓을지요. stacked면 토글이 아예 렌더되지 않아요.</td></tr>
+            <tr><td>Root: open / defaultOpen / onOpenChange</td><td></td><td>시트 열림 상태를 직접 관리할 수도, 맡길 수도 있어요.</td></tr>
             <tr><td>Main · Pane</td><td></td><td>본문과 보조 패널이에요. Pane은 <code>aside</code>(complementary)로 렌더돼요.</td></tr>
           </tbody>
         </table>

@@ -32,10 +32,10 @@ export default function QualityPage() {
         Machine-checkable criteria run automatically; human ones print as a checklist.
       </p>
       <ul>
-        <li>100% of library tests (currently 225) plus a clean workspace typecheck</li>
+        <li>100% of library tests (currently 229) plus a clean workspace typecheck</li>
         <li>all 63 decision-table cells - one wrong cell is a blocked release, not a statistic</li>
         <li>the 699-test real-app scenario suite green</li>
-        <li>bundle budgets: all roles under 8KB gzip (6.9 today); one role via its public subpath under 3.5KB tree-shaken (3.0 today - shakeability is a contract); core under 2KB (1.2)</li>
+        <li>bundle budgets: all roles under 8KB gzip (7.0 today); one role via its public subpath under 3.5KB tree-shaken (3.0 today - shakeability is a contract); core under 2KB (1.2)</li>
         <li>zero overlay markup in the deployed site&apos;s server HTML (measured with curl)</li>
         <li>manual checklist: axe, CLS 0, the browser matrix, docs-match-reality</li>
       </ul>

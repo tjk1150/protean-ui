@@ -123,4 +123,38 @@ describe('Menu', () => {
     expect(sheet?.closest('[data-scope="boundary"]')).not.toBeNull()
     expect(sheet?.hasAttribute('data-contained')).toBe(true)
   })
+  it('opens from a controlled prop and reports transitions', () => {
+    installEnvironment({ width: 1280, coarse: false, hover: true })
+    const seen: boolean[] = []
+    function Harness() {
+      const [open, setOpen] = React.useState(false)
+      return (
+        <ProteanProvider>
+          <button onClick={() => setOpen(true)}>external open</button>
+          <Menu.Root
+            open={open}
+            onOpenChange={(next) => {
+              seen.push(next)
+              setOpen(next)
+            }}
+          >
+            <Menu.Trigger>More actions</Menu.Trigger>
+            <Menu.Content>
+              <Menu.Item onSelect={() => {}}>Share</Menu.Item>
+            </Menu.Content>
+          </Menu.Root>
+        </ProteanProvider>
+      )
+    }
+    render(<Harness />)
+
+    expect(popup()).toBeNull()
+    fireEvent.click(screen.getByRole('button', { name: 'external open' }))
+    expect(popup()).not.toBeNull()
+
+    fireEvent.click(screen.getByRole('menuitem', { name: 'Share' }))
+    expect(seen).toContain(false)
+    expect(popup()).toBeNull()
+  })
+
 })

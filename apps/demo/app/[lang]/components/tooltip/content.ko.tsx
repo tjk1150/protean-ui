@@ -53,6 +53,7 @@ export default function TooltipKo() {
           <thead><tr><th>속성</th><th>타입</th><th>설명</th></tr></thead>
           <tbody>
             <tr><td>Root: presentation</td><td>&quot;tooltip&quot; | &quot;popover&quot; | &#123; 화면등급: 모습 &#125;</td><td>이 힌트만 다르게 열고 싶을 때 지정해요.</td></tr>
+            <tr><td>Root: open / defaultOpen / onOpenChange</td><td></td><td>열림 상태를 직접 관리할 수도, 맡길 수도 있어요. 힌트는 하이드레이션 이후에만 보여요.</td></tr>
             <tr><td>Trigger: aria-label</td><td>string</td><td>트리거가 &quot;?&quot; 같은 기호라면 꼭 붙여 주세요.</td></tr>
             <tr><td>Trigger: onClick · disabled ...</td><td></td><td>버튼 속성이 전부 통과해요 - 힌트 달린 버튼이 실제 동작도 할 수 있어요. disabled는 버튼과 힌트를 함께 잠가요.</td></tr>
           </tbody>

@@ -42,6 +42,7 @@ export default function SelectKo() {
           <thead><tr><th>속성</th><th>타입</th><th>설명</th></tr></thead>
           <tbody>
             <tr><td>value / defaultValue / onValueChange</td><td>string | null</td><td>선택값이에요. 직접 관리할 수도, 맡길 수도 있어요.</td></tr>
+            <tr><td>open / defaultOpen / onOpenChange</td><td></td><td>열림 상태도 같은 방식이에요 - 라우터나 분석 이벤트와 연결할 때 쓰세요.</td></tr>
             <tr><td>items</td><td>&#123; value, label &#125;[]</td><td>값과 표시 이름의 목록이에요. 버튼에 선택된 이름을 보여줄 때 쓰고, native 모드에서는 필수예요.</td></tr>
             <tr><td>presentation</td><td>모습 지정 | &quot;native&quot;</td><td>이 셀렉트만 다르게 열고 싶을 때 지정해요.</td></tr>
             <tr><td>aria-label</td><td>string</td><td>스크린 리더가 읽을 이름이에요. 버튼과 native 모드 양쪽에 연결돼요.</td></tr>

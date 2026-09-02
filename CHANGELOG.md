@@ -2,6 +2,11 @@
 
 All four packages (`protean-ui`, `@protean-ui/react`, `@protean-ui/core`, `@protean-ui/css`) are versioned and released together. Pre-alpha: APIs move without notice until 0.1.0.
 
+## 0.1.0-alpha.7 - 2026-09-02
+
+- **Controlled open state everywhere.** `Menu.Root`, `Select.Root`, `Tooltip.Root`, and `SupportingPane.Root` now accept `open` / `defaultOpen` / `onOpenChange`, matching Dialog - wire any openable surface to routing, analytics, or an external close. Decisions still happen at open time, controlled or not; a hint opened via a controlled prop appears only after hydration (the mount gate is unchanged).
+- First release published from CI via npm trusted publishing (OIDC) - no npm tokens exist anymore.
+
 ## 0.1.0-alpha.6 - 2026-09-02
 
 - **SupportingPane** (tenth role): supporting content beside the main content where there is room; on compact it collapses behind a toggle and rises as a non-modal bottom sheet - same DOM, morphed by CSS, markup identical on server and client. The author chooses the compact meaning (`compact="sheet" | "stacked"`), never the environment. Completes Material's canonical layouts alongside ListDetail (feed stays a CSS grid concern).

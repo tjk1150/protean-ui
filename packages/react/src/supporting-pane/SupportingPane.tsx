@@ -33,16 +33,27 @@ export interface SupportingPaneRootProps extends React.HTMLAttributes<HTMLDivEle
   /* What compact does with the pane: collapse behind a toggle into a bottom
      sheet (default), or simply stack it below the main content. */
   readonly compact?: 'sheet' | 'stacked'
+  readonly defaultOpen?: boolean
+  readonly open?: boolean
+  readonly onOpenChange?: (open: boolean) => void
   readonly children: React.ReactNode
 }
 
 export function SupportingPaneRoot({
   paneLabel,
   compact = 'sheet',
+  defaultOpen = false,
+  open: openProp,
+  onOpenChange,
   children,
   ...rest
 }: SupportingPaneRootProps): React.JSX.Element {
-  const [open, setOpen] = React.useState(false)
+  const [internalOpen, setInternalOpen] = React.useState(defaultOpen)
+  const open = openProp ?? internalOpen
+  const setOpen = (next: boolean) => {
+    setInternalOpen(next)
+    onOpenChange?.(next)
+  }
   const paneId = React.useId()
 
   const value = React.useMemo<SupportingPaneLocalContextValue>(
@@ -71,7 +82,7 @@ export function SupportingPaneRoot({
               data-part="pane-toggle"
               aria-expanded={open}
               aria-controls={paneId}
-              onClick={() => setOpen((current) => !current)}
+              onClick={() => setOpen(!open)}
             >
               {paneLabel}
             </button>

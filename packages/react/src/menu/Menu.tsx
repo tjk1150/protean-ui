@@ -34,12 +34,16 @@ function useMenuLocalContext(part: string): MenuLocalContextValue {
 export interface MenuRootProps {
   readonly presentation?: InstanceOverride<OverlayPresentation>
   readonly defaultOpen?: boolean
+  readonly open?: boolean
+  readonly onOpenChange?: (open: boolean) => void
   readonly children: React.ReactNode
 }
 
 export function MenuRoot({
   presentation,
   defaultOpen = false,
+  open,
+  onOpenChange,
   children
 }: MenuRootProps): React.JSX.Element {
   const { policy } = useProteanContext()
@@ -50,10 +54,17 @@ export function MenuRoot({
     [policy, readTraits, presentation]
   )
 
-  const [open, setOpen] = React.useState(defaultOpen)
+  const [internalOpen, setInternalOpen] = React.useState(defaultOpen)
   const [decision, setDecision] = React.useState<Decision<OverlayPresentation> | null>(() =>
-    defaultOpen ? decide() : null
+    (open ?? defaultOpen) ? decide() : null
   )
+  const isOpen = open ?? internalOpen
+
+  /* A controlled open can arrive from outside without passing through
+     handleOpenChange - decide then too. */
+  React.useEffect(() => {
+    if (isOpen && !decision) setDecision(decide())
+  }, [isOpen, decision, decide])
 
   const handleOpenChange = React.useCallback(
     (next: boolean) => {
@@ -64,9 +75,10 @@ export function MenuRoot({
           console.debug(`[protean] ${explain(nextDecision)}`)
         }
       }
-      setOpen(next)
+      setInternalOpen(next)
+      onOpenChange?.(next)
     },
-    [decide]
+    [decide, onOpenChange]
   )
 
   const localValue = React.useMemo<MenuLocalContextValue>(() => ({ decision }), [decision])
@@ -74,7 +86,7 @@ export function MenuRoot({
   return (
     <MenuLocalContext.Provider value={localValue}>
       <BaseMenu.Root
-        open={open}
+        open={isOpen}
         onOpenChange={(next) => handleOpenChange(next)}
         modal={decision?.presentation === 'sheet'}
       >
