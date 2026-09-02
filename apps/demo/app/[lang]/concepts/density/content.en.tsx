@@ -83,6 +83,33 @@ export default function DensityPage() {
   padding: clamp(8px, 3cqi, var(--protean-target));
 }`}</code></pre>
 
+      <h2>Why shape is not a separate decision</h2>
+      <p>
+        We evaluated a shape domain as the next geometry axis, and the verdict is{' '}
+        <strong>we are not building one</strong>. The reason is simple: shape is
+        already decided. Popovers are 12px, modals 14px, sheets round only their top
+        corners, fullscreen has none - a token ({`--protean-shape`}) keyed to{' '}
+        <code>data-presentation</code> covers all eleven surfaces with nothing
+        missing.
+      </p>
+      <p>
+        The contrast with density is the criterion. Density varied{' '}
+        <strong>within the same presentation</strong> - input modality and a user
+        setting split the value. Multiple inputs make a decision, and a decision
+        earned a domain. Shape has exactly one input: the presentation. One input is
+        not a decision, it is a lookup table, and lookup tables live in CSS. The
+        remaining axis of variation is brand, and that is a one-line token rebind:
+      </p>
+      <pre><code>{`[data-presentation='modal'] { --protean-shape: 20px; }`}</code></pre>
+      <p>
+        Pattern-shape coupling is already free - shape keys off the presentation
+        stamp, so when Protean changes the pattern the shape follows atomically, and
+        the portal problem is solved by the same stamp. A shape domain would add
+        surface while adding no capability. The principle at the top of this page
+        applies to Protean itself: what CSS and tokens already solve does not get
+        forced into a feature.
+      </p>
+
       <h2>Why steps, not proportional scaling?</h2>
       <p>
         &quot;The card shrank 20%, shrink the radius 20%&quot; produces values no designer

@@ -80,6 +80,30 @@ export default function DensityKo() {
   padding: clamp(8px, 3cqi, var(--protean-target));
 }`}</code></pre>
 
+      <h2>모양(shape)은 왜 별도 결정이 아닌가요?</h2>
+      <p>
+        기하 축의 다음 후보로 shape 도메인을 검토했고, 결론은{' '}
+        <strong>만들지 않는다</strong>예요. 이유는 간단해요: 모양은 이미 결정되고
+        있어요. 팝오버는 12px, 모달은 14px, 시트는 위 모서리만, 풀스크린은 0 -
+        전부 <code>data-presentation</code>에 키잉된 토큰({`--protean-shape`})이
+        표면 11곳을 빠짐없이 덮고 있어요.
+      </p>
+      <p>
+        밀도와의 차이가 판정 기준이에요. 밀도는 <strong>같은 presentation 안에서</strong>{' '}
+        입력 방식과 사용자 설정이 값을 갈랐어요 - 입력이 여럿이니 결정이고, 결정이라
+        도메인이 됐어요. 모양의 입력은 presentation 하나뿐이에요. 입력이 하나인 것은
+        결정이 아니라 대응표이고, 대응표의 집은 CSS예요. 남는 변주 축은 브랜드인데,
+        그건 토큰 리바인딩 한 줄이에요:
+      </p>
+      <pre><code>{`[data-presentation='modal'] { --protean-shape: 20px; }`}</code></pre>
+      <p>
+        패턴-모양 결합도 이미 공짜예요 - 모양이 presentation 스탬프에 키잉돼 있어서,
+        Protean이 패턴을 바꾸면 모양이 원자적으로 따라와요. 포털 문제도 같은 스탬프가
+        이미 풀었고요. 그러니 shape 도메인은 능력을 하나도 더하지 않으면서 표면만
+        늘려요. &quot;CSS와 토큰으로 충분한 문제는 억지로 기능으로 만들지 않는다&quot; -
+        이 페이지 맨 위의 원칙이 여기에도 적용된 거예요.
+      </p>
+
       <h2>왜 비례 축소가 아니라 단계인가요?</h2>
       <p>
         &quot;카드가 20% 작아졌으니 radius도 20% 줄이자&quot;는 어떤 디자이너도 고른 적
