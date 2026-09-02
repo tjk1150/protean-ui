@@ -10,12 +10,15 @@ export default function GettingStartedPage() {
       </p>
 
       <h2>Install</h2>
-      <pre><code>{`npm install protean-ui`}</code></pre>
+      <pre><code>{`npm install @protean-ui/react`}</code></pre>
       <p>
         Base UI (the behavior backend) and the policy engine (core) come along as
-        dependencies. No <code>transpilePackages</code>, no aliases. Installing the
-        scoped package directly - <code>npm install @protean-ui/react</code> - is
-        equivalent.
+        dependencies. No <code>transpilePackages</code>, no aliases. This scoped
+        package is the one official entry point - install, imports, the stylesheet
+        (<code>@protean-ui/react/reference.css</code>), and the per-role subpaths
+        (<code>@protean-ui/react/dialog</code>) all share one name, so there is
+        nothing to mix up. The short alias <code>protean-ui</code> exists on npm but
+        only re-exports this package.
       </p>
       <div className="callout">
         On versions: this is <code>0.1.0-alpha</code>. APIs move without notice - pin

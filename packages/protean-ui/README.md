@@ -16,7 +16,7 @@ return isMobile
 The same thing with Protean:
 
 ```tsx
-import { Select } from 'protean-ui'
+import { Select } from '@protean-ui/react'
 import '@protean-ui/react/reference.css'
 
 <Select.Root aria-label="Billing cycle" items={cycles}>
@@ -37,8 +37,10 @@ Screen, PrimaryAction, Tooltip, ListDetail, Actions, SupportingPane - and Base
 UI ships alongside as a peer, so the non-adaptive components are already there
 to import.
 
-This is the umbrella package; it re-exports
-[`@protean-ui/react`](https://www.npmjs.com/package/@protean-ui/react).
+This package is a short alias. The one official entry point is
+[`@protean-ui/react`](https://www.npmjs.com/package/@protean-ui/react) -
+install that, and every name (imports, `reference.css`, per-role subpaths)
+matches. This umbrella only re-exports it.
 
 Status: pre-alpha. APIs move without notice.
 

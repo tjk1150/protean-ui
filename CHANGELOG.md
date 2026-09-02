@@ -2,6 +2,20 @@
 
 All four packages (`protean-ui`, `@protean-ui/react`, `@protean-ui/core`, `@protean-ui/css`) are versioned and released together. Pre-alpha: APIs move without notice until 0.1.0.
 
+## 0.1.0-alpha.9 - 2026-09-02
+
+- **One official entry point: `@protean-ui/react`.** Docs and READMEs previously
+  mixed `npm install protean-ui` with `import ... from '@protean-ui/react'` -
+  structurally inevitable, since the umbrella carries neither `reference.css`
+  nor the per-role subpaths. Everything now teaches the scoped package, where
+  install, imports, the stylesheet, and `@protean-ui/react/dialog`-style
+  subpaths share one name. The `protean-ui` umbrella remains published as a
+  short alias and its README points here.
+- The npm READMEs now carry the same 30-second first screen as GitHub: the
+  hand-coupled `isMobile` + `rowHeight` branch versus a bare `Select`, and the
+  outcome table including "a narrow window is not a phone".
+- No runtime changes.
+
 ## 0.1.0-alpha.8 - 2026-09-02
 
 - **Density** - the sixth policy domain, and the first geometry semantic:

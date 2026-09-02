@@ -150,7 +150,7 @@ headless 적응 정책 런타임입니다. Radix와 Base UI가 패턴을 주고,
 Coutaz, 1999)입니다. 이 프로젝트를 통과시킨 킬 크라이테리아 판정문은 데이터와 함께
 저장소에 있습니다.
 
-- 설치: `npm install protean-ui` (프리알파)
+- 설치: `npm install @protean-ui/react` (프리알파)
 - 저장소: https://github.com/tjk1150/protean-ui
 - 문서와 라이브 데모: https://protean-ui-jintaes-projects.vercel.app
 - 왜 만들었나: https://protean-ui-jintaes-projects.vercel.app/ko/why · 설계 원리: https://protean-ui-jintaes-projects.vercel.app/ko/concepts/design-principles

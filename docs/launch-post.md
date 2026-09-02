@@ -155,7 +155,7 @@ The name: protean - readily assuming different forms. The academic lineage is UI
 plasticity (Thevenin and Coutaz, 1999). The kill-criteria verdict that gated this project
 is in the repository, data included.
 
-- Install: `npm install protean-ui` (pre-alpha)
+- Install: `npm install @protean-ui/react` (pre-alpha)
 - Repository: https://github.com/tjk1150/protean-ui
 - Docs and live demo: https://protean-ui-jintaes-projects.vercel.app
 - Why this exists: https://protean-ui-jintaes-projects.vercel.app/en/why - Design principles: https://protean-ui-jintaes-projects.vercel.app/en/concepts/design-principles

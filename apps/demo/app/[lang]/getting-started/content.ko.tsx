@@ -10,12 +10,15 @@ export default function GettingStartedKo() {
       </p>
 
       <h2>1. 설치하기</h2>
-      <pre><code>{`npm install protean-ui`}</code></pre>
+      <pre><code>{`npm install @protean-ui/react`}</code></pre>
       <p>
-        행동을 맡는 Base UI와 정책 엔진(core)은 의존성으로 함께 설치돼요. 컴파일된
-        ESM과 타입이 배포되기 때문에 번들러 설정이나 Next.js 설정은 아무것도 필요
-        없어요. 스코프 패키지를 직접 쓰고 싶으면{' '}
-        <code>npm install @protean-ui/react</code>도 같아요.
+        행동을 맡는 Base UI와 정책 엔진(core)은 함께 설치돼요. 컴파일된 ESM과
+        타입이 배포되기 때문에 번들러 설정이나 Next.js 설정은 아무것도 필요 없어요.
+        공식 진입점은 이 스코프 패키지 하나예요 - 설치, 임포트, CSS(
+        <code>@protean-ui/react/reference.css</code>), 역할별 서브패스(
+        <code>@protean-ui/react/dialog</code>)가 전부 같은 이름이라 헷갈릴 곳이
+        없어요. 짧은 별칭 <code>protean-ui</code>도 npm에 있지만 같은 것을
+        재수출할 뿐이에요.
       </p>
       <div className="callout">
         <strong>버전에 대해:</strong> 지금은 <code>0.1.0-alpha</code>예요. API가 예고
