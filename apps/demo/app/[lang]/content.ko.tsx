@@ -42,6 +42,12 @@ return isDesktop
         열려요. 분기 코드는 한 줄도 없고, 전부 15줄이에요. 두 방식을 나란히 놓은{' '}
         <Link href="/delete-demo">삭제 데모</Link>에서 직접 비교해 보세요.
       </p>
+      <p>
+        모습만 고르는 게 아니에요. 같은 판단이 <strong>밀도</strong>도 골라요 -
+        데스크톱 마우스에는 촘촘한 행을, 터치에는 넉넉한 행을요. 분기마다{' '}
+        <code>rowHeight</code>를 손으로 맞추던 일이 사라져요. 자세한 건{' '}
+        <Link href="/ko/concepts/density">밀도</Link> 문서에 있어요.
+      </p>
 
       <h2>어떻게 정하나요?</h2>
       <ol>

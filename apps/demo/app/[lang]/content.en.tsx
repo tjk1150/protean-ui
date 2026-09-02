@@ -38,6 +38,13 @@ return isDesktop ? <Dialog>...</Dialog> : <Drawer>...</Drawer>;`}</code></pre>
       <p>
         See it side by side in <Link href="/delete-demo">the deletion demo</Link>.
       </p>
+      <p>
+        And it does not stop at the pattern: the same judgment picks the{' '}
+        <strong>density</strong> - desktop-dense rows for a mouse, touch-sized rows
+        for a finger - so the <code>rowHeight</code> you used to couple to each
+        branch by hand stops being your code. Details on the{' '}
+        <Link href="/en/concepts/density">density</Link> page.
+      </p>
 
       <h2>How it decides</h2>
       <ul>

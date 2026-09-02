@@ -2,32 +2,48 @@
 
 [![ci](https://github.com/tjk1150/protean-ui/actions/workflows/ci.yml/badge.svg)](https://github.com/tjk1150/protean-ui/actions/workflows/ci.yml)
 
-> Headless adaptive UI runtime for React. Declare what your UI means; the runtime decides how it presents in the current environment.
+> Declare what your UI means. Protean decides how it presents - and how dense - in the user's current environment.
 
-**Status: pre-alpha.** Phase 0 passed its kill criteria ([verdict](docs/phase-0-verdict.md)). Ten roles are implemented (Dialog, Select, Menu, Navigation, Screen, PrimaryAction, Tooltip, ListDetail, Actions, SupportingPane), proven against a 699-test production-grade app migration. APIs move without notice.
+The component every responsive React app ends up writing:
+
+```tsx
+const isMobile = useMediaQuery("(max-width: 768px)");
+
+return isMobile
+  ? <BottomSheet rowHeight={44} />   // touch sizing, coupled by hand
+  : <Popover rowHeight={36} />;      // pointer density, coupled by hand
+```
+
+The same thing with Protean:
+
+```tsx
+<Select.Root aria-label="Billing cycle" items={cycles}>
+  <Select.Trigger />
+  <Select.Content />
+</Select.Root>
+```
+
+| Environment | What the user gets |
+|---|---|
+| desktop + mouse | anchored popover, desktop-dense rows |
+| phone + touch | bottom sheet, touch-sized rows |
+| narrow window + mouse | still a popover - a narrow window is not a phone |
+
+You write the intent. The environment branch and the density coupling stop being your code - and there is no `isMobile` left to keep two trees in sync.
+
+**Status: pre-alpha.** APIs move without notice.
 
 ```
 npm install protean-ui
 ```
 
+One install is a whole app: Base UI ships alongside as a peer, so the non-adaptive components - form controls, tabs, toast, and the rest - are already there to import. No second UI library.
+
 ## The idea
 
-Web apps still encode environment-to-presentation decisions by hand at every call site:
+CSS solved layout adaptation (media queries, container queries). Pattern adaptation - Popover vs BottomSheet, Sidebar vs BottomNav, inline button vs fixed action bar - is still manual branching in application code, because those swaps change the DOM, the focus management, and the ARIA wiring.
 
-```tsx
-const isMobile = useMediaQuery("(max-width: 768px)");
-return isMobile ? <BottomSheet /> : <Popover />;
-```
-
-CSS solved layout adaptation (media queries, container queries). Pattern adaptation - Popover vs BottomSheet, Sidebar vs BottomNav, inline button vs fixed action bar - is still manual branching in application code.
-
-Protean moves that decision into a policy runtime:
-
-```tsx
-<Dialog.Root role="form">...</Dialog.Root>   // popover, sheet, modal, or fullscreen -
-<Navigation.Root>...</Navigation.Root>       // bar, drawer, rail, or sidebar -
-<PrimaryAction.Root>Buy</PrimaryAction.Root> // decided by traits (size x input), not by you
-```
+Protean moves that decision into a policy runtime. Every role works the way Select does above: `Dialog.Root role="form"` opens as a popover, sheet, modal, or fullscreen; `Navigation.Root` presents as a bar, drawer, rail, or sidebar; ten roles in all, driven by one policy reading the environment (size x input) so you never do.
 
 Goal: **no breakpoints in application code** - precisely, no pattern-choosing branches (`isMobile ? <A/> : <B/>`). Layout tweaks like `md:flex-row` are a problem CSS already solves and stay CSS's job. The pattern breakpoints do not disappear - they move into one named, inspectable, overridable policy layer (`protean.config.ts`) that lives in your repo.
 
@@ -68,6 +84,11 @@ test design: the default policy is verified as an exhaustive 72-cell decision ta
 thresholds and hysteresis by boundary value analysis, lifecycles by state-transition
 tests, and odd user behavior by negative tests - 245 library tests plus a 699-test
 real-app scenario suite. The release gate is documented in [docs/qa.md](docs/qa.md).
+
+The project passed its own kill criteria before continuing
+([Phase 0 verdict](docs/phase-0-verdict.md)), and the real test was a migration:
+a production-grade 24-screen app moved onto Protean with all 699 of its tests
+staying green and a net 152 lines of application code removed.
 
 ## Why "protean"
 
