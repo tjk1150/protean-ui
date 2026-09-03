@@ -6,89 +6,209 @@ export default function DialogKo() {
     <div className="doc" lang="ko">
       <h1>Dialog</h1>
       <p className="lede">
-        다이얼로그의 역할만 선언하면, 열리는 순간의 환경에 맞춰 팝오버 · 바텀 시트 ·
-        모달 · 전체 화면 중 하나로 열려요.
+        확인, 입력, 간단한 옵션처럼 <strong>사용자의 작업을 잠시 별도 화면에
+        보여줄 때</strong> 사용해요. Protean에서는 Dialog의 역할만 알려주면, 현재
+        환경에 맞춰 모달 · 바텀 시트 · 팝오버 · 전체 화면 중 알맞은 형태를
+        선택해요.
       </p>
 
+      <h2>직접 확인해 보세요</h2>
       <div className="example">
-        <span className="exampleLabel">직접 해 보세요 - 창 크기를 바꾸고 다시 열어 보세요</span>
+        <span className="exampleLabel">창 크기와 입력 환경을 바꾼 뒤 Dialog를 다시 열어 보세요</span>
         <ProteanCheckoutDialog />
       </div>
+      <p>같은 코드인데도 환경과 <code>role</code>에 따라 열리는 형태가 달라져요.</p>
 
+      <h2>기본 사용법</h2>
+      <p>입력 폼을 여는 Dialog예요.</p>
       <pre><code>{`<Dialog.Root role="form">
   <Dialog.Trigger>배송지 수정</Dialog.Trigger>
   <Dialog.Content title="배송지 수정">
     <AddressForm />
   </Dialog.Content>
 </Dialog.Root>`}</code></pre>
-
-      <h2>역할에 따라 이렇게 열려요</h2>
       <p>
-        <code>role</code>은 이 다이얼로그가 어떤 성격인지 알려주는 속성이에요. 성격에
-        따라 어울리는 모습이 달라요.
+        여기서 중요한 건 <code>role=&quot;form&quot;</code>이에요. 앱은 &quot;이
+        Dialog는 입력 폼이에요&quot;라고 알려주기만 해요. 모달로 열지, 전체
+        화면으로 열지는 직접 분기하지 않아요.
       </p>
+
+      <h2>역할에 따라 어떻게 달라지나요?</h2>
+      <p><code>role</code>은 이 Dialog가 어떤 목적으로 사용되는지 알려줘요.</p>
       <div className="tableWrap">
         <table>
           <thead>
-            <tr><th>role</th><th>이런 것</th><th>작은 화면 + 터치</th><th>그 외</th></tr>
+            <tr><th>role</th><th>이런 상황에 사용해요</th><th>작은 화면 + 터치</th><th>그 외</th></tr>
           </thead>
           <tbody>
-            <tr><td>confirmation</td><td>확인 · 안내 창</td><td>바텀 시트</td><td>모달</td></tr>
-            <tr><td>form</td><td>입력 폼</td><td>전체 화면</td><td>모달</td></tr>
-            <tr><td>contextual</td><td>버튼에 붙는 메뉴 · 옵션</td><td>바텀 시트</td><td>팝오버 (버튼 옆에 붙어요)</td></tr>
+            <tr><td><code>confirmation</code></td><td>확인 · 안내</td><td>바텀 시트</td><td>모달</td></tr>
+            <tr><td><code>form</code></td><td>입력 폼</td><td>전체 화면</td><td>모달</td></tr>
+            <tr><td><code>contextual</code></td><td>버튼 주변의 옵션 · 간단한 작업</td><td>바텀 시트</td><td>팝오버</td></tr>
           </tbody>
         </table>
       </div>
-      <div className="callout">
-        열려 있는 동안에는 창 크기가 바뀌어도 모습을 유지해요. 쓰던 도중에 UI가 갑자기
-        변신하면 당황스러우니까요. 다음에 열 때 다시 판단해요. 반대 트레이드가 필요하면{' '}
-        <code>continuity=&quot;live&quot;</code>를 켜 보세요. 열려 있는 동안에도 다시
-        판단해서 모습을 그 자리에서 바꾸는데, 입력하던 내용과 포커스, React 상태까지
-        전부 보존돼요. <a href="/continuity-demo">전환 연속성 데모</a>에서 직접 확인할
-        수 있어요.
-      </div>
+      <p>예를 들어 삭제 여부를 묻는 Dialog라면:</p>
+      <pre><code>{`<Dialog.Root role="confirmation">
+  ...
+</Dialog.Root>`}</code></pre>
+      <p>입력 항목이 많은 편집 화면이라면:</p>
+      <pre><code>{`<Dialog.Root role="form">
+  ...
+</Dialog.Root>`}</code></pre>
+      <p>처럼 의미에 맞는 역할을 선택하면 돼요.</p>
 
-      <h2>Dialog.Root</h2>
-      <div className="tableWrap">
-        <table>
-          <thead><tr><th>속성</th><th>타입</th><th>설명</th></tr></thead>
-          <tbody>
-            <tr><td>role</td><td>&quot;confirmation&quot; | &quot;form&quot; | &quot;contextual&quot;</td><td>다이얼로그의 성격. 기본값은 confirmation이에요.</td></tr>
-            <tr><td>presentation</td><td>모습 이름 | &#123; 화면등급: 모습 &#125;</td><td>이 다이얼로그만 다르게 열고 싶을 때 지정해요. 픽셀이 아니라 환경 이름으로 써요.</td></tr>
-            <tr><td>continuity</td><td>&quot;pinned&quot; | &quot;live&quot;</td><td>기본은 pinned(열림 동안 고정)이에요. live면 열려 있는 동안에도 다시 판단해서, 상태를 보존한 채 모습을 바꿔요.</td></tr>
-            <tr><td>open / defaultOpen / onOpenChange</td><td></td><td>열림 상태를 직접 관리할 수도, 맡길 수도 있어요. 부모가 조건부로 렌더링하는 패턴은 defaultOpen과 onOpenChange를 쓰면 돼요.</td></tr>
-          </tbody>
-        </table>
-      </div>
-
-      <h2>Dialog.Content</h2>
-      <div className="tableWrap">
-        <table>
-          <thead><tr><th>속성</th><th>타입</th><th>설명</th></tr></thead>
-          <tbody>
-            <tr><td>title</td><td>string</td><td>제목이에요. 화면에 보이고, 스크린 리더가 읽는 이름으로도 연결돼요.</td></tr>
-            <tr><td>className</td><td>string</td><td>팝업 요소에 그대로 붙어요. 기존 클래스 기반 스타일을 재사용할 수 있어요.</td></tr>
-            <tr><td>alert</td><td>boolean</td><td>되돌릴 수 없는 확인 창이면 켜 주세요. role=&quot;alertdialog&quot;로 알려요.</td></tr>
-            <tr><td>describedBy</td><td>string</td><td>설명 문단의 id를 연결해요. 여러 개면 공백으로 이어요.</td></tr>
-            <tr><td>initialFocus</td><td>RefObject</td><td>열릴 때 포커스를 받을 요소예요. 위험한 창에서는 취소 버튼을 지정하세요.</td></tr>
-            <tr><td>finalFocus</td><td>false | RefObject | 함수</td><td>닫힐 때 포커스가 갈 곳이에요. 함수로 false를 돌려주면 복귀를 생략하고 앱이 직접 옮길 수 있어요.</td></tr>
-          </tbody>
-        </table>
-      </div>
+      <h2>왜 role을 사용하나요?</h2>
+      <p>호출하는 곳에서 이렇게 작성할 수도 있어요.</p>
+      <pre><code>{`isMobile ? <BottomSheet /> : <Modal />`}</code></pre>
       <p>
-        <code>Dialog.Trigger</code>와 <code>Dialog.Close</code>는 연결이 끝나 있는
-        평범한 버튼이에요. 버튼에 쓰는 속성을 그대로 받고, 트리거는{' '}
-        <code>render</code>로 다른 요소(스타일드 버튼, <code>Tooltip.Trigger</code>)에
-        행동을 합칠 수 있어요 - <Link href="/ko/guides/composition">함께 쓰기</Link>에
-        패턴이 있어요. 모든 조각에는{' '}
-        <code>data-scope</code> · <code>data-part</code> ·{' '}
-        <code>data-presentation</code> 속성이 붙어서 CSS 선택자로 스타일링해요.
+        하지만 이렇게 하면 어떤 형태를 보여줄지 앱 코드가 직접 결정하게 돼요.
+        Protean에서는 대신 <code>role</code>로 <strong>Dialog가 무엇을 위한
+        것인지</strong> 남겨요. 환경에 따른 기본 선택은 Protean이 맡아요. 이
+        원리가 궁금하다면{' '}
+        <Link href="/ko/concepts/pattern-adaptation">패턴 적응</Link>에서 자세히
+        볼 수 있어요.
       </p>
 
+      <h2>열린 뒤에는 갑자기 바뀌지 않아요</h2>
       <p>
-        수동 분기 방식과 나란히 비교하려면 <Link href="/delete-demo">삭제 데모</Link>를,
-        서버 렌더링에서 왜 안전한지는 <Link href="/ko/advanced/server-rendering">서버 렌더링</Link>{' '}
-        문서를 보세요.
+        기본적으로 Dialog는 <strong>열리는 순간</strong> 현재 환경에 맞는 형태를
+        선택해요. 한번 열리면 창 크기가 달라져도 닫을 때까지 그 형태를 유지해요.
+        예를 들어 입력 중이던 전체 화면 Dialog가 갑자기 모달로 바뀌지 않아요.
+      </p>
+      <pre><code>{`열기
+  ↓
+현재 환경에서 형태 선택
+  ↓
+사용하는 동안 유지
+  ↓
+닫기`}</code></pre>
+      <p>
+        다음에 다시 열 때 현재 환경을 보고 새로 선택해요. 이 기본 동작을{' '}
+        <code>pinned</code>라고 해요.
+      </p>
+
+      <h3>열려 있는 동안에도 바꾸고 싶다면</h3>
+      <p>필요한 경우에는:</p>
+      <pre><code>{`<Dialog.Root
+  role="form"
+  continuity="live"
+>`}</code></pre>
+      <p>
+        처럼 <code>live</code>를 사용할 수 있어요. 이 경우 열린 상태에서도 환경이
+        달라지면 새로운 형태로 전환할 수 있어요. Protean은 전환할 때 입력 중인
+        값이나 React 상태가 사라지지 않도록 같은 Dialog의 연속성을 유지해요.
+        일반적인 Dialog에서는 기본값인 <code>pinned</code>를 그대로 사용하는 걸
+        권장해요. <a href="/continuity-demo">전환 연속성 데모</a>에서 직접 확인할
+        수 있어요.
+      </p>
+
+      <h2>이 Dialog만 결과를 바꾸고 싶다면</h2>
+      <p>
+        기본 규칙과 다르게 특정 Dialog만 다른 형태로 보여줘야 할 수도 있어요.
+        그럴 때는 <code>presentation</code>을 직접 지정할 수 있어요.
+      </p>
+      <pre><code>{`<Dialog.Root
+  role="form"
+  presentation="sheet"
+>
+  ...
+</Dialog.Root>`}</code></pre>
+      <p>
+        이렇게 지정하면 이 Dialog에서는 기본 판단보다 직접 지정한 결과가 우선해요.
+        모든 Dialog의 규칙을 바꾸고 싶은 경우에는 호출부마다{' '}
+        <code>presentation</code>을 반복하지 말고{' '}
+        <Link href="/ko/guides/customize-decisions">결과 맞춤 설정</Link>에서
+        프로젝트 규칙을 변경하는 편이 좋아요.
+      </p>
+
+      <h2>Dialog.Root</h2>
+      <p>Dialog 전체의 역할과 적응 방식을 설정해요.</p>
+      <div className="tableWrap">
+        <table>
+          <thead><tr><th>속성</th><th>설명</th></tr></thead>
+          <tbody>
+            <tr><td><code>role</code></td><td>Dialog의 목적이에요. <code>confirmation</code>, <code>form</code>, <code>contextual</code> 중에서 선택해요. 기본값은 <code>confirmation</code>이에요.</td></tr>
+            <tr><td><code>presentation</code></td><td>이 Dialog에서 사용할 형태를 직접 지정하고 싶을 때 사용해요.</td></tr>
+            <tr><td><code>continuity</code></td><td>열린 동안 형태를 유지할지 결정해요. 기본값은 <code>pinned</code>예요.</td></tr>
+            <tr><td><code>open</code></td><td>열림 상태를 직접 제어할 때 사용해요.</td></tr>
+            <tr><td><code>defaultOpen</code></td><td>처음 열림 상태의 기본값이에요.</td></tr>
+            <tr><td><code>onOpenChange</code></td><td>열림 상태가 바뀔 때 호출돼요.</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>
+        <code>presentation</code>에는 형태 이름 하나(<code>&quot;sheet&quot;</code>)를
+        주거나, 환경별로 다르게(<code>&#123; compact: &quot;sheet&quot; &#125;</code>)
+        지정할 수도 있어요. 픽셀이 아니라 환경 이름으로 써요.
+      </p>
+
+      <h2>Dialog.Content</h2>
+      <p>실제로 열리는 Dialog 내용을 만들어요.</p>
+      <pre><code>{`<Dialog.Content title="배송지 수정">
+  ...
+</Dialog.Content>`}</code></pre>
+      <div className="tableWrap">
+        <table>
+          <thead><tr><th>속성</th><th>설명</th></tr></thead>
+          <tbody>
+            <tr><td><code>title</code></td><td>Dialog의 제목이에요. 화면에 표시되고 접근성 이름으로도 연결돼요.</td></tr>
+            <tr><td><code>className</code></td><td>실제 팝업 요소에 클래스를 추가해요.</td></tr>
+            <tr><td><code>alert</code></td><td>되돌리기 어려운 작업처럼 특별한 주의가 필요한 Dialog에 사용해요. 스크린 리더에 <code>alertdialog</code>로 알려요.</td></tr>
+            <tr><td><code>describedBy</code></td><td>Dialog를 설명하는 요소와 연결할 때 사용해요.</td></tr>
+            <tr><td><code>initialFocus</code></td><td>Dialog가 열렸을 때 처음 포커스를 받을 요소를 지정해요.</td></tr>
+            <tr><td><code>finalFocus</code></td><td>Dialog가 닫힌 뒤 포커스가 돌아갈 위치를 지정해요.</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h2>Trigger와 Close</h2>
+      <p><code>Dialog.Trigger</code>는 Dialog를 열고:</p>
+      <pre><code>{`<Dialog.Trigger>
+  배송지 수정
+</Dialog.Trigger>`}</code></pre>
+      <p><code>Dialog.Close</code>는 Dialog를 닫아요.</p>
+      <pre><code>{`<Dialog.Close>
+  완료
+</Dialog.Close>`}</code></pre>
+      <p>
+        일반적인 버튼 속성을 그대로 사용할 수 있어요. 기존 디자인 시스템의 버튼과
+        함께 사용하는 방법은{' '}
+        <Link href="/ko/guides/composition">함께 쓰기</Link>에서 설명해요.
+      </p>
+
+      <h2>스타일을 바꾸고 싶다면</h2>
+      <p>실제로 열리는 요소에는 현재 선택된 형태가 표시돼요. 예를 들어:</p>
+      <pre><code>{`<div data-presentation="modal">`}</code></pre>
+      <p>
+        처럼 확인할 수 있어요. 그래서 필요한 경우 CSS에서도 형태에 따라 스타일을
+        다르게 적용할 수 있어요.
+      </p>
+      <pre><code>{`[data-presentation="modal"] {
+  /* 프로젝트 스타일 */
+}`}</code></pre>
+      <p>
+        다만 기본 디자인 토큰이나 프로젝트 전체 스타일을 바꾸는 방법은 이
+        페이지에서 모두 설명하지 않아요. 자세한 내용은{' '}
+        <Link href="/ko/guides/customize-decisions">결과 맞춤 설정</Link>에서
+        확인해 주세요.
+      </p>
+
+      <h2>정리하면</h2>
+      <p>
+        Dialog를 사용할 때 가장 먼저 결정할 건 <strong>어떻게 보여줄지</strong>가
+        아니라 <strong>무엇을 위한 Dialog인지</strong>예요. 의미를 선언하면
+        기본적인 환경 분기는 Protean이 맡아요. 대부분은 이 정도면 충분해요.
+      </p>
+      <pre><code>{`<Dialog.Root role="form">
+  <Dialog.Trigger>수정</Dialog.Trigger>
+  <Dialog.Content title="수정">
+    ...
+  </Dialog.Content>
+</Dialog.Root>`}</code></pre>
+      <p>
+        특별한 경우에만 <code>presentation</code>이나 <code>continuity</code>를
+        직접 지정하면 돼요. 다음은{' '}
+        <Link href="/ko/components/select">Select</Link>예요.
       </p>
     </div>
   )
