@@ -8,7 +8,7 @@ import type { ReactNode } from 'react'
 export type DocsLang = 'ko' | 'en'
 
 type NavEntry =
-  | { readonly group: { ko: string; en: string } }
+  | { readonly group: { ko: string; en: string }; readonly sub?: boolean }
   | {
       readonly path: string
       readonly label: { ko: string; en: string }
@@ -20,9 +20,10 @@ const entries: readonly NavEntry[] = [
   { path: '', label: { ko: 'Protean UI란?', en: 'What is Protean UI?' } },
   { path: '/getting-started', label: { ko: '10분 시작하기', en: 'Start in 10 minutes' } },
   { group: { ko: '핵심 개념', en: 'Core concepts' } },
-  { path: '/concepts/pattern-adaptation', label: { ko: '상황에 맞는 패턴 선택', en: 'Pattern adaptation' } },
+  { path: '/concepts/pattern-adaptation', label: { ko: '패턴 적응', en: 'Pattern adaptation' } },
   { path: '/concepts/density', label: { ko: '밀도', en: 'Density' } },
-  { group: { ko: '패턴 컴포넌트', en: 'Pattern components' } },
+  { group: { ko: '컴포넌트', en: 'Components' } },
+  { group: { ko: '패턴', en: 'Patterns' }, sub: true },
   { path: '/components/dialog', label: { ko: 'Dialog', en: 'Dialog' } },
   { path: '/components/select', label: { ko: 'Select', en: 'Select' } },
   { path: '/components/menu', label: { ko: 'Menu', en: 'Menu' } },
@@ -30,20 +31,19 @@ const entries: readonly NavEntry[] = [
   { path: '/components/list-detail', label: { ko: 'ListDetail', en: 'ListDetail' } },
   { path: '/components/primary-action', label: { ko: 'PrimaryAction', en: 'PrimaryAction' } },
   { path: '/components/tooltip', label: { ko: 'Tooltip', en: 'Tooltip' } },
-  { group: { ko: '레이아웃 도우미 - CSS 중심', en: 'Layout helpers - CSS-driven' } },
+  { group: { ko: '레이아웃', en: 'Layout' }, sub: true },
   { path: '/layout/screen', label: { ko: 'Screen', en: 'Screen' } },
   { path: '/layout/actions', label: { ko: 'Actions', en: 'Actions' } },
   { path: '/layout/supporting-pane', label: { ko: 'SupportingPane', en: 'SupportingPane' } },
-  { group: { ko: '사용 가이드', en: 'Guides' } },
-  { path: '/guides/customize-decisions', label: { ko: '적응 결과 맞춤 설정', en: 'Customize the decisions' } },
+  { group: { ko: '가이드', en: 'Guides' } },
+  { path: '/guides/customize-decisions', label: { ko: '결과 맞춤 설정', en: 'Customize the decisions' } },
   { path: '/guides/composition', label: { ko: '함께 쓰기', en: 'Using together' } },
-  { path: '/guides/accessibility', label: { ko: '접근성', en: 'Accessibility' } },
-  { group: { ko: '심화', en: 'Advanced' } },
+  { path: '/advanced/container-boundary', label: { ko: '컨테이너 안에서 사용하기', en: 'Inside a container' } },
   { path: '/advanced/server-rendering', label: { ko: '서버 렌더링', en: 'Server rendering' } },
-  { path: '/advanced/container-boundary', label: { ko: '컨테이너 기준 적응', en: 'Container-scoped adaptation' } },
-  { group: { ko: '프로젝트', en: 'Project' } },
-  { path: '/about/scope', label: { ko: '제공 범위와 비목표', en: 'Scope and non-goals' } },
-  { path: '/about/status', label: { ko: '품질·지원 상태', en: 'Quality and support status' } },
+  { path: '/guides/accessibility', label: { ko: '접근성', en: 'Accessibility' } },
+  { group: { ko: '참고', en: 'Reference' } },
+  { path: '/about/scope', label: { ko: '제공 범위', en: 'Scope and non-goals' } },
+  { path: '/about/status', label: { ko: '품질과 지원', en: 'Quality and support' } },
   { path: '/about/why', label: { ko: '왜 만들었나요', en: 'Why this exists' } },
 ]
 
@@ -100,7 +100,7 @@ export function DocsShell({ lang, children }: { lang: DocsLang; children: ReactN
         >
           {entries.map((entry) =>
             'group' in entry ? (
-              <li key={entry.group.en} data-part="group-label">
+              <li key={entry.group.en} data-part={entry.sub ? 'group-sublabel' : 'group-label'}>
                 {entry.group[lang]}
               </li>
             ) : (

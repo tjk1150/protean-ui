@@ -61,6 +61,18 @@
   list-style: none;
 }
 
+/* Sub-label inside a group (e.g. Components > Patterns / Layout). */
+.docsShell [data-part='group-sublabel'] {
+  margin: 8px 0 2px;
+  padding: 0 14px 0 22px;
+  font-size: 0.64rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: color-mix(in srgb, var(--muted) 72%, transparent);
+  list-style: none;
+}
+
 /* The docs navigation never uses the bar presentation, so the bar-only
    overflow toggle stays hidden in every state. */
 .docsShell [data-scope='navigation'] [data-part='overflow-toggle-item'] {
