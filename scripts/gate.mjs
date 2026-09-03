@@ -17,7 +17,7 @@ import { gzipSync } from 'node:zlib'
 
 const ROOT = join(import.meta.dirname, '..')
 const BUDGETS = { react: 8 * 1024, core: 2 * 1024, role: 3.5 * 1024 }
-const GATE_URL = process.env.PROTEAN_GATE_URL ?? 'https://protean-ui-jintaes-projects.vercel.app'
+const GATE_URL = process.env.PROTEAN_GATE_URL ?? 'https://protean-ui-two.vercel.app'
 
 const results = []
 function record(name, status, detail = '') {

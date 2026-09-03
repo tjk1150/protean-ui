@@ -37,7 +37,7 @@ You write the intent. The environment branch and the density coupling stop being
 npm install @protean-ui/react
 ```
 
-One install is a whole app: Base UI ships alongside as a peer, so the non-adaptive components - form controls, tabs, toast, and the rest - are already there to import. No second UI library.
+One install is a whole app: Base UI ships alongside as a dependency, so the non-adaptive components - form controls, tabs, toast, and the rest - are already there to import. No second UI library.
 
 ## The idea
 
@@ -57,7 +57,7 @@ Goal: **no breakpoints in application code** - precisely, no pattern-choosing br
 
 ## One install, a whole app
 
-`npm install @protean-ui/react` brings the adaptation layer and the entire behavior layer: Base UI installs alongside as a peer, so every non-adaptive component an app needs - form controls, tabs, accordion, toast, and the rest - is already there to `import` directly. No second UI library required, and no new ecosystem coupling: Protean is one layer on top of the substrate you would use anyway, and removing it leaves a plain Base UI app. The full map lives in the docs ("Is it enough?").
+`npm install @protean-ui/react` brings the adaptation layer and the entire behavior layer: Base UI installs alongside as a dependency, so every non-adaptive component an app needs - form controls, tabs, accordion, toast, and the rest - is already there to `import` directly. No second UI library required, and no new ecosystem coupling: Protean is one layer on top of the substrate you would use anyway, and removing it leaves a plain Base UI app. The full map lives in the docs ("Is it enough?").
 
 ## Packages
 
