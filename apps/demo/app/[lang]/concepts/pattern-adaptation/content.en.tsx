@@ -3,149 +3,168 @@ import Link from 'next/link'
 export default function PatternAdaptationPage() {
   return (
     <div className="doc">
-      <h1>Pattern adaptation</h1>
+      <h1>Use the pattern that fits the situation</h1>
       <p className="lede">
-        The same &quot;confirmation&quot; wants a small modal on desktop and a bottom
-        sheet on a phone. Making that choice Protean&apos;s job instead of a branch in
-        your code - that is pattern adaptation. This page explains exactly how, and
-        when, the choice happens.
+        The same feature does not always belong in the same UI pattern. A Select
+        can be a dropdown in one environment and a sheet in another. A Dialog
+        can be a modal, a sheet, or fullscreen while still representing the same
+        task. Pattern adaptation is the decision between those patterns.
       </p>
 
-      <h2>Same meaning, different pattern</h2>
+      <h2>Width alone is not enough</h2>
       <p>
-        UI has meaning: &quot;a dialog confirming something irreversible&quot;, &quot;a
-        form collecting an address&quot;, &quot;a menu attached to an item&quot;. The
-        meaning survives every environment - <strong>which UX pattern shows it</strong>{' '}
-        does not.
+        A narrow viewport does not necessarily mean &quot;mobile.&quot; Consider
+        the same Select in four environments:
       </p>
       <div className="tableWrap">
         <table>
-          <thead><tr><th>Declared meaning</th><th>Desktop + mouse</th><th>Phone + touch</th></tr></thead>
+          <thead>
+            <tr><th>Environment</th><th>Result</th></tr>
+          </thead>
           <tbody>
-            <tr><td><code>role=&quot;confirmation&quot;</code></td><td>centered modal</td><td>bottom sheet</td></tr>
-            <tr><td><code>role=&quot;form&quot;</code></td><td>centered modal</td><td>fullscreen</td></tr>
-            <tr><td><code>role=&quot;contextual&quot;</code></td><td>anchored popover</td><td>bottom sheet</td></tr>
-            <tr><td>navigation</td><td>sidebar</td><td>bottom tab bar</td></tr>
+            <tr><td>Desktop + pointer</td><td>Dropdown</td></tr>
+            <tr><td>Small + touch</td><td>Bottom sheet</td></tr>
+            <tr><td>Tablet + touch</td><td>Dropdown with touch density</td></tr>
+            <tr><td>Narrow window + pointer</td><td>Dropdown</td></tr>
           </tbody>
         </table>
       </div>
       <p>
-        Why CSS cannot do this swap is the crux: a popover and a fullscreen dialog do
-        not differ in font size - they are <strong>different objects, with different
-        DOM structure, focus rules, dismissal, and accessibility wiring</strong>. That
-        is why every app has hand-written <code>isMobile ? &lt;A/&gt; : &lt;B/&gt;</code>,
-        and it is exactly the branch Protean replaces.
+        The last two rows are the important ones. A touch tablet can have plenty
+        of space while still benefiting from larger targets. A narrow desktop
+        window can have very little space while still being operated with a
+        precise pointer. So Protean does not reduce the problem to &quot;small
+        width → mobile UI.&quot; It combines the signals that matter to the role
+        being adapted. <strong>Narrow does not always mean mobile.</strong>
       </p>
 
-      <h2>What one button press sets off</h2>
-      <pre><code>{`<Dialog.Root role="confirmation">   // all the app knows: "this is a confirmation"
-
-the user presses the trigger
-  → read the environment    size class + input method
-  → apply the rules         per-instance override? none → project rules? defer
-                            → default: "small screen + touch means sheet, else modal"
-  → a presentation is set   modal
-  → open as a modal         focus, ESC, accessibility wired along
-  → data-presentation="modal"   CSS paints the look`}</code></pre>
+      <h2>The feature keeps its meaning</h2>
       <p>
-        Run the same code on a phone: the environment reads differently, the rules
-        pick a sheet, and a bottom sheet opens. The app code still contains zero
-        branches.
+        The application declares what the UI is for. For a Dialog, that meaning
+        is expressed with <code>role</code>:
       </p>
-
-      <h2>Decisions have a moment</h2>
-      <p>The server does not know the user&apos;s screen. Hence one rule:</p>
-      <div className="callout">
-        A decision the server could get wrong must be expressible in CSS, or deferred
-        to interaction time.
+      <pre><code>{`<Dialog.Root role="confirmation">
+  ...
+</Dialog.Root>`}</code></pre>
+      <p>
+        The environment can change the presentation without changing the task
+        itself. With the default policy:
+      </p>
+      <div className="tableWrap">
+        <table>
+          <thead>
+            <tr><th>Dialog role</th><th>compact + touch</th><th>otherwise</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><code>confirmation</code></td><td>Sheet</td><td>Modal</td></tr>
+            <tr><td><code>form</code></td><td>Fullscreen</td><td>Modal</td></tr>
+            <tr><td><code>contextual</code></td><td>Sheet</td><td>Popover</td></tr>
+          </tbody>
+        </table>
       </div>
-      <ul>
-        <li>
-          <strong>Dialogs, selects, and menus decide when they open.</strong> While
-          closed there is no decision at all - the served HTML carries zero overlay
-          markup, so the server has no chance to be wrong. While open, the decision is
-          pinned so the UI is not swapped out from under the user mid-use; it decides
-          again next time.
-        </li>
-        <li>
-          <strong>Navigation and the screen skeleton cannot defer</strong> - they are
-          always visible. So all four presentations are one identical HTML tree, and
-          CSS draws the first picture. Whatever the server sends, the markup is the
-          same: the first layout cannot be wrong and nothing shifts.
-        </li>
-      </ul>
       <p>
-        The consequences live in{' '}
+        A confirmation stays a confirmation. A form stays a form. Protean
+        changes <strong>how that role is presented</strong>, not what the
+        application means.
+      </p>
+
+      <h2>The application does not branch between two implementations</h2>
+      <p>
+        Without a shared adaptive layer, this decision often ends up at the call
+        site:
+      </p>
+      <pre><code>{`return isMobile
+  ? <MobileSheet />
+  : <DesktopPopover />;`}</code></pre>
+      <p>
+        Now the application owns two implementations of the same feature - and
+        keeps their state, events, focus behavior, dismissal, and accessibility
+        wiring in sync. With Protean, the call site describes the feature
+        instead:
+      </p>
+      <pre><code>{`<Dialog.Root role="contextual">
+  ...
+</Dialog.Root>`}</code></pre>
+      <p>The presentation is selected elsewhere.</p>
+
+      <h2>Protean chooses the pattern. CSS expresses it.</h2>
+      <p>
+        This is the responsibility boundary. Protean decides between semantic
+        results such as <code>popover</code>, <code>sheet</code>,{' '}
+        <code>modal</code>, and <code>fullscreen</code>. CSS still owns the
+        actual visual expression - dimensions, spacing, grid and flex layout,
+        colors, borders, shape, animation. CSS is the right tool for layout and
+        visual expression. Protean handles the separate question of{' '}
+        <strong>which interaction pattern should be active</strong>.
+      </p>
+
+      <h2>The selected result is visible in the DOM</h2>
+      <p>
+        When a presentation is selected, Protean exposes it through{' '}
+        <code>data-presentation</code>:
+      </p>
+      <pre><code>{`<div data-presentation="sheet">
+  ...
+</div>`}</code></pre>
+      <p>That gives CSS a stable result to style:</p>
+      <pre><code>{`[data-presentation="sheet"] {
+  /* sheet-specific expression */
+}`}</code></pre>
+      <p>
+        The application does not need another <code>isMobile</code> branch just
+        to style the selected pattern.
+      </p>
+
+      <h2>Overlays decide when they open</h2>
+      <p>
+        Dialog, Select, and Menu normally do not need to decide their
+        presentation while they are closed. When the user opens one, Protean
+        reads the current environment and chooses the result.
+      </p>
+      <pre><code>{`closed → no presentation decision needed
+open   → read the current environment
+       → choose the presentation`}</code></pre>
+      <p>
+        The default behavior then{' '}
+        <strong>pins that result while the overlay stays open</strong>. If the
+        window changes halfway through a form, the UI does not suddenly switch
+        from a modal to fullscreen underneath the user. Close it and open it
+        again, and Protean evaluates the current environment again. The detailed
+        server-rendering consequences are covered in{' '}
         <Link href="/en/advanced/server-rendering">Server rendering</Link>.
       </p>
 
-      <h2>How is this different from breakpoints?</h2>
-      <ol>
-        <li>
-          <strong>A different unit changes.</strong> A media query changes CSS
-          properties of the same pattern. Protean changes the pattern itself.
-        </li>
-        <li>
-          <strong>Decisions have a moment.</strong> A media query is an always-on
-          declaration with no concept of &quot;when&quot; - which is why the{' '}
-          <code>isMobile ? &lt;Sheet/&gt; : &lt;Dialog/&gt;</code> recipe flashes
-          under server rendering.
-        </li>
-        <li>
-          <strong>Decisions are values.</strong> The inputs (size class and input
-          method - together called <strong>traits</strong>) and the result exist as a
-          value: traced to whoever decided, explained in one console line in dev,
-          testable without rendering, stamped on the DOM as{' '}
-          <code>data-presentation</code>. You cannot ask a media query why the UI
-          looks the way it does.
-        </li>
-        <li>
-          <strong>Call sites speak meaning only.</strong>{' '}
-          <code>role=&quot;confirmation&quot;</code> lives at the call site; what it
-          becomes lives in one place. When a new input joins the judgment later, call
-          sites do not change. With breakpoints, every new axis multiplies conditions
-          across every call site.
-        </li>
-      </ol>
-
-      <h2>Values follow the presentation</h2>
+      <h2>Always-visible UI uses a different strategy</h2>
       <p>
-        A narrower screen never &quot;corrects&quot; a radius from 24 to 16. Instead,
-        when the UI&apos;s role changes, the value policy changes with it: a fullscreen
-        dialog is no longer a floating card, so it loses its corners; a bottom sheet
-        touches the bottom, so only its top corners round. The reference stylesheet
-        contains not a single media query on radius - every such value hangs off the
-        chosen presentation, so shape needs no separate decision. Values that differ{' '}
-        <strong>within the same presentation</strong> - row heights, tap targets - do
-        deserve one, and that is <Link href="/en/concepts/density">density</Link>.
+        Navigation cannot wait for a click before it appears - it is part of the
+        page from the first render. Protean therefore keeps one stable
+        Navigation structure and exposes the selected presentation as data,
+        while the reference stylesheet uses CSS to express the actual layout for
+        the current environment.
+      </p>
+      <pre><code>{`React    → one Navigation tree
+Protean  → presentation meaning
+CSS      → actual layout`}</code></pre>
+      <p>
+        Protean does not render a separate mobile Navigation tree and desktop
+        Navigation tree. Overlays and always-visible chrome simply have
+        different timing needs - the full strategy is on the{' '}
+        <Link href="/en/advanced/server-rendering">Server rendering</Link> page.
       </p>
 
-      <h2>What the default rules see - and do not</h2>
-      <p>Stated honestly, the inputs currently used or collected:</p>
-      <ul>
-        <li>size class: compact (below 600px) · medium · expanded (840px and up)</li>
-        <li>input method: touch · pointer · hybrid</li>
-        <li>hover capability - consulted by hints (tooltips)</li>
-        <li>reduced-motion preference - collected; the reference stylesheet handles motion via CSS media queries directly</li>
-        <li>virtual keyboard - collected, not yet consulted by the defaults</li>
-      </ul>
+      <h2>Pattern and density are separate decisions</h2>
       <p>
-        The default <strong>pattern</strong> rules branch on input only at compact -
-        a touch tablet and a mouse desktop get the same patterns at medium and up. We
-        refuse to ship speculative rules unvalidated on real devices; tablet
-        differentiation is on the roadmap. <strong>Density</strong> and{' '}
-        <strong>hints</strong>, by contrast, read the input method at every size.
-        Container-scoped judgment ships for overlays - see{' '}
-        <Link href="/en/advanced/container-boundary">container-scoped adaptation</Link>.
-        Because the rules are a first-class API, adding such an axis never touches
-        your call sites.
+        Pattern adaptation answers: <em>which interaction pattern should this
+        feature use?</em> Density answers: <em>how much space should the
+        controls inside that UI use?</em> A tablet with touch input can keep the
+        Select as a dropdown while using touch-friendly row and target sizes:
       </p>
-
+      <pre><code>{`Pattern → dropdown
+Density → touch`}</code></pre>
       <p>
-        Next: <Link href="/en/concepts/density">Density</Link> for the second
-        decision, and{' '}
-        <Link href="/en/guides/customize-decisions">Customize the decisions</Link> to
-        make the rules your own.
+        That is why Protean does not collapse every adaptive behavior into a
+        single &quot;mobile mode.&quot; Next:{' '}
+        <Link href="/en/concepts/density">Density</Link>.
       </p>
     </div>
   )
