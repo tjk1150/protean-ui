@@ -3,116 +3,173 @@ import Link from 'next/link'
 export default function DensityPage() {
   return (
     <div className="doc">
-      <h1>Density</h1>
+      <h1>Density changes how much space the same UI uses</h1>
       <p className="lede">
-        The same UI should sit snug for a mouse and spread out for a finger. Protean
-        handles this as a three-step <strong>density profile</strong> - compact ·
-        comfortable · touch. It never computes pixels: it{' '}
-        <strong>decides which density to use</strong>; tokens carry the values and CSS
-        does the rendering.
+        Pattern adaptation chooses <strong>which UI pattern</strong> to use.
+        Density chooses <strong>how much space the controls inside that UI
+        should use</strong>. A Select can stay a dropdown in both environments -
+        dense rows for a desktop pointer, touch-sized rows on a tablet. The
+        pattern stays the same; the spacing changes because the input
+        environment is different.
       </p>
 
-      <div className="callout">
-        <strong>First, when you do not need Protean.</strong> If all you want is
-        app-wide density keyed to screen size or pointer type, three lines of CSS are
-        the right answer:
-        <pre><code>{`:root { --target: 40px; }
-@media (pointer: coarse) { :root { --target: 48px; } }`}</code></pre>
-        CSS renders exceptionally well. What Protean owns is choosing a density from
-        inputs CSS cannot see - a user setting, and the pattern decision.
-      </div>
-
-      <h2>How density is decided</h2>
+      <h2>Three density profiles</h2>
       <div className="tableWrap">
         <table>
-          <thead><tr><th>Input</th><th>Result</th><th>Decided by</th></tr></thead>
+          <thead>
+            <tr><th>Density</th><th>Row</th><th>Target</th><th>Use it for</th></tr>
+          </thead>
           <tbody>
-            <tr><td>a precise pointer</td><td>comfortable</td><td>a CSS media query - page content needs no JS</td></tr>
-            <tr><td>touch</td><td>touch</td><td>a CSS media query - page content needs no JS</td></tr>
-            <tr><td>opened as a sheet</td><td>always touch</td><td>pattern coupling - a sheet is a thumb surface whatever the profile</td></tr>
-            <tr><td>a user setting</td><td>overrides everything</td><td><code>&lt;ProteanProvider density=&quot;compact&quot;&gt;</code></td></tr>
-            <tr><td>compact</td><td>only by explicit choice</td><td>the default rule never guesses</td></tr>
+            <tr><td><code>compact</code></td><td>28px</td><td>32px</td><td>Precise pointer input and information density - dense menus, tables, desktop-style interfaces.</td></tr>
+            <tr><td><code>comfortable</code></td><td>36px</td><td>40px</td><td>The middle profile - more breathing room without touch-sized targets.</td></tr>
+            <tr><td><code>touch</code></td><td>44px</td><td>48px</td><td>Coarse input. The point is not that the viewport is &quot;mobile&quot; - it is that the interaction benefits from larger targets.</td></tr>
           </tbody>
         </table>
       </div>
-
-      <h2>The user density setting - the headline use case</h2>
       <p>
-        Like Gmail&apos;s default/comfortable/compact, density is a user option in real
-        products. A media query cannot read app state, so this is where Protean&apos;s
-        job starts:
+        <code>row</code> is the visual row size and <code>target</code> is the
+        interaction target size. They are separate tokens because the visible
+        row and the hit area do not always need to be identical.
       </p>
-      <pre><code>{`const [density, setDensity] = useState()   // the user's setting
 
-<ProteanProvider density={density}>
-  <div data-density={density}>             {/* one stamp for static content */}
-    <App />
-  </div>
+      <h2>Pattern and density are independent</h2>
+      <p>
+        A pattern decision answers: <em>should this be a dropdown or a
+        sheet?</em> A density decision answers: <em>how large should the rows
+        and targets inside it be?</em> The combinations are real:
+      </p>
+      <pre><code>{`Dropdown + compact
+Dropdown + touch
+Sheet + comfortable
+Sheet + touch`}</code></pre>
+      <p>
+        A large touch tablet can use{' '}
+        <code>pattern: dropdown, density: touch</code> at the same time. Protean
+        does not collapse all of this into a single &quot;mobile&quot; state.
+      </p>
+
+      <h2>Density can come from the environment</h2>
+      <p>Protean can choose a density automatically from the current input environment:</p>
+      <pre><code>{`precise pointer   → comfortable
+touch-first input → touch`}</code></pre>
+      <p>
+        This is not device detection. Protean responds to interaction
+        characteristics - it does not identify an iPhone, a tablet, or a desktop
+        model.
+      </p>
+
+      <h2>Users can choose a density too</h2>
+      <p>
+        A product may let the user choose how dense the interface should feel.
+        An explicit density overrides the automatic result:
+      </p>
+      <pre><code>{`<ProteanProvider density="comfortable">
+  <App />
 </ProteanProvider>`}</code></pre>
       <p>
-        Popups (dialog, menu, select, tooltip) are portaled, so ancestor stamps never
-        reach them - <strong>the components stamp <code>data-density</code> on their own
-        popups</strong>, the same contract as <code>data-presentation</code>, nothing
-        for you to wire. A popup is a surface where a decision already happens at
-        open; the density stamp rides that decision, adding no measurement and no
-        re-render.
+        The important implementation detail:{' '}
+        <strong><code>ProteanProvider</code> does not render a DOM
+        wrapper.</strong> It does not automatically produce{' '}
+        <code>&lt;div data-density=&quot;comfortable&quot;&gt;</code> around
+        your application. The provider changes the density decision available
+        to Protean components - it does not stamp a global attribute by itself.
       </p>
 
-      <h2>Tokens respond</h2>
-      <div className="tableWrap">
-        <table>
-          <thead><tr><th>Token</th><th>compact</th><th>comfortable</th><th>touch</th></tr></thead>
-          <tbody>
-            <tr><td><code>--protean-target</code> (tap target)</td><td>32px</td><td>40px</td><td>48px</td></tr>
-            <tr><td><code>--protean-row</code> (row height)</td><td>28px</td><td>36px</td><td>44px</td></tr>
-          </tbody>
-        </table>
-      </div>
+      <h2>Popup components stamp density on their own UI</h2>
       <p>
-        The reference chrome&apos;s menu rows, select rows, and action buttons consume
-        these - so menus sit desktop-dense under a mouse and spread out for touch.
-        Consume the same tokens in your own components and the whole app moves as one.
+        Dialog, Select, Menu, and Tooltip stamp <code>data-density</code>{' '}
+        directly on their popup UI:
+      </p>
+      <pre><code>{`<div
+  data-presentation="popover"
+  data-density="touch"
+>
+  ...
+</div>`}</code></pre>
+      <p>
+        That lets the reference stylesheet - or your own CSS - apply the correct
+        row and target values without an application-wide wrapper. Popups render
+        through a portal, so an ancestor attribute could not reach them anyway.
       </p>
 
-      <h2>Policy sets the endpoints; CSS travels between them</h2>
+      <h2>Static content needs an explicit connection</h2>
       <p>
-        Where a value should vary continuously, let Protean hand CSS the meaningful
-        endpoints and let the browser interpolate by container width - no
-        measurement, no re-render:
+        Because the provider does not render a wrapper, a user density setting
+        does not automatically appear on your static application markup. If your
+        own non-popup content should follow the same setting, connect it
+        explicitly:
       </p>
-      <pre><code>{`.my-panel {
-  padding: clamp(8px, 3cqi, var(--protean-target));
+      <pre><code>{`<ProteanProvider density={density}>
+  <div data-density={density}>
+    <Dashboard />
+  </div>
+</ProteanProvider>`}</code></pre>
+      <p>Then your application CSS can consume the same tokens:</p>
+      <pre><code>{`[data-density="touch"] {
+  --app-row-size: var(--protean-row);
+  --app-target-size: var(--protean-target);
 }`}</code></pre>
-
-      <h2>Why is there nothing like this for shape?</h2>
       <p>
-        Corner radius is already decided - popovers 12px, modals 14px, sheets round
-        only their top corners, fullscreen none, every value hanging off the chosen
-        presentation. When something has exactly one input, it is a lookup table, not
-        a decision, and lookup tables belong to CSS. A brand changes it with one
-        token line
-        (<code>[data-presentation=&apos;modal&apos;] {'{'} --protean-shape: 20px {'}'}</code>).
-        The principle lives in{' '}
-        <Link href="/en/concepts/pattern-adaptation">Pattern adaptation</Link> under
-        &quot;values follow the presentation&quot;. Density earns a decision for the
-        opposite reason: its values split <strong>within the same presentation</strong>,
-        by input method and user setting.
+        Not every density expression needs JavaScript, though. The reference
+        styles use input-capability media queries for the automatic static
+        path - the decision layer and the CSS expression layer work together.
+        Do not rewrite every density-related media query as a React decision
+        just because Protean has a density domain.
       </p>
 
-      <h2>Why steps, not proportional scaling?</h2>
+      <h2>A Sheet can still use touch sizing</h2>
       <p>
-        &quot;The card shrank 20%, shrink the radius 20%&quot; produces values no designer
-        ever chose (25.6px). Material&apos;s shape and density systems are discrete
-        steps too. When a small screen feels off, the honest fix is a{' '}
-        <strong>pattern change</strong> (card to list row) or a{' '}
-        <strong>density step</strong> - and those two decisions are exactly
-        Protean&apos;s job.
+        One subtle distinction is worth keeping precise. Suppose the density
+        decision is <code>comfortable</code> but the selected presentation is a
+        sheet:
+      </p>
+      <pre><code>{`density decision → comfortable
+presentation     → sheet
+CSS expression   → touch-sized sheet controls`}</code></pre>
+      <p>
+        The reference CSS gives sheets touch-oriented dimensions regardless of
+        the profile - a sheet is a thumb surface. That does{' '}
+        <strong>not</strong> mean Protean silently changed the density decision
+        to <code>touch</code>. The selected presentation can influence how the
+        density is expressed, while the decision itself stays user-selected.
       </p>
 
+      <h2>Decision and expression are different layers</h2>
+      <pre><code>{`Density decision → compact / comfortable / touch
+CSS              → row size, target size, padding,
+                   component-specific expression`}</code></pre>
       <p>
-        Compare the two implementations (Protean vs hand-rolled) side by side in the{' '}
-        <Link href="/density-spike">density demo</Link>. Dev mode prints the
-        reasoning: <code>density -&gt; compact [instance] size=expanded input=pointer</code>.
+        The decision chooses the profile. CSS turns that profile into actual
+        geometry.
+      </p>
+
+      <h2>Two things density is not</h2>
+      <ul>
+        <li>
+          <strong>Not an accessibility certification.</strong> Larger targets
+          can improve usability, but selecting <code>touch</code> does not make
+          an application accessible by itself - labels, keyboard behavior,
+          focus visibility, contrast, and content structure still matter. See{' '}
+          <Link href="/en/guides/accessibility">Accessibility</Link>.
+        </li>
+        <li>
+          <strong>Not a sibling of shape.</strong> Protean has CSS tokens such
+          as <code>--protean-shape</code>, but shape is not a separate runtime
+          decision domain - the selected presentation drives its CSS
+          expression. Density is different because it is an independent
+          decision domain. See <Link href="/en/about/scope">Scope</Link>.
+        </li>
+      </ul>
+
+      <h2>Summary</h2>
+      <pre><code>{`Pattern → dropdown / sheet / modal / ...
+Density → compact / comfortable / touch
+CSS     → actual dimensions and styling`}</code></pre>
+      <p>
+        Keeping these decisions separate lets Protean handle cases such as a
+        large touch tablet without calling the whole environment
+        &quot;mobile.&quot; Next:{' '}
+        <Link href="/en/components/dialog">Dialog</Link>.
       </p>
     </div>
   )
