@@ -1,155 +1,220 @@
+import Link from 'next/link'
+
 export default function CompositionPage() {
   return (
     <div className="doc">
-      <h1>Using them together</h1>
+      <h1>Compose behavior without duplicating controls</h1>
       <p className="lede">
-        Ten roles in one app - does that tangle? Most combinations structurally
-        cannot: the components do not know about each other. This page explains why,
-        and the four places that genuinely deserve care.
+        Protean components are designed to share application structure. The
+        goal is never a desktop component plus a mobile component for the same
+        interaction - compose the semantic pieces you already need and let each
+        component own one responsibility.
       </p>
 
-      <h2>The full assembly</h2>
-      <p>A real app assembles like this. This docs site is the same structure.</p>
-      <pre><code>{`<ProteanProvider>                  {/* optional - built-in default policy */}
-  <Screen.Root>
-    <Screen.Navigation>
-      <Navigation.Root aria-label="Menu">   {/* bar - drawer - rail - sidebar */}
-        <Navigation.Item href="/inbox">Inbox</Navigation.Item>
-        ...
-      </Navigation.Root>
-    </Screen.Navigation>
-
-    <Screen.Content>
-      <Actions.Root aria-label="Document tools">  {/* action row */}
-        <Actions.Item onClick={save}>Save</Actions.Item>
-        <Actions.Item secondary onClick={rename}>Rename</Actions.Item>
-      </Actions.Root>
-
-      <ListDetail.Root detailActive={!!selected}>  {/* list-detail */}
-        <ListDetail.List>...</ListDetail.List>
-        <ListDetail.Detail>
-          <ProteanBoundary>              {/* decisions use this panel's width */}
-            <Dialog.Root role="confirmation">
-              <Dialog.Trigger>Delete</Dialog.Trigger>
-              <Dialog.Content title="Delete this?">...</Dialog.Content>
-            </Dialog.Root>
-          </ProteanBoundary>
-        </ListDetail.Detail>
-      </ListDetail.Root>
-    </Screen.Content>
-
-    <Screen.Actions>
-      <PrimaryAction.Root>Check out</PrimaryAction.Root>
-    </Screen.Actions>
-  </Screen.Root>
-</ProteanProvider>`}</code></pre>
-
-      <h2>Why it does not tangle</h2>
+      <h2>App shell: Screen + Navigation + PrimaryAction</h2>
+      <pre><code>{`<Screen.Root>
+  <Screen.Navigation>
+    <Navigation.Root aria-label="Primary">...</Navigation.Root>
+  </Screen.Navigation>
+  <Screen.Content>
+    ...
+  </Screen.Content>
+  <Screen.Actions>
+    <PrimaryAction.Root>Continue</PrimaryAction.Root>
+  </Screen.Actions>
+</Screen.Root>`}</code></pre>
+      <pre><code>{`Screen        → page structure
+Navigation    → navigation semantics + adaptive presentation
+PrimaryAction → primary CTA + adaptive placement`}</code></pre>
       <p>
-        There is no channel through which one component reads or writes
-        another&apos;s state. What they do share are <strong>values that are the same
-        for everyone</strong> - the read-only environment, the rules, a density
-        setting - and every overlay decides independently,{' '}
-        <strong>at the moment it opens</strong>. Three
-        dialogs, two selects, and a menu on one screen each behave exactly as they
-        would alone. Nesting works the same way - open a select inside a dialog and
-        Base UI handles focus and stacking while each decides for itself.
+        Screen does not control the Navigation or PrimaryAction decisions -
+        each component owns its own.
+      </p>
+
+      <h2>Screen.Actions + Actions.Root</h2>
+      <pre><code>{`<Screen.Actions>
+  <Actions.Root aria-label="Document actions">
+    <Actions.Item onClick={save}>Save</Actions.Item>
+    <Actions.Item secondary onClick={duplicate}>Duplicate</Actions.Item>
+  </Actions.Root>
+</Screen.Actions>`}</code></pre>
+      <pre><code>{`Screen.Actions → where actions belong in the page
+Actions.Root   → action-group semantics and compact overflow`}</code></pre>
+
+      <h2>Add help to an icon button</h2>
+      <pre><code>{`<Tooltip.Root>
+  <Tooltip.Trigger aria-label="Settings">
+    <SettingsIcon />
+  </Tooltip.Trigger>
+  <Tooltip.Content>Settings</Tooltip.Content>
+</Tooltip.Root>`}</code></pre>
+      <p>
+        The accessible name belongs to the button; the Tooltip adds optional
+        help. Do not rely on Tooltip content as the button&apos;s only
+        accessible name.
+      </p>
+
+      <h2>One button can open a Dialog and have a Tooltip</h2>
+      <p>
+        Do not nest two native buttons just to attach two behaviors -{' '}
+        <code>&lt;button&gt;&lt;button&gt;</code> is invalid interactive
+        nesting. Instead, let the Trigger API that supports <code>render</code>{' '}
+        attach its behavior to the Tooltip button:
+      </p>
+      <pre><code>{`<Tooltip.Root presentation="tooltip">
+  <Dialog.Root role="confirmation">
+    <Dialog.Trigger
+      render={<Tooltip.Trigger aria-label="Delete project" />}
+    >
+      <TrashIcon />
+    </Dialog.Trigger>
+    <Dialog.Content title="Delete project?">...</Dialog.Content>
+  </Dialog.Root>
+  <Tooltip.Content>Delete project</Tooltip.Content>
+</Tooltip.Root>`}</code></pre>
+      <pre><code>{`Tooltip.Trigger       → the actual native button
+Dialog.Trigger render → adds Dialog trigger behavior`}</code></pre>
+      <p>
+        The result is one button in the DOM with both behaviors - a contract
+        the composition tests assert directly. Critical direction:{' '}
+        <strong><code>Tooltip.Trigger</code> itself does not have{' '}
+        <code>render</code></strong>. Do not reverse this composition.
+      </p>
+      <p>
+        <code>Menu.Trigger</code> exposes the same verified <code>render</code>{' '}
+        path - when a Menu trigger also needs Tooltip help, the actual button
+        stays the Tooltip Trigger and Menu attaches its behavior:
+      </p>
+      <pre><code>{`<Menu.Trigger
+  render={<Tooltip.Trigger aria-label="More actions" />}
+>
+  <MoreIcon />
+</Menu.Trigger>`}</code></pre>
+      <p>
+        The same works for composing onto your own styled button:{' '}
+        <code>render=&#123;&lt;button className=&quot;fancy&quot; /&gt;&#125;</code>.
+        The principle: <strong>keep one actual interactive element.</strong>
+      </p>
+
+      <h2>Form actions</h2>
+      <pre><code>{`<form onSubmit={handleSubmit}>
+  ...
+  <PrimaryAction.Root type="submit">Continue</PrimaryAction.Root>
+</form>`}</code></pre>
+      <p>
+        This works because PrimaryAction preserves an explicit type and only
+        falls back to <code>button</code> when none is supplied. Do not
+        generalize that contract:
+      </p>
+      <pre><code>{`PrimaryAction.Root → type ?? "button"  (explicit submit survives)
+Tooltip.Trigger    → type="button" fixed
+Actions.Item       → type="button" fixed`}</code></pre>
+      <p>Use the component whose contract matches the interaction.</p>
+
+      <h2>SupportingPane inside Screen</h2>
+      <pre><code>{`<Screen.Root>
+  <Screen.Content>
+    <SupportingPane.Root paneLabel="Filters">
+      <SupportingPane.Main>
+        <Results />
+      </SupportingPane.Main>
+      <SupportingPane.Pane>
+        <Filters />
+      </SupportingPane.Pane>
+    </SupportingPane.Root>
+  </Screen.Content>
+</Screen.Root>`}</code></pre>
+      <p>
+        Screen owns the page structure; SupportingPane owns the main +
+        supporting relationship inside the content. Neither requires the
+        other.
+      </p>
+
+      <h2>Provider is optional</h2>
+      <p>
+        None of these recipes require a <code>ProteanProvider</code>. Add one
+        only when the application needs shared configuration - project policy,
+        explicit density, custom thresholds, SSR traits, or custom Dialog
+        presentation implementations (below).
+      </p>
+
+      <h2>Replace Dialog presentation implementations</h2>
+      <p>
+        The Provider <code>components</code> prop is an advanced composition
+        hook. Its current scope is{' '}
+        <strong>Dialog presentation implementations</strong>:
+      </p>
+      <pre><code>{`<ProteanProvider
+  components={{
+    modal: MyModalPresentation,
+  }}
+>
+  <App />
+</ProteanProvider>`}</code></pre>
+      <p>
+        The registry is <code>Partial&lt;OverlayComponents&gt;</code> merged
+        with Protean&apos;s defaults - replace only <code>modal</code> and{' '}
+        <code>fullscreen</code> · <code>sheet</code> · <code>popover</code>{' '}
+        keep the default implementations. The registry&apos;s consumer is
+        Dialog Content.
       </p>
       <div className="callout">
-        <strong>Why this design?</strong> The moment decisions flow between
-        components, you get &quot;changing A broke B&quot;. Decisions live in a pure
-        function and only the result reaches the DOM (<code>data-presentation</code>),
-        so adding components multiplies the markup, not the cases.
+        <strong><code>components</code> is not a global registry.</strong>{' '}
+        There is no <code>components.Navigation</code> or{' '}
+        <code>components.Menu</code> - this is not dependency injection for the
+        whole package. And a replacement implementation still participates in a
+        Dialog: it must preserve the behavior and accessibility contract Dialog
+        expects. Protean does not make an arbitrary replacement accessible
+        automatically.
       </div>
-
-      <h2>The four places that deserve care</h2>
-
-      <h3>1. Do not set display directly on parts</h3>
+      <p>The decision rule:</p>
+      <pre><code>{`same implementation, different appearance     → CSS
+the presentation implementation must differ  → components`}</code></pre>
       <p>
-        The reference stylesheet lives in <code>@layer</code>, so your CSS always
-        wins - including against state-driven hiding. Setting
-        <code>display: flex</code> on a part that a state hides (ListDetail&apos;s
-        list, Navigation&apos;s overflow tab) defeats the hiding. Scope your display
-        rules to the visible state
-        (<code>[data-presentation=&quot;panes&quot;] [data-part=&quot;list&quot;]</code>) or style an
-        inner wrapper instead.
+        Do not replace the Dialog backend just to change radius, padding,
+        scrim, shadow, or animation - those are CSS.
       </p>
 
-      <h3>2. Inside a Boundary, chrome still reads the viewport</h3>
+      <h2>Nested overlays and sheet scrims</h2>
       <p>
-        Wrap a 420px panel in <code>ProteanBoundary</code> and overlays inside it
-        decide by the panel&apos;s width (compact - the sheet rises from the
-        panel&apos;s own bottom). Navigation in the same panel still reads the
-        viewport: chrome is always on screen, so the server renders it, and the
-        server cannot measure a panel. To adapt in-panel chrome, use CSS container
-        queries against the same data attributes.
+        Opening a Select or Menu inside a sheet Dialog works - focus and
+        dismissal are handled by the underlying primitives. But on small
+        screens a sheet can open over another sheet, stacking two scrims and
+        over-darkening the screen. If the product nests these surfaces often,
+        adjust the inner scrim with CSS:
       </p>
-
-      <h3>3. Sheet on sheet: manage the scrim yourself</h3>
-      <p>
-        On compact, opening a select inside a sheet dialog stacks sheet on sheet.
-        Behavior is fully correct (focus, close order), but two scrims darken the
-        page. Where stacking is common, drop the inner scrim in CSS:
-      </p>
-      <pre><code>{`/* skip the select sheet's scrim when a sheet is already up */
+      <pre><code>{`/* skip the select sheet's scrim when a sheet dialog is already up */
 body:has([data-scope='overlay'][data-presentation='sheet'])
   [data-scope='select'] [data-part='backdrop'] {
   background: transparent;
 }`}</code></pre>
-
-      <h3>4. Nested boundaries: the nearest one wins</h3>
       <p>
-        Put a Boundary inside a Boundary and an overlay measures against, and is
-        contained by, the nearest one above it. This contract is pinned by a test.
+        (Whether to use <code>:has()</code> is the project&apos;s choice.)
+        Nested visual treatment is a CSS concern - the interaction semantics do
+        not need to change.
       </p>
 
-      <h2>A hinted button is still a button</h2>
-      <p>
-        <code>Tooltip.Trigger</code> passes every button prop through. To make a
-        tooltipped icon button actually do something, hand it an
-        <code>onClick</code> - on touch (tap-toggled popover) the hint opening and
-        your onClick run together. <code>disabled</code> lands on the button
-        natively and locks the hint with it.
-      </p>
-      <pre><code>{`<Tooltip.Root>
-  <Tooltip.Trigger aria-label="Delete row" onClick={removeRow}>
-    <TrashIcon />
-  </Tooltip.Trigger>
-  <Tooltip.Content>Removes this row.</Tooltip.Content>
-</Tooltip.Root>`}</code></pre>
-
-      <h2>Two roles on one element: render</h2>
-      <p>
-        When one button needs a hint and also opens a dialog or menu, hand the
-        action owner&apos;s trigger (Dialog, Menu) another element via
-        <code>render</code>. Exactly one button reaches the DOM, with the behavior
-        and accessibility wiring merged onto it - the Base UI render convention.
-      </p>
-      <pre><code>{`<Tooltip.Root presentation="tooltip">  {/* see the note below */}
-  <Menu.Root>
-    <Menu.Trigger render={<Tooltip.Trigger aria-label="More actions" />}>
-      <MoreIcon />
-    </Menu.Trigger>
-    <Menu.Content>...</Menu.Content>
-  </Menu.Root>
-  <Tooltip.Content>More actions</Tooltip.Content>
-</Tooltip.Root>`}</code></pre>
-      <div className="callout">
-        <strong>Keep the hint hover-only on an action button.</strong> The default
-        policy turns hints into tap-toggled popovers where hover does not exist -
-        but on a button that acts, one tap would then do two things. Give
-        <code>Tooltip.Root</code> <code>presentation=&quot;tooltip&quot;</code> and the hint
-        opens only on hover, silently absent on touch - the accessible name is
-        already carried by <code>aria-label</code>. A styled host button
-        (<code>render=&#123;&lt;button className=&quot;...&quot;/&gt;&#125;</code>) composes the same way.
+      <h2>Composition map</h2>
+      <div className="tableWrap">
+        <table>
+          <thead><tr><th>Goal</th><th>Compose</th></tr></thead>
+          <tbody>
+            <tr><td>Page shell</td><td><code>Screen</code> + <code>Navigation</code> + <code>PrimaryAction</code></td></tr>
+            <tr><td>Several page actions</td><td><code>Screen.Actions</code> + <code>Actions.Root</code></td></tr>
+            <tr><td>Help for an icon button</td><td><code>Tooltip</code></td></tr>
+            <tr><td>Tooltip + Dialog on one button</td><td><code>Dialog.Trigger render</code> + <code>Tooltip.Trigger</code></td></tr>
+            <tr><td>Tooltip + Menu on one button</td><td><code>Menu.Trigger render</code> + <code>Tooltip.Trigger</code></td></tr>
+            <tr><td>Main content + supporting tools</td><td><code>Screen.Content</code> + <code>SupportingPane</code></td></tr>
+            <tr><td>Form submission</td><td><code>PrimaryAction type=&quot;submit&quot;</code></td></tr>
+            <tr><td>Different Dialog appearance</td><td>CSS</td></tr>
+            <tr><td>Different Dialog presentation implementation</td><td>Provider <code>components</code></td></tr>
+          </tbody>
+        </table>
       </div>
-
-      <h2>Proof it runs</h2>
       <p>
-        The docs site you are reading is the Screen + Navigation assembly, and the
-        Toss mini-app clone (24 screens, 699 tests) ran five overlay kinds plus the
-        shell together through a real migration. Container decisions are live in
-        the container boundary demo.
+        Container-scoped decisions are their own topic - next:{' '}
+        <Link href="/en/advanced/container-boundary">Using Protean inside
+        containers</Link>.
       </p>
     </div>
   )
