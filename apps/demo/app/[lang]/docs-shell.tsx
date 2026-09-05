@@ -18,7 +18,7 @@ type NavEntry =
 const entries: readonly NavEntry[] = [
   { group: { ko: '시작하기', en: 'Getting started' } },
   { path: '', label: { ko: 'Protean UI란?', en: 'What is Protean UI?' } },
-  { path: '/getting-started', label: { ko: '10분 시작하기', en: 'Start in 10 minutes' } },
+  { path: '/getting-started', label: { ko: '10분 시작하기', en: 'Get started in 10 minutes' } },
   { group: { ko: '핵심 개념', en: 'Core concepts' } },
   { path: '/concepts/pattern-adaptation', label: { ko: '패턴 적응', en: 'Pattern adaptation' } },
   { path: '/concepts/density', label: { ko: '밀도', en: 'Density' } },
@@ -36,15 +36,15 @@ const entries: readonly NavEntry[] = [
   { path: '/layout/actions', label: { ko: 'Actions', en: 'Actions' } },
   { path: '/layout/supporting-pane', label: { ko: 'SupportingPane', en: 'SupportingPane' } },
   { group: { ko: '가이드', en: 'Guides' } },
-  { path: '/guides/customize-decisions', label: { ko: '결과 맞춤 설정', en: 'Customize the decisions' } },
-  { path: '/guides/composition', label: { ko: '함께 쓰기', en: 'Using together' } },
+  { path: '/guides/customize-decisions', label: { ko: '결과 맞춤 설정', en: 'Customizing results' } },
+  { path: '/guides/composition', label: { ko: '함께 쓰기', en: 'Composition' } },
   { path: '/advanced/container-boundary', label: { ko: '컨테이너 안에서 사용하기', en: 'Inside a container' } },
   { path: '/advanced/server-rendering', label: { ko: '서버 렌더링', en: 'Server rendering' } },
   { path: '/guides/accessibility', label: { ko: '접근성', en: 'Accessibility' } },
   { group: { ko: '참고', en: 'Reference' } },
-  { path: '/about/scope', label: { ko: '제공 범위', en: 'Scope and non-goals' } },
+  { path: '/about/scope', label: { ko: '제공 범위', en: 'Scope' } },
   { path: '/about/status', label: { ko: '품질과 지원', en: 'Quality and support' } },
-  { path: '/about/why', label: { ko: '왜 만들었나요', en: 'Why this exists' } },
+  { path: '/about/why', label: { ko: '왜 만들었나요', en: 'Why Protean?' } },
 ]
 
 const pages = entries.filter((entry): entry is Exclude<NavEntry, { group: object }> => 'path' in entry)
