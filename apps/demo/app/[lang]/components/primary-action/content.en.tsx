@@ -5,51 +5,155 @@ export default function PrimaryActionDocPage() {
     <div className="doc">
       <h1>PrimaryAction</h1>
       <p className="lede">
-        The screen&apos;s main action. On a phone it is a fixed, full-width action bar
-        that respects the safe area and dodges the virtual keyboard; in a narrow desktop
-        window it is a sticky footer; on larger screens it sits inline where you placed
-        it.
+        Use <code>PrimaryAction</code> for the most important action on a
+        screen. The same action can appear in an action bar, footer-style
+        placement, or inline depending on the environment.
+      </p>
+      <pre><code>{`import { PrimaryAction } from "@protean-ui/react";
+
+<PrimaryAction.Root onClick={save}>
+  Save changes
+</PrimaryAction.Root>`}</code></pre>
+      <p>
+        The button stays the same. Protean changes the selected placement
+        pattern. Open the <Link href="/screen-demo">screen demo</Link> on a
+        phone-sized window to see it move.
       </p>
 
-      <pre><code>{`<Screen.Actions>
-  <PrimaryAction.Root onClick={buy}>Buy now</PrimaryAction.Root>
-</Screen.Actions>`}</code></pre>
-
-      <h2>Presentations</h2>
+      <h2>Default presentation</h2>
       <div className="tableWrap">
         <table>
-          <thead><tr><th>Environment</th><th>Presentation</th></tr></thead>
+          <thead>
+            <tr><th>Environment</th><th>Presentation</th></tr>
+          </thead>
           <tbody>
-            <tr><td>compact + touch</td><td>action-bar: full-width, bottom-pinned, safe-area padded, shifted above the virtual keyboard via visualViewport</td></tr>
-            <tr><td>compact + pointer</td><td>sticky-footer inside the content column</td></tr>
-            <tr><td>medium / expanded</td><td>inline in the content flow - fixed-bottom buttons are a touch idiom, not a desktop one</td></tr>
+            <tr><td>compact + touch</td><td><code>action-bar</code></td></tr>
+            <tr><td>compact + pointer / hybrid</td><td><code>sticky-footer</code></td></tr>
+            <tr><td>medium</td><td><code>inline</code></td></tr>
+            <tr><td>expanded</td><td><code>inline</code></td></tr>
           </tbody>
         </table>
       </div>
+      <p>
+        The compact result depends on input - a hybrid environment follows the
+        pointer path. Do not simplify this to &quot;compact → action-bar.&quot;
+      </p>
+      <ul>
+        <li>
+          <strong><code>action-bar</code></strong> - in a compact touch
+          environment, the reference styles make the primary action easy to
+          reach: a full-width button with a touch-sized minimum height.
+        </li>
+        <li>
+          <strong><code>sticky-footer</code></strong> - in a compact pointer
+          environment, the reference layout places the action in a footer-style
+          compact position. This is the <strong>name of the presentation</strong>,
+          not a promise about a CSS property - the current reference stylesheet
+          does not implement it with <code>position: sticky</code>.
+        </li>
+        <li>
+          <strong><code>inline</code></strong> - on medium and expanded
+          layouts, the action participates in the normal page layout, staying
+          near the surrounding content.
+        </li>
+      </ul>
 
-      <h2>Props</h2>
+      <h2>The action itself stays a button</h2>
+      <p>
+        <code>PrimaryAction.Root</code> accepts normal button behavior -{' '}
+        <code>onClick</code>, <code>disabled</code>, <code>aria-*</code>, and
+        the rest. Internally, the structure is a wrapper plus the actual native
+        button:
+      </p>
+      <pre><code>{`<div data-scope="primary-action" data-presentation="inline">
+  <button data-part="button">
+    Save changes
+  </button>
+</div>`}</code></pre>
+      <p>
+        The wrapper carries the adaptive placement structure; the button remains
+        the actual action control. The outer Root DOM node is not itself a
+        button.
+      </p>
+
+      <h2>Use it as a form submit button</h2>
+      <pre><code>{`<form onSubmit={handleSubmit}>
+  ...
+  <PrimaryAction.Root type="submit">
+    Continue
+  </PrimaryAction.Root>
+</form>`}</code></pre>
+      <p>
+        The default button type is <code>button</code>, so a PrimaryAction
+        inside a form does not submit accidentally. The implementation uses the
+        equivalent of <code>type ?? &quot;button&quot;</code>, so an explicit{' '}
+        <code>type=&quot;submit&quot;</code> (or <code>&quot;reset&quot;</code>)
+        is preserved.
+      </p>
+
+      <h2>Override the presentation</h2>
+      <pre><code>{`<PrimaryAction.Root presentation="inline">
+  Save
+</PrimaryAction.Root>`}</code></pre>
+      <p>
+        This changes the selected presentation and the corresponding DOM state.
+        The actual placement is still expressed by CSS - the same precision as
+        Navigation and ListDetail:
+      </p>
+      <pre><code>{`PrimaryAction → selected presentation + data-presentation
+reference.css → actual placement`}</code></pre>
+      <p>
+        Under the default configuration these agree; if the project replaces
+        the CSS, the final geometry belongs to the project. Project-wide rules
+        belong in policy - see{' '}
+        <Link href="/en/guides/customize-decisions">Customizing results</Link>.
+      </p>
+
+      <h2>Reference placement is opt-in</h2>
+      <p>
+        The page-level PrimaryAction placement rules are scoped under{' '}
+        <code>protean-defaults</code> - importing <code>reference.css</code>{' '}
+        alone does not impose them on an existing application. This is the same
+        opt-in boundary introduced in{' '}
+        <Link href="/en/getting-started">Getting started</Link>.{' '}
+        <code>PrimaryAction</code> composes naturally with the page structure
+        provided by <code>Screen</code>, but it is a composition pattern, not a
+        hard parent requirement - see{' '}
+        <Link href="/en/guides/composition">Composition</Link>.
+      </p>
+
+      <h2>Virtual keyboard adjustment</h2>
+      <p>
+        The reference compact placement accounts for the browser&apos;s visible
+        viewport (<code>visualViewport</code>), so the primary action can stay
+        aligned with the usable area when the virtual keyboard changes it. In
+        environments without that information, the placement simply works
+        without the extra offset. This adjusts placement - it does not change
+        the button&apos;s behavior. Try it in the{' '}
+        <Link href="/screen-demo">screen demo</Link> by focusing an input on a
+        phone.
+      </p>
+
+      <h2>PrimaryAction.Root</h2>
       <div className="tableWrap">
         <table>
-          <thead><tr><th>Prop</th><th>Type</th><th>Notes</th></tr></thead>
+          <thead><tr><th>Prop</th><th>Description</th></tr></thead>
           <tbody>
-            <tr><td>presentation</td><td>presentation | &#123; sizeClass: presentation &#125;</td><td>pick from action-bar · sticky-footer · inline. Note: the override changes the decision and the DOM stamp. The reference stylesheet derives its default look from media queries, so to make an override visible, key your own CSS off the stamp - it is a data contract.</td></tr>
-            <tr><td>...button props</td><td>type, disabled, onClick, form, ...</td><td>the inner element is a real button, so standard button attributes (type, disabled, form wiring) pass through untouched</td></tr>
+            <tr><td><code>presentation</code></td><td>Overrides the selected presentation (<code>action-bar</code> · <code>sticky-footer</code> · <code>inline</code>, per size class if needed).</td></tr>
+            <tr><td><code>children</code></td><td>Button content.</td></tr>
+            <tr><td><code>type</code></td><td>Standard button type. Defaults to <code>button</code>; explicit <code>submit</code> / <code>reset</code> are preserved.</td></tr>
+            <tr><td><code>disabled</code> / <code>onClick</code> / <code>aria-*</code> ...</td><td>All standard button attributes pass through to the inner native button.</td></tr>
           </tbody>
         </table>
       </div>
-
-      <h2>Virtual keyboard</h2>
       <p>
-        When the on-screen keyboard opens, the container tracks{' '}
-        <code>visualViewport</code> and exposes the occluded height as{' '}
-        <code>--protean-vk-offset</code>; the reference stylesheet translates the action
-        bar above the keyboard. This is a progressive enhancement - browsers without the
-        API simply keep the bar at the bottom.
-      </p>
-
-      <p>
-        Try it in the <Link href="/screen-demo">screen demo</Link>: focus the promo-code
-        input on a phone and watch the button stay reachable.
+        PrimaryAction is not a button design system - there is no{' '}
+        <code>variant</code>, <code>size</code>, or <code>loading</code> API.
+        Visual styling belongs to your design system, connected through the DOM
+        hooks covered in{' '}
+        <Link href="/en/guides/customize-decisions">Customizing results</Link>.
+        Use PrimaryAction for the one action whose placement should adapt - not
+        for every button on the screen.
       </p>
     </div>
   )
